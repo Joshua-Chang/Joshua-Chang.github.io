@@ -1,0 +1,491 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>dagger2的Qualifier与Scope | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1604759555384">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="dagger2的Qualifier与Scope | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="Qualifier即Named
+当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化
+Module
+@Module
+public class ClothModule {
+    @Blue
+    @Provi..." />
+    <meta name="keywords" content="IOC,Qualifier,Scope" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1604759555384" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              dagger2的Qualifier与Scope
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-05-21
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://Joshua-Chang.github.io/tag/SlLTvLCt3u/" class="post-tag">
+                  # IOC
+                </a>
+              
+                <a href="https://Joshua-Chang.github.io/tag/JlEfQ4lwpF/" class="post-tag">
+                  # Qualifier
+                </a>
+              
+                <a href="https://Joshua-Chang.github.io/tag/j_I7aMNmgh/" class="post-tag">
+                  # Scope
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h4 id="qualifier即named">Qualifier即Named</h4>
+<p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
+<h5 id="module">Module</h5>
+<pre><code class="language-java">@Module
+public class ClothModule {
+    @Blue
+    @Provides
+    public Cloth getBluecloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;蓝&quot;);
+        return mCloth;
+    }
+    @Named(&quot;Red&quot;)
+    @Provides
+    public Cloth getRedcloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;红&quot;);
+        return mCloth;
+    }
+}
+</code></pre>
+<!--more-->
+<h5 id="component">Component</h5>
+<pre><code class="language-java">@Component(modules=ClothModule.class)
+public interface ClothCompetent {
+    void inject(MainActivity mainActivity);
+}
+</code></pre>
+<h5 id="activity">Activity</h5>
+<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
+    TextView mTextView;
+    @Named(&quot;Red&quot;)
+    @Inject
+    Cloth mClothRed;
+    @Blue
+    @Inject
+    Cloth mClothBlue;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mTextView= (TextView) findViewById(R.id.tv1);
+        ClothCompetent mClothCompetent=DaggerClothCompetent.builder().clothModule(new ClothModule()).build();
+        mClothCompetent.inject(this);
+        mTextView.setText(mClothRed+&quot;\n&quot;+mClothBlue);
+    }
+}
+</code></pre>
+<h5 id="qualifier">Qualifier</h5>
+<p>自定义的Qualifier与官方的Named原理一样</p>
+<pre><code class="language-java">@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Blue {
+}
+</code></pre>
+<p>官方的Named</p>
+<pre><code class="language-java">@Qualifier
+@Documented
+@Retention(RUNTIME)
+public @interface Named {
+
+    /** The name. */
+    String value() default &quot;&quot;;
+}
+</code></pre>
+<h4 id="scope即singleton">Scope即Singleton</h4>
+<p>以Component为依据，在指定范围内的单例</p>
+<h5 id="module-2">Module</h5>
+<ol>
+<li>在@Provides为外界提供Jacket时，参数中用到了Cloth，必须在Module中@Provides为Jacket提供Cloth</li>
+<li>自定义的Qualifier和Named也可以在参数中使用</li>
+</ol>
+<pre><code class="language-java">@Module
+public class JacketModule {
+    @Provides
+    public Jacket getJacket(@Named(&quot;Red&quot;) Cloth cloth){
+        return new Jacket(cloth);
+    }
+    @Singleton
+    @Named(&quot;Red&quot;)
+    @Provides
+    public Cloth getRedCloth(){
+       Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;红&quot;);
+        return mCloth;
+    }
+    @Blue
+    @Provides
+    public Cloth getBluecloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;蓝&quot;);
+        return mCloth;
+    }
+}
+</code></pre>
+<h5 id="component-2">Component</h5>
+<p>在用到的Cloth和Component上同时添加@Singleton，此时Cloth为单例</p>
+<pre><code class="language-java">@Singleton
+@Component(modules = JacketModule.class)
+public interface JacketComponent {
+    void inject(MainActivity mainActivity);
+}
+</code></pre>
+<h5 id="activity-2">Activity</h5>
+<p>此时的Cloth和JacketRed.getCloth()为同一个</p>
+<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
+    TextView mTextView;
+    @Named(&quot;Red&quot;)
+    @Inject
+    Cloth mClothRed;
+    @Inject
+    Jacket mJacketRed;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mTextView= (TextView) findViewById(R.id.tv1);
+        JacketComponent mJacketComponent = DaggerJacketComponent.builder().jacketModule(new JacketModule()).build();
+        mJacketComponent.inject(this);
+        mTextView.setText((mJacketRed.getCloth() == mClothRed) + &quot;&quot;);
+    }
+}
+</code></pre>
+<h5 id="scope">Scope</h5>
+<p>自定义的Scope与官方的Singleton原理一样，替换Singleton为JacketSingleton仍返回true</p>
+<p>自定义的JacketSingleton：在JacketSingleton作用域内单例</p>
+<pre><code class="language-java">@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JacketSingleton {
+}
+</code></pre>
+<p>官方的Singleton</p>
+<pre><code class="language-java">@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface Singleton {}
+</code></pre>
+<h4 id="dependencies">dependencies</h4>
+<p>实例：分别创建两个Activity，跳转后的实例为同一个（工具类多此用法在app层单例）</p>
+<h5 id="分别创建两个module">分别创建两个Module</h5>
+<p>JacketModule与JacketModule2</p>
+<h5 id="创建component">创建Component</h5>
+<h6 id="方法一dependencies">方法一：dependencies</h6>
+<pre><code class="language-java">@JacketSingleton
+@Component(modules = JacketModule.class,dependencies = BaseComponent.class)
+public interface JacketComponent {
+    void inject(MainActivity mainActivity);
+}
+</code></pre>
+<h6 id="方法二subcomponent">方法二：Subcomponent</h6>
+<pre><code class="language-java">@JacketSingleton
+@Subcomponent(modules = JacketModule2.class)
+public interface JacketComponent2 {
+    void inject(MainActivity2 mainActivity);
+}
+</code></pre>
+<h5 id="创建basemodule">创建BaseModule</h5>
+<pre><code class="language-java">@Module
+public class BaseModule {
+    @Singleton
+    @Provides
+    public Jacket getJacket(@Named(&quot;Red&quot;) Cloth cloth){
+        return new Jacket(cloth);
+    }
+    @Singleton
+    @Provides
+    @Named(&quot;Red&quot;)
+    public Cloth getRedCloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;红&quot;);
+        return mCloth;
+    }
+}
+</code></pre>
+<h5 id="创建basecomponent">创建BaseComponent</h5>
+<pre><code class="language-java">@Singleton
+@Component(modules = BaseModule.class)
+public interface BaseComponent {
+    Jacket getJacket();//dependencies依赖声明的方式
+    JacketComponent2 getJacketComponent2(JacketModule2 jacketModule2);//@Subcomponent使用的声明方式,声明一个返回值为子组件的方法,子组件需要什么Module,就在方法参数中添加什么
+}
+</code></pre>
+<h5 id="在app中初始化basecomponent">在app中初始化BaseComponent</h5>
+<pre><code class="language-java">public class App extends Application {
+        private BaseComponent baseComponent;
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            baseComponent = DaggerBaseComponent.builder().baseModule(new BaseModule()).build();
+        }
+
+        public BaseComponent getBaseComponent() {
+            return baseComponent;
+        }
+}
+</code></pre>
+<h5 id="在两个activity中使用">在两个Activity中使用</h5>
+<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
+    TextView mTextView;
+    @Named(&quot;Red&quot;)
+    @Inject
+    Cloth mClothRed;
+    @Inject
+    Jacket mJacketRed;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mTextView= (TextView) findViewById(R.id.tv1);
+        JacketComponent mJacketComponent = DaggerJacketComponent.builder().baseComponent(((App) getApplication()).getBaseComponent()).jacketModule(new JacketModule()).build();
+        mJacketComponent.inject(this);
+        mTextView.setText(mJacketRed.hashCode()+&quot;&quot;);
+    }
+    public void go(View view) {
+        Intent intent = new Intent(this,MainActivity2.class);
+        intent.putExtra(&quot;xx&quot;,mJacketRed.hashCode()+&quot;&quot;);
+        startActivity(intent);
+    }
+}
+</code></pre>
+<pre><code class="language-java">public class MainActivity2 extends AppCompatActivity {
+    TextView mTextView;
+    @Named(&quot;Red&quot;)
+    @Inject
+    Cloth mClothRed;
+    @Inject
+    Jacket mJacketRed;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+        mTextView= (TextView) findViewById(R.id.tv2);
+        App application = (App) getApplication();
+        application.getBaseComponent().getJacketComponent2(new JacketModule2()).inject(this);
+        String mString = (String) getIntent().getExtras().get(&quot;xx&quot;);
+        mTextView.setText(mString+&quot;\n&quot;+mJacketRed.hashCode()+&quot;&quot;);
+    }
+}
+</code></pre>
+<h5 id="结论">结论</h5>
+<p>分别在两个Activity中初始化的Jacket哈希值相同，为同一个变量，app层单例。</p>
+<h4 id="lazy与provider">Lazy与Provider</h4>
+<p>Lazy用于延迟加载,所谓的懒加载就是当你需要用到该依赖对象时,Dagger2才帮你去获取一个;Provide用于强制重新加载,也就是每一要用到依赖对象时,Dagger2都会帮你依赖注入一次</p>
+<pre><code class="language-java">    @Inject //Lazy声明方式
+    Lazy&lt;Cloth&gt; redCloth;
+    @Inject //Provider声明方式
+    Provider&lt;Shoe&gt; shoe;
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#qualifier%E5%8D%B3named">Qualifier即Named</a>
+<ul>
+<li><a href="#module">Module</a></li>
+<li><a href="#component">Component</a></li>
+<li><a href="#activity">Activity</a></li>
+<li><a href="#qualifier">Qualifier</a></li>
+</ul>
+</li>
+<li><a href="#scope%E5%8D%B3singleton">Scope即Singleton</a>
+<ul>
+<li><a href="#module-2">Module</a></li>
+<li><a href="#component-2">Component</a></li>
+<li><a href="#activity-2">Activity</a></li>
+<li><a href="#scope">Scope</a></li>
+</ul>
+</li>
+<li><a href="#dependencies">dependencies</a>
+<ul>
+<li><a href="#%E5%88%86%E5%88%AB%E5%88%9B%E5%BB%BA%E4%B8%A4%E4%B8%AAmodule">分别创建两个Module</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BAcomponent">创建Component</a>
+<ul>
+<li><a href="#%E6%96%B9%E6%B3%95%E4%B8%80dependencies">方法一：dependencies</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95%E4%BA%8Csubcomponent">方法二：Subcomponent</a></li>
+</ul>
+</li>
+<li><a href="#%E5%88%9B%E5%BB%BAbasemodule">创建BaseModule</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BAbasecomponent">创建BaseComponent</a></li>
+<li><a href="#%E5%9C%A8app%E4%B8%AD%E5%88%9D%E5%A7%8B%E5%8C%96basecomponent">在app中初始化BaseComponent</a></li>
+<li><a href="#%E5%9C%A8%E4%B8%A4%E4%B8%AAactivity%E4%B8%AD%E4%BD%BF%E7%94%A8">在两个Activity中使用</a></li>
+<li><a href="#%E7%BB%93%E8%AE%BA">结论</a></li>
+</ul>
+</li>
+<li><a href="#lazy%E4%B8%8Eprovider">Lazy与Provider</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/dagger2由简入深/">
+              <h3 class="post-title">
+                dagger2由简入深
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

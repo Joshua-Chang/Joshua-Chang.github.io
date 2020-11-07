@@ -1,0 +1,264 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>View滑动的几种方式 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1604759555384">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="View滑动的几种方式 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="View的滑动
+实现View滑动大概有：layout()、offsetLeftAndRight()／offsetTopAndBottom()、LayoutParams、动画、scollTo与scollBy和Scroller等几种方法。
+
+l..." />
+    <meta name="keywords" content="滑动,自定义View" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1604759555384" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              View滑动的几种方式
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-09-28
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://Joshua-Chang.github.io/tag/iYk81OjEy/" class="post-tag">
+                  # 滑动
+                </a>
+              
+                <a href="https://Joshua-Chang.github.io/tag/46xQSrY8CI/" class="post-tag">
+                  # 自定义View
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h3 id="view的滑动">View的滑动</h3>
+<p>实现View滑动大概有：layout()、offsetLeftAndRight()／offsetTopAndBottom()、LayoutParams、动画、scollTo与scollBy和Scroller等几种方法。</p>
+<!--more-->
+<h3 id="layout">layout()</h3>
+<pre><code class="language-java">layout(getLeft()+offsetX, getTop()+offsetY,getRight()+offsetX , getBottom()+offsetY);
+</code></pre>
+<h3 id="offset">offset</h3>
+<pre><code class="language-java">offsetLeftAndRight(offsetX);
+offsetTopAndBottom(offsetY);
+</code></pre>
+<h3 id="layoutparams">LayoutParams</h3>
+<pre><code class="language-java">ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) getLayoutParams();
+layoutParams.leftMargin = getLeft() + offsetX;
+layoutParams.topMargin = getTop() + offsetY;
+setLayoutParams(layoutParams);
+</code></pre>
+<h3 id="scollby">scollBy</h3>
+<p>反向移动父布局画布</p>
+<pre><code class="language-java">((View)getParent()).scrollBy(-offsetX,-offsetY);
+</code></pre>
+<h3 id="scroller">Scroller</h3>
+<ul>
+<li>初始化Scroller</li>
+</ul>
+<pre><code class="language-java">public CustomView(Context context, AttributeSet attrs) {
+      super(context, attrs);
+      mScroller = new Scroller(context);
+  }
+</code></pre>
+<ul>
+<li>
+<p>复写computeScroll()  在绘制View的时候在draw()中调用该方法</p>
+<p>调用父类的scrollTo()方法并通过Scroller来不断获取当前的滚动值，并调用invalidate()不断重绘，重绘就会调用computeScroll()方法，连贯成移动</p>
+</li>
+</ul>
+<pre><code class="language-java">@Override
+public void computeScroll() {
+    super.computeScroll();
+    if(mScroller.computeScrollOffset()){
+        ((View) getParent()).scrollTo(mScroller.getCurrX(),mScroller.getCurrY());
+         //通过不断的重绘不断的调用computeScroll方法
+         invalidate();
+    }  
+}
+</code></pre>
+<ul>
+<li>startScroll()</li>
+</ul>
+<pre><code class="language-java">public void smoothScrollTo(int destX,int destY){
+      int scrollX=getScrollX();
+      int delta=destX-scrollX;
+      //1000秒内滑向destX
+      mScroller.startScroll(scrollX,0,delta,0,2000);
+      invalidate();
+  }
+</code></pre>
+<ul>
+<li>外部调用</li>
+</ul>
+<pre><code class="language-java">mCustomView.smoothScrollTo(-400,0);
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#view%E7%9A%84%E6%BB%91%E5%8A%A8">View的滑动</a></li>
+<li><a href="#layout">layout()</a></li>
+<li><a href="#offset">offset</a></li>
+<li><a href="#layoutparams">LayoutParams</a></li>
+<li><a href="#scollby">scollBy</a></li>
+<li><a href="#scroller">Scroller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/TabLayout-indicator宽度工具类/">
+              <h3 class="post-title">
+                TabLayout indicator宽度工具类
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

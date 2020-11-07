@@ -1,0 +1,296 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MaterialDesign动画 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1604759555384">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="MaterialDesign动画 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="
+
+Touch Feedback（触摸反馈）
+水波纹效果
+5.0+自带的
+ &lt;Button android:layout_width=&quot;wrap_content&quot;
+    android:layout_height..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1604759555384" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              MaterialDesign动画
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-05-19
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <figure data-type="image" tabindex="1"><img src="https://ws1.sinaimg.cn/large/006tKfTcly1ffr5152xj9g30u01hc1l3.gif" alt="https://ws1.sinaimg.cn/large/006tKfTcly1ffr5152xj9g30u01hc1l3.gif" loading="lazy"></figure>
+<!--more-->
+<h4 id="touch-feedback触摸反馈">Touch Feedback（触摸反馈）</h4>
+<h5 id="水波纹效果">水波纹效果</h5>
+<p>5.0+自带的</p>
+<pre><code class="language-xml"> &lt;Button android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;100dp&quot;
+    android:text=&quot;@string/hello_world&quot; /&gt;
+&lt;Button
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;100dp&quot;
+    android:background=&quot;?attr/selectableItemBackground&quot;
+    android:text=&quot;@string/hello_world&quot; /&gt;
+&lt;Button
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;100dp&quot;
+    android:background=&quot;?attr/selectableItemBackgroundBorderless&quot;//没有边界，圆形
+    android:text=&quot;@string/hello_world&quot; /&gt;
+</code></pre>
+<p>可以修改背景颜色和水波纹的颜色style</p>
+<pre><code class="language-xml">	 &lt;item name=&quot;colorControlHighlight&quot;&gt;@color/colorPrimary_pink&lt;/item&gt;//高亮颜色
+        &lt;item name=&quot;colorButtonNormal&quot;&gt;@color/material_blue_grey_800&lt;/item&gt;//默认的颜色
+</code></pre>
+<h4 id="reveal-effect揭露效果">Reveal Effect（揭露效果）</h4>
+<h5 id="viewanimationutil">ViewAnimationUtil</h5>
+<pre><code class="language-java">//圆形水波纹揭露效果
+	ViewAnimationUtils.createCircularReveal(
+			view, //作用在哪个View上面
+			centerX, centerY, //扩散的中心点
+			startRadius, //开始扩散初始半径
+			endRadius)//扩散结束半径
+</code></pre>
+<pre><code class="language-java">mBt1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Animator mCircularReveal = ViewAnimationUtils.createCircularReveal(mBt1, mBt1.getWidth() / 2, mBt1.getHeight() / 2, 0, mBt1.getHeight());
+                mCircularReveal.setDuration(300);
+                mCircularReveal.setInterpolator(new AccelerateInterpolator());
+                mCircularReveal.start();
+                onBackPressed();
+            }
+        });
+public void jielu2(View view) {
+        Animator mCircularReveal = ViewAnimationUtils.createCircularReveal(view, 0, 0, 0, (float) Math.hypot(view.getWidth(),view.getHeight()));
+        mCircularReveal.setDuration(300);
+        mCircularReveal.setInterpolator(new BounceInterpolator());
+        mCircularReveal.start();
+    }
+</code></pre>
+<h4 id="activity-transitionactivity转场动画效果">Activity transition（Activity转场动画效果）</h4>
+<p>ActivityOptions只支持API21以上的版本</p>
+<p>前提：需要给两个Activity都设置如下，让其允许使用转场动画。</p>
+<pre><code>//方法一：
+getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//方法二：style
+修改主题：&lt;item name=&quot;android:windowContentTransitions&quot;&gt;true&lt;/item&gt;
+</code></pre>
+<p>兼容类：ActivityOptionsCompat 此类在低版本上面并没有转场动画效果，只是解决了我们手动去判断版本的问题而已。</p>
+<h5 id="共享元素转换">共享元素转换</h5>
+<ol>
+<li>给两个Activity当中的共享元素view都设置同一个名字---android:transitionName</li>
+<li>ActivityOptionsCompat设置</li>
+</ol>
+<pre><code class="language-java">//单个元素共享
+ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, iv1, &quot;iv_meinv3&quot;);
+	Intent intent = new Intent(this, SecondActivity.class);
+	startActivity(intent, optionsCompat.toBundle());
+	//多个共享元素
+	ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+			.makeSceneTransitionAnimation(this, Pair.create((View)iv1, &quot;iv1&quot;),Pair.create((View)bt, &quot;bt&quot;));
+	Intent intent = new Intent(this, SecondActivity.class);
+	startActivity(intent, optionsCompat.toBundle());
+</code></pre>
+<h5 id="普通的转换">普通的转换</h5>
+<p>三种系统带的：滑动效果Slide、展开效果Explode、渐变显示隐藏效果Fade（API21+）直接在Activity中设置</p>
+<pre><code class="language-java">Slide mSlide=new Slide();
+        mSlide.setDuration(1000);
+Explode mExplode=new Explode();
+        mExplode.setDuration(1000);
+Fade mFade = new Fade();
+        mFade.setDuration(1000);
+        getWindow().setExitTransition(mExplode);
+        getWindow().setEnterTransition(mExplode);
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#touch-feedback%E8%A7%A6%E6%91%B8%E5%8F%8D%E9%A6%88">Touch Feedback（触摸反馈）</a>
+<ul>
+<li><a href="#%E6%B0%B4%E6%B3%A2%E7%BA%B9%E6%95%88%E6%9E%9C">水波纹效果</a></li>
+</ul>
+</li>
+<li><a href="#reveal-effect%E6%8F%AD%E9%9C%B2%E6%95%88%E6%9E%9C">Reveal Effect（揭露效果）</a>
+<ul>
+<li><a href="#viewanimationutil">ViewAnimationUtil</a></li>
+</ul>
+</li>
+<li><a href="#activity-transitionactivity%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C">Activity transition（Activity转场动画效果）</a>
+<ul>
+<li><a href="#%E5%85%B1%E4%BA%AB%E5%85%83%E7%B4%A0%E8%BD%AC%E6%8D%A2">共享元素转换</a></li>
+<li><a href="#%E6%99%AE%E9%80%9A%E7%9A%84%E8%BD%AC%E6%8D%A2">普通的转换</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/Palette调色板/">
+              <h3 class="post-title">
+                Palette调色板
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

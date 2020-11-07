@@ -1,0 +1,222 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>简析事件分发机制 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1604759555384">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="简析事件分发机制 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="一、View的事件分发。
+结论：
+1.控件的Listener事件触发的顺序是先onTouch，再onClick。
+2.控件的onTouch返回true，将会onClick事件没有了---阻止了事件的传递。
+返回false，才会传递onCli..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1604759555384" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              简析事件分发机制
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-03-10
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>一、View的事件分发。<br>
+结论：</p>
+<p>1.控件的Listener事件触发的顺序是先onTouch，再onClick。<br>
+2.控件的onTouch返回true，将会onClick事件没有了---阻止了事件的传递。<br>
+返回false，才会传递onClick事件(才会传递up事件)</p>
+<p>源码依据：</p>
+<!--more-->
+<p>​	View的事件分发<br>
+​	1.dispatchTouchEvent（）<br>
+​	2.onTouchListener--&gt;onTouch方法<br>
+​	3.onTouchEvent()<br>
+​	4.onClickListener--&gt;onClick方法</p>
+<p>结论：<br>
+1.如果onTouchListener的onTouch方法返回了true，那么view里面的onTouchEvent就不会被调用了。<br>
+顺序dispatchTouchEvent--&gt;onTouchListener---return false--&gt;onTouchEvent<br>
+2.如果view为disenable,则：onTouchListener里面不会执行，但是会执行onTouchEvent(event)方法<br>
+3.onTouchEvent方法中的ACTION_UP分支中触发onclick事件监听<br>
+onTouchListener--&gt;onTouch方法返回true，消耗次事件。down,但是up事件是无法到达onClickListener.<br>
+onTouchListener--&gt;onTouch方法返回false，不会消耗此事件</p>
+<p>二、ViewGroup+View的事件分发<br>
+ViewGroup--&gt;View<br>
+​	1.dispatchTouchEvent()<br>
+​	2.onTouchEvent();<br>
+​	3.onInterceptTouchEvent(); 拦截触摸事件。</p>
+<p>1.先接触到事件的是父容器。<br>
+2.顺序：dispatchTouchEvent--&gt;onInterceptTouchEvent-----&gt;onTouchListener---return false--&gt;onTouchEvent</p>
+<p>dispatchTouchEvent:action--0---view:MyRelativeLayout<br>
+onInterceptTouchEvent:action--0---view:MyRelativeLayout //false不拦截<br>
+​	super.dispatchTouchEvent()<br>
+​	child.dispatchTouchEvent()<br>
+dispatchTouchEvent:action--0---view:MyButton<br>
+OnTouchListener:acton--0----view:com.ricky.event.MyButton{528154dc VFED..C. ........ 0,37-205,163 #7f080001 app:id/button1}<br>
+onTouchEvent:action--0---view:MyButton</p>
+<p>源码：2108行<br>
+​	 final boolean disallowIntercept = (mGroupFlags &amp; FLAG_DISALLOW_INTERCEPT) != 0;<br>
+​	            if (!disallowIntercept) {<br>
+​	                intercepted = onInterceptTouchEvent(ev);//调用拦截方法判断<br>
+​	                ev.setAction(action); // restore action in case it was changed<br>
+​	            } else {<br>
+​	                intercepted = false;<br>
+​	            }<br>
+源码：2197行<br>
+​	 if (dispatchTransformedTouchEvent(ev, false, child, idBitsToAssign)) {</p>
+<p>源码：2520行<br>
+​	dispatchTransformedTouchEvent(){<br>
+​		 if (child == null) {//如果ViewGroup里面没有子控件就交给自己处理(就是一个纯粹的View)<br>
+​			handled = super.dispatchTouchEvent(event);<br>
+​		    } else {<br>
+​			handled = child.dispatchTouchEvent(event);<br>
+​		    }<br>
+​	}</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

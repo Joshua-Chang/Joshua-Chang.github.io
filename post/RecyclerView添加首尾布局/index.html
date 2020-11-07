@@ -1,0 +1,369 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RecyclerView奇技淫巧：添加首尾布局 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1604759555384">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="RecyclerView奇技淫巧：添加首尾布局 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="
+自定义View继承自RecyclerView 建立添加首尾布局的方法，复写setAdapter()方法让其自主选择是否有首尾布局
+
+
+public class MyRecyclerView extends RecyclerView {
+ ..." />
+    <meta name="keywords" content="Design,RecyclerView,Item" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1604759555384" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              RecyclerView奇技淫巧：添加首尾布局
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-05-17
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://Joshua-Chang.github.io/tag/kV2tV-_fmf/" class="post-tag">
+                  # Design
+                </a>
+              
+                <a href="https://Joshua-Chang.github.io/tag/gS22UP4Uvz/" class="post-tag">
+                  # RecyclerView
+                </a>
+              
+                <a href="https://Joshua-Chang.github.io/tag/itRk9vqWe9/" class="post-tag">
+                  # Item
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <ol>
+<li>自定义View继承自RecyclerView 建立添加首尾布局的方法，复写setAdapter()方法让其自主选择是否有首尾布局</li>
+</ol>
+<!--more-->
+<pre><code class="language-java">public class MyRecyclerView extends RecyclerView {
+    ArrayList&lt;View&gt; mHeaderViewInfos = new ArrayList();
+    ArrayList&lt;View&gt; mFooterViewInfos = new ArrayList();
+    private Adapter mAdapter;
+
+    public MyRecyclerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public void addFooterView(View v) {
+
+        mFooterViewInfos.add(v);
+
+        // Wrap the adapter if it wasn't already wrapped.
+        if (mAdapter != null) {
+            if (!(mAdapter instanceof MyHeaderAdapter)) {
+                mAdapter = new MyHeaderAdapter(mHeaderViewInfos, mFooterViewInfos, mAdapter);
+            }
+        }
+    }
+
+    public void addHeaderView(View v) {
+        mHeaderViewInfos.add(v);
+        // Wrap the adapter if it wasn't already wrapped.
+        if (mAdapter != null) {
+            if (!(mAdapter instanceof MyHeaderAdapter)) {
+                mAdapter = new MyHeaderAdapter(mHeaderViewInfos, mFooterViewInfos, mAdapter);
+            }
+
+        }
+    }
+
+    public void setAdapter(Adapter adapter) {
+        if (mHeaderViewInfos.size() &gt; 0 || mFooterViewInfos.size() &gt; 0) {
+            mAdapter = new MyHeaderAdapter(mHeaderViewInfos, mFooterViewInfos, adapter);
+        } else {
+            mAdapter = adapter;
+        }
+        super.setAdapter(mAdapter);
+    }
+}
+</code></pre>
+<ol start="3">
+<li>
+<p>封装一个添加首尾布局的adapter</p>
+<pre><code class="language-java">public class MyHeaderAdapter extends RecyclerView.Adapter {
+
+    private final Adapter mAdapter;
+
+    // These two ArrayList are assumed to NOT be null.
+    // They are indeed created when declared in ListView and then shared.
+    ArrayList&lt;View&gt; mHeaderViewInfos;
+    ArrayList&lt;View&gt; mFooterViewInfos;
+
+    public MyHeaderAdapter(ArrayList&lt;View&gt; headerViewInfos, ArrayList&lt;View&gt; footerViewInfos, RecyclerView.Adapter mAdapter) {
+
+        this.mAdapter = mAdapter;
+
+        if (headerViewInfos == null) {
+            mHeaderViewInfos = new ArrayList&lt;View&gt;();
+        } else {
+            mHeaderViewInfos = headerViewInfos;
+        }
+
+        if (footerViewInfos == null) {
+            mFooterViewInfos  = new ArrayList&lt;View&gt;();
+
+        } else {
+            mFooterViewInfos = footerViewInfos;
+        }
+
+    }
+     public int getItemCount() {
+       if (mAdapter != null) {
+           return getFootersCount() + getHeadersCount() + mAdapter.getItemCount();
+       } else {
+           return getFootersCount() + getHeadersCount();
+       }
+   }
+
+   @Override
+   public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+       int numHeaders = getHeadersCount();
+       if (position &lt; numHeaders) {
+           return ;
+       }
+       final int adjPosition = position - numHeaders;
+       int adapterCount = 0;
+       if (mAdapter != null) {
+           adapterCount = mAdapter.getItemCount();
+           if (adjPosition &lt; adapterCount) {
+               mAdapter.onBindViewHolder(holder,adjPosition);
+               return ;
+           }
+       }
+   }
+      public int getItemViewType(int position) {
+       int numHeaders = getHeadersCount();
+       if (position &lt; numHeaders) {
+           return RecyclerView.INVALID_TYPE;
+       }
+       final int adjPosition = position - numHeaders;
+       int adapterCount = 0;
+       if (mAdapter != null) {
+           adapterCount = mAdapter.getItemCount();
+           if (adjPosition &lt; adapterCount) {
+               return mAdapter.getItemViewType(adjPosition);
+           }
+       }
+       return RecyclerView.INVALID_TYPE - 1;
+   }
+      @Override
+   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+       if (viewType== RecyclerView.INVALID_TYPE) {
+           return new MyHeaderViewHolder(mHeaderViewInfos.get(0));//首
+       }else if (viewType==RecyclerView.INVALID_TYPE-1){
+           return new MyHeaderViewHolder(mFooterViewInfos.get(0));//尾
+       }
+       return mAdapter.onCreateViewHolder(parent,viewType);
+   }
+
+   private static class MyHeaderViewHolder extends RecyclerView.ViewHolder {
+       public MyHeaderViewHolder(View view) {
+           super(view);
+       }
+   }
+   public int getHeadersCount() {
+       return mHeaderViewInfos.size();
+   }
+
+   public int getFootersCount() {
+       return mFooterViewInfos.size();
+   }  }
+</code></pre>
+</li>
+<li>
+<p>在RecyclerView上添加首尾布局 （inflator、Fvb、动态add一个系统View）</p>
+<pre><code class="language-java">
+ViewGroup.LayoutParams mLayoutParams = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+ImageView mTextView=new ImageView(this);
+mTextView.setLayoutParams(mLayoutParams);
+mTextView.setImageResource(R.mipmap.ic_launcher);
+mMyRecyclerView.addHeaderView(mTextView);
+
+TextView mTextView1=new TextView(this);
+mLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+mTextView1.setLayoutParams(mLayoutParams);
+mTextView1.setText(&quot;xxx&quot;);
+mMyRecyclerView.addFooterView(mTextView1);
+</code></pre>
+</li>
+</ol>
+<h3 id="注意刷新问题">注意：刷新问题</h3>
+<p>此方法模仿自ListView 采用中间代理模式</p>
+<pre><code>//注意：如果添加了头部的话，这样刷新是没有效果的
+//adapter.notifyDataSetChanged();
+//需要拿到真正的adapter（因为我们自定义REcyclerView里面是包装了一层新的adapter）
+//recyclerView.getAdapter().notifyDataSetChanged();
+//这里还要注意position的问题，因为header也是属于条目的一部分，所以position都要往下移1位才行
+//recyclerView.getAdapter().notifyItemInserted(1);
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E6%B3%A8%E6%84%8F%E5%88%B7%E6%96%B0%E9%97%AE%E9%A2%98">注意：刷新问题</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/简析事件分发机制/">
+              <h3 class="post-title">
+                简析事件分发机制
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

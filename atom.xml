@@ -1,0 +1,971 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://Joshua-Chang.github.io</id>
+    <title>Joshua-Chang`Blog</title>
+    <updated>2020-11-07T14:32:37.284Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://Joshua-Chang.github.io"/>
+    <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://Joshua-Chang.github.io/images/avatar.png</logo>
+    <icon>https://Joshua-Chang.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2020, Joshua-Chang`Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Hello Gridea]]></title>
+        <id>https://Joshua-Chang.github.io/post/hello-gridea/</id>
+        <link href="https://Joshua-Chang.github.io/post/hello-gridea/">
+        </link>
+        <updated>2018-12-11T16:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+<!-- more -->
+<p><a href="https://github.com/getgridea/gridea">Github</a><br>
+<a href="https://gridea.dev/">Gridea 主页</a><br>
+<a href="http://fehey.com/">示例网站</a></p>
+<h2 id="特性">特性👇</h2>
+<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
+<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
+<p>🏷️  你可以对文章进行标签分组</p>
+<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
+<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
+<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
+<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
+<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
+<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
+<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
+<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
+<p>未来，它一定会成为你离不开的伙伴</p>
+<p>尽情发挥你的才华吧！</p>
+<p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Update MacOS to Mojave Vim: Caught deadly signal SEGV]]></title>
+        <id>https://Joshua-Chang.github.io/post/Update-MacOS-to-Mojave-Vim-Caught-deadly-signal-SEGVE/</id>
+        <link href="https://Joshua-Chang.github.io/post/Update-MacOS-to-Mojave-Vim-Caught-deadly-signal-SEGVE/">
+        </link>
+        <updated>2018-10-24T03:51:37.000Z</updated>
+        <content type="html"><![CDATA[<h5 id="极有可能是youcompleteme或者powerline等插件的问题">极有可能是<em>YouCompleteMe</em>或者<em>Powerline</em>等插件的问题</h5>
+<pre><code class="language-bash">Vim: Caught deadly signal SEGV
+
+Error detected while processing function &lt;SNR&gt;78_PollServerReady[7]..&lt;SNR&gt;78_Pyeval:Vim: Finished.
+
+line    4:
+Exception MemoryError: MemoryError() in &lt;module 'threading' from '/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/threading.pyc'&gt; ignored
+[1]    72868 segmentation fault  vim Test.java
+</code></pre>
+<h5 id="解决">解决：</h5>
+<pre><code class="language-bash">brew install vim --with-lua --with-override-system-vi
+</code></pre>
+<p>and restart shell , fixed</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[App使用统计与静默拍摄]]></title>
+        <id>https://Joshua-Chang.github.io/post/App时常统计与静默拍摄/</id>
+        <link href="https://Joshua-Chang.github.io/post/App时常统计与静默拍摄/">
+        </link>
+        <updated>2018-10-03T10:29:46.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="app使用统计">App使用统计</h3>
+<p>监控或统计手机内的app使用情况可以从两个思路考虑</p>
+<ul>
+<li>
+<p>统计每个app的使用时长</p>
+<p>UsageStatsManager这一统计管理类，可以查出每个app简单的最近开启时间、某时限内的使用时长等信息。更复杂的手机亮屏次数，开启<!--more-->应用次数可以使用UsageStatsService或者过滤包名的形式统计。</p>
+</li>
+<li>
+<p>统计每个Android系统耗电情况的每个app占比</p>
+<p>在做电量优化的时候经常会通过adb使用Battery-Historian分析电量报告，所以由此灵感，具体的实现还需要头脑风暴一下。</p>
+</li>
+</ul>
+<h5 id="对app使用时常统计的简单实现">对app使用时常统计的简单实现</h5>
+<ol>
+<li>
+<p>开启ACTION_USAGE_ACCESS_SETTINGS权限</p>
+<figure data-type="image" tabindex="1"><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fvv9r2lhoyj308r0fkt9b.jpg" alt="" loading="lazy"></figure>
+</li>
+<li>
+<p>得到使用分析管理UsageStatsManager并根据时限查询统计状态</p>
+<pre><code class="language-java">UsageStatsManager manager = (UsageStatsManager) getApplicationContext().getSystemService(USAGE_STATS_SERVICE);
+List&lt;UsageStats&gt; stats = manager.queryUsageStats(UsageStatsManager.INTERVAL_MONTHLY, beginCal.getTimeInMillis(), endCal.getTimeInMillis());
+</code></pre>
+</li>
+<li>
+<p>根据UsageStats查询每个app的统计信息</p>
+<pre><code class="language-java">for (UsageStats us : stats) {
+    try {
+        PackageManager pm = getApplicationContext().getPackageManager();
+        ApplicationInfo applicationInfo = pm.getApplicationInfo(us.getPackageName(), PackageManager.GET_META_DATA);
+        if ((applicationInfo.flags &amp; applicationInfo.FLAG_SYSTEM) &lt;= 0) {
+            sb.append(pm.getApplicationLabel(applicationInfo)+&quot; 使用时长：&quot;+formatTime(us.getTotalTimeInForeground())+&quot;\n&quot;);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fvv9r2tdo9j308r0fkabf.jpg" alt="" loading="lazy"></figure>
+</li>
+</ol>
+<h3 id="静默后台拍摄">静默后台拍摄</h3>
+<h5 id="静默拍摄的简单思路">静默拍摄的简单思路</h5>
+<ul>
+<li>
+<p>将SurfaceView或TextureView这一采集呈现的layout参数设为最小。（不能设置visibility：gone 不会采集到图像），可见现在采集时没有采集预览，但采集到的bitmap可以成功设置。</p>
+<figure data-type="image" tabindex="3"><img src="https://thumbs.gfycat.com/DenseFailingGroundhog-size_restricted.gif" alt="" loading="lazy"></figure>
+</li>
+<li>
+<p>再将SurfaceView所在的Activity主题透明化</p>
+<p>可见此时的采集效果从UI上看静默进行。”拍摄“按键只是方便展示效果，如果使用Service去掉用则</p>
+<p>真正实现了后台静默采集的效果，至于采集到bitmap可以储存也可以直接用三方sdk做一些图像分析。</p>
+<figure data-type="image" tabindex="4"><img src="https://thumbs.gfycat.com/SpryBeautifulChafer-size_restricted.gif" alt="" loading="lazy"></figure>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[开发一个IntelliJ IDEA插件]]></title>
+        <id>https://Joshua-Chang.github.io/post/开发一个IntelliJ-IDEA插件/</id>
+        <link href="https://Joshua-Chang.github.io/post/开发一个IntelliJ-IDEA插件/">
+        </link>
+        <updated>2017-12-26T16:03:17.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="灵感">灵感</h3>
+<p>IDEA和AS中的大小写切换快捷键，一直是比较良心的。</p>
+<p>在声明一些常量时极其省事，但常量由多个单词组成时，还要手动的加上下划线又及其麻烦。</p>
+<h3 id="思路">思路</h3>
+<p>开发一个插件，把符合驼峰命名的多单词组成名字，分别加上下划线。反之，把由下划线拼成的名字变成驼峰<!--more--></p>
+<p>命名。</p>
+<h3 id="eg">e.g.</h3>
+<ul>
+<li>
+<p>light_dialog_type --&gt; lightDialogType</p>
+</li>
+<li>
+<p>anApplePie --&gt; an_apple_pie</p>
+</li>
+<li>
+<p>homeActivityTimer --&gt;home_activity_timer --&gt; HOME_ACTIVITY_TIMER</p>
+</li>
+</ul>
+<h3 id="实现">实现</h3>
+<ol>
+<li>新建一个IntelliJ Platform Plugin项目，创建相应的action复写actionPerformed()</li>
+<li>得到AS/IDEA选中的常量名</li>
+</ol>
+<pre><code class="language-java">       //获取Editor和Project对象
+        Editor editor = e.getData(PlatformDataKeys.EDITOR);
+        Project project = e.getData(PlatformDataKeys.PROJECT);
+        if (editor == null || project == null)
+            return;
+
+        //获取SelectionModel和Document对象
+        SelectionModel selectionModel = editor.getSelectionModel();
+        Document document = editor.getDocument();
+
+        selectionModel.selectWordAtCaret(false);
+        //拿到选中部分字符串
+        String selectedText = selectionModel.getSelectedText();
+
+        //得到选中字符串的起始和结束位置
+        int startOffset = selectionModel.getSelectionStart();
+        int endOffset = selectionModel.getSelectionEnd();
+</code></pre>
+<ol start="3">
+<li>新线程中去执行驼峰命名与下划线的转换操作</li>
+</ol>
+<pre><code class="language-java">        //对文档进行操作部分代码，需要放入Runnable接口中实现，由IDEA在内部将其通过一个新线程执行
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isLine(selectedText)) {
+                    document.replaceString(startOffset, endOffset, lineToHump(selectedText));
+                }else {
+                    String temp=null;
+                    if (selectedText.charAt(0) == 'm' &amp;&amp; selectedText.charAt(1) &lt;= 'Z' &amp;&amp; selectedText.charAt(1) &gt;= 'A') {//情况一：把mActivityInstance这种变为ActivityInstance
+                        temp = selectedText.substring(1);
+                    }
+                    String result = temp != null ? temp : selectedText;
+                    result=humpToLine(result);
+                    if (result.charAt(0)=='_') {
+                        result=result.substring(1);
+                    }
+                    document.replaceString(startOffset, endOffset, result);
+                }
+            }
+        };
+</code></pre>
+<ol start="4">
+<li>加入任务，由IDEA调度执行这个任务</li>
+</ol>
+<pre><code class="language-java">WriteCommandAction.runWriteCommandAction(project, runnable);
+</code></pre>
+<ol start="5">
+<li>其他：转换方法都是些常用算法不做赘述；Action的update方法看需求情况编写。</li>
+</ol>
+<h3 id="完工">完工</h3>
+<p>发布在JetBrains给提提意见：<a href="https://plugins.jetbrains.com/plugin/11121-underline-camel-toggle-case">Underline Camel Toggle Case</a> 或在AS/IDEA的plugin中搜索</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[View滑动的几种方式]]></title>
+        <id>https://Joshua-Chang.github.io/post/View滑动的几种方式/</id>
+        <link href="https://Joshua-Chang.github.io/post/View滑动的几种方式/">
+        </link>
+        <updated>2017-09-28T06:27:58.000Z</updated>
+        <summary type="html"><![CDATA[<h3 id="view的滑动">View的滑动</h3>
+<p>实现View滑动大概有：layout()、offsetLeftAndRight()／offsetTopAndBottom()、LayoutParams、动画、scollTo与scollBy和Scroller等几种方法。</p>
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="view的滑动">View的滑动</h3>
+<p>实现View滑动大概有：layout()、offsetLeftAndRight()／offsetTopAndBottom()、LayoutParams、动画、scollTo与scollBy和Scroller等几种方法。</p>
+<!--more-->
+<h3 id="layout">layout()</h3>
+<pre><code class="language-java">layout(getLeft()+offsetX, getTop()+offsetY,getRight()+offsetX , getBottom()+offsetY);
+</code></pre>
+<h3 id="offset">offset</h3>
+<pre><code class="language-java">offsetLeftAndRight(offsetX);
+offsetTopAndBottom(offsetY);
+</code></pre>
+<h3 id="layoutparams">LayoutParams</h3>
+<pre><code class="language-java">ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) getLayoutParams();
+layoutParams.leftMargin = getLeft() + offsetX;
+layoutParams.topMargin = getTop() + offsetY;
+setLayoutParams(layoutParams);
+</code></pre>
+<h3 id="scollby">scollBy</h3>
+<p>反向移动父布局画布</p>
+<pre><code class="language-java">((View)getParent()).scrollBy(-offsetX,-offsetY);
+</code></pre>
+<h3 id="scroller">Scroller</h3>
+<ul>
+<li>初始化Scroller</li>
+</ul>
+<pre><code class="language-java">public CustomView(Context context, AttributeSet attrs) {
+      super(context, attrs);
+      mScroller = new Scroller(context);
+  }
+</code></pre>
+<ul>
+<li>
+<p>复写computeScroll()  在绘制View的时候在draw()中调用该方法</p>
+<p>调用父类的scrollTo()方法并通过Scroller来不断获取当前的滚动值，并调用invalidate()不断重绘，重绘就会调用computeScroll()方法，连贯成移动</p>
+</li>
+</ul>
+<pre><code class="language-java">@Override
+public void computeScroll() {
+    super.computeScroll();
+    if(mScroller.computeScrollOffset()){
+        ((View) getParent()).scrollTo(mScroller.getCurrX(),mScroller.getCurrY());
+         //通过不断的重绘不断的调用computeScroll方法
+         invalidate();
+    }  
+}
+</code></pre>
+<ul>
+<li>startScroll()</li>
+</ul>
+<pre><code class="language-java">public void smoothScrollTo(int destX,int destY){
+      int scrollX=getScrollX();
+      int delta=destX-scrollX;
+      //1000秒内滑向destX
+      mScroller.startScroll(scrollX,0,delta,0,2000);
+      invalidate();
+  }
+</code></pre>
+<ul>
+<li>外部调用</li>
+</ul>
+<pre><code class="language-java">mCustomView.smoothScrollTo(-400,0);
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[TabLayout indicator宽度工具类]]></title>
+        <id>https://Joshua-Chang.github.io/post/TabLayout-indicator宽度工具类/</id>
+        <link href="https://Joshua-Chang.github.io/post/TabLayout-indicator宽度工具类/">
+        </link>
+        <updated>2017-09-22T13:35:36.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="宽度工具类">宽度工具类</h4>
+<p>一劳永逸之法</p>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="宽度工具类">宽度工具类</h4>
+<p>一劳永逸之法</p>
+<!--more-->
+<pre><code class="language-java">public void reflex(final TabLayout tabLayout){
+    //了解源码得知 线的宽度是根据 tabView的宽度来设置的
+    tabLayout.post(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                //拿到tabLayout的mTabStrip属性
+                LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
+
+                int dp10 = dp2px(tabLayout.getContext(), 10);
+
+                for (int i = 0; i &lt; mTabStrip.getChildCount(); i++) {
+                    View tabView = mTabStrip.getChildAt(i);
+
+                    //拿到tabView的mTextView属性  tab的字数不固定一定用反射取mTextView
+                    Field mTextViewField = tabView.getClass().getDeclaredField(&quot;mTextView&quot;);
+                    mTextViewField.setAccessible(true);
+
+                    TextView mTextView = (TextView) mTextViewField.get(tabView);
+
+                    tabView.setPadding(0, 0, 0, 0);
+
+                    //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
+                    int width = 0;
+                    width = mTextView.getWidth();
+                    if (width == 0) {
+                        mTextView.measure(0, 0);
+                        width = mTextView.getMeasuredWidth();
+                    }
+
+                    //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                    params.width = width ;
+                    params.leftMargin = dp10;
+                    params.rightMargin = dp10;
+                    tabView.setLayoutParams(params);
+
+                    tabView.invalidate();
+                }
+
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    });
+
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[IPC机制之Messenger]]></title>
+        <id>https://Joshua-Chang.github.io/post/IPC机制之Messenger/</id>
+        <link href="https://Joshua-Chang.github.io/post/IPC机制之Messenger/">
+        </link>
+        <updated>2017-06-02T02:42:31.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="概念">概念</h4>
+<p>Messenger是一种轻量级的IPC方案，它的底层实现是AIDL，通过Messenger可以在不同进程中传递Message对象，在Message中放入我们需要传递的数据就可以轻松实现数据在进程间传递了。</p>
+<p>在Messenger中进行数据传递必须将数据放入Message中，而Messenger和Message都实现了Parcelable接口，因此可以跨进程传输。</p>
+<p>Messenger的使用很简单，由于它一次处理一个请求，因此在服务端不用考虑线程同步的问题。Messenger实现进程间通信大致可以分为以下几步，分为服务端和客户端。</p>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="概念">概念</h4>
+<p>Messenger是一种轻量级的IPC方案，它的底层实现是AIDL，通过Messenger可以在不同进程中传递Message对象，在Message中放入我们需要传递的数据就可以轻松实现数据在进程间传递了。</p>
+<p>在Messenger中进行数据传递必须将数据放入Message中，而Messenger和Message都实现了Parcelable接口，因此可以跨进程传输。</p>
+<p>Messenger的使用很简单，由于它一次处理一个请求，因此在服务端不用考虑线程同步的问题。Messenger实现进程间通信大致可以分为以下几步，分为服务端和客户端。</p>
+<!--more-->
+<h4 id="服务端进程">服务端进程</h4>
+<p>服务端新建一个Service来处理客户端发起的请求，同时创建一个Handler并通过它来创建一个Messenger对象，然后在Service的onBind中返回这个Messenger对象底层的Binder即可。</p>
+<p>如果需要客服端能够回应客户端，那么和服务端一样，在客户端还需要创建一个新的Messenger,并把这个Messenger对象通过Message的replyTo参数传递给服务端，服务端通过这个replyTo参数就可以回应客户端。</p>
+<pre><code class="language-java">public class MyService extends Service {
+    public static final int MSG_FROM_SERVICE=2;
+    public MyService() {}
+    public static class MessagerHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what==MainActivity.MSG_FROM_CLIENT){
+                Log.e(&quot;xxx&quot;,&quot;msg from client: &quot;+msg.getData().getString(&quot;msg&quot;));
+
+                Messenger mReplyTo = msg.replyTo;
+                Message mMessage=Message.obtain(null,MSG_FROM_SERVICE);
+                Bundle mBundle=new Bundle();
+                mBundle.putString(&quot;reply&quot;,&quot;Hi,service received succeed&quot;);
+                mMessage.setData(mBundle);
+                try {
+                    mReplyTo.send(mMessage);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+  //1.创建Messenger（需要handler）对象
+    private Messenger mMessenger=new Messenger(new MessagerHandler());
+    @Override
+    public IBinder onBind(Intent intent) {
+      //2.在Service的onBind中返回这个Messenger对象底层的Binder 供客户端使用
+        return mMessenger.getBinder();
+    }
+}
+</code></pre>
+<h4 id="客户端进程">客户端进程</h4>
+<p>客户端进程中首先要绑定服务端的Service，绑定成功后用服务端返回的IBinder对象创建一个Messenger，通过这个Messenger就可以向服务端发送类型为Message的消息了，message内可以存入Bundle。</p>
+<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
+    public static final int MSG_FROM_CLIENT=1;
+
+    private ServiceConnection mServiceConnection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+          //2.绑定成功后,根据上文返回的IBinder对象创建一个Messenger
+            Messenger mMessenger=new Messenger(service);
+            Message mMessage = Message.obtain(null, MSG_FROM_CLIENT);
+            Bundle mBundle=new Bundle();
+            mBundle.putString(&quot;msg&quot;,&quot;hello,this msg from client&quot;);
+            mMessage.setData(mBundle);
+
+            mMessage.replyTo=mReplyMessenger;
+            try {
+                mMessenger.send(mMessage);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+    private static class ReceiveHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what==MyService.MSG_FROM_SERVICE){
+                Log.e(&quot;xxx&quot;,&quot;msg from service: &quot;+msg.getData().getString(&quot;reply&quot;));
+            }
+        }
+    }
+    private Messenger mReplyMessenger=new Messenger(new ReceiveHandler());
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+      //1.绑定服务端的Service
+        Intent mIntent=new Intent(this,MyService.class);
+        bindService(mIntent,mServiceConnection,BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbindService(mServiceConnection);
+        super.onDestroy();
+    }
+}
+</code></pre>
+<h4 id="extra">Extra</h4>
+<p>注册service时为新的全局进程</p>
+<pre><code class="language-xml">&lt;service
+    android:name=&quot;.MyService&quot;
+    android:process=&quot;com.coolapk.developer_verify_package&quot;&gt;
+&lt;/service&gt;
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[dagger2的Qualifier与Scope]]></title>
+        <id>https://Joshua-Chang.github.io/post/dagger2的Qualifier与Scope/</id>
+        <link href="https://Joshua-Chang.github.io/post/dagger2的Qualifier与Scope/">
+        </link>
+        <updated>2017-05-21T11:18:57.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="qualifier即named">Qualifier即Named</h4>
+<p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
+<h5 id="module">Module</h5>
+<pre><code class="language-java">@Module
+public class ClothModule {
+    @Blue
+    @Provides
+    public Cloth getBluecloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;蓝&quot;);
+        return mCloth;
+    }
+    @Named(&quot;Red&quot;)
+    @Provides
+    public Cloth getRedcloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;红&quot;);
+        return mCloth;
+    }
+}
+</code></pre>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="qualifier即named">Qualifier即Named</h4>
+<p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
+<h5 id="module">Module</h5>
+<pre><code class="language-java">@Module
+public class ClothModule {
+    @Blue
+    @Provides
+    public Cloth getBluecloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;蓝&quot;);
+        return mCloth;
+    }
+    @Named(&quot;Red&quot;)
+    @Provides
+    public Cloth getRedcloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;红&quot;);
+        return mCloth;
+    }
+}
+</code></pre>
+<!--more-->
+<h5 id="component">Component</h5>
+<pre><code class="language-java">@Component(modules=ClothModule.class)
+public interface ClothCompetent {
+    void inject(MainActivity mainActivity);
+}
+</code></pre>
+<h5 id="activity">Activity</h5>
+<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
+    TextView mTextView;
+    @Named(&quot;Red&quot;)
+    @Inject
+    Cloth mClothRed;
+    @Blue
+    @Inject
+    Cloth mClothBlue;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mTextView= (TextView) findViewById(R.id.tv1);
+        ClothCompetent mClothCompetent=DaggerClothCompetent.builder().clothModule(new ClothModule()).build();
+        mClothCompetent.inject(this);
+        mTextView.setText(mClothRed+&quot;\n&quot;+mClothBlue);
+    }
+}
+</code></pre>
+<h5 id="qualifier">Qualifier</h5>
+<p>自定义的Qualifier与官方的Named原理一样</p>
+<pre><code class="language-java">@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Blue {
+}
+</code></pre>
+<p>官方的Named</p>
+<pre><code class="language-java">@Qualifier
+@Documented
+@Retention(RUNTIME)
+public @interface Named {
+
+    /** The name. */
+    String value() default &quot;&quot;;
+}
+</code></pre>
+<h4 id="scope即singleton">Scope即Singleton</h4>
+<p>以Component为依据，在指定范围内的单例</p>
+<h5 id="module-2">Module</h5>
+<ol>
+<li>在@Provides为外界提供Jacket时，参数中用到了Cloth，必须在Module中@Provides为Jacket提供Cloth</li>
+<li>自定义的Qualifier和Named也可以在参数中使用</li>
+</ol>
+<pre><code class="language-java">@Module
+public class JacketModule {
+    @Provides
+    public Jacket getJacket(@Named(&quot;Red&quot;) Cloth cloth){
+        return new Jacket(cloth);
+    }
+    @Singleton
+    @Named(&quot;Red&quot;)
+    @Provides
+    public Cloth getRedCloth(){
+       Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;红&quot;);
+        return mCloth;
+    }
+    @Blue
+    @Provides
+    public Cloth getBluecloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;蓝&quot;);
+        return mCloth;
+    }
+}
+</code></pre>
+<h5 id="component-2">Component</h5>
+<p>在用到的Cloth和Component上同时添加@Singleton，此时Cloth为单例</p>
+<pre><code class="language-java">@Singleton
+@Component(modules = JacketModule.class)
+public interface JacketComponent {
+    void inject(MainActivity mainActivity);
+}
+</code></pre>
+<h5 id="activity-2">Activity</h5>
+<p>此时的Cloth和JacketRed.getCloth()为同一个</p>
+<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
+    TextView mTextView;
+    @Named(&quot;Red&quot;)
+    @Inject
+    Cloth mClothRed;
+    @Inject
+    Jacket mJacketRed;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mTextView= (TextView) findViewById(R.id.tv1);
+        JacketComponent mJacketComponent = DaggerJacketComponent.builder().jacketModule(new JacketModule()).build();
+        mJacketComponent.inject(this);
+        mTextView.setText((mJacketRed.getCloth() == mClothRed) + &quot;&quot;);
+    }
+}
+</code></pre>
+<h5 id="scope">Scope</h5>
+<p>自定义的Scope与官方的Singleton原理一样，替换Singleton为JacketSingleton仍返回true</p>
+<p>自定义的JacketSingleton：在JacketSingleton作用域内单例</p>
+<pre><code class="language-java">@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JacketSingleton {
+}
+</code></pre>
+<p>官方的Singleton</p>
+<pre><code class="language-java">@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface Singleton {}
+</code></pre>
+<h4 id="dependencies">dependencies</h4>
+<p>实例：分别创建两个Activity，跳转后的实例为同一个（工具类多此用法在app层单例）</p>
+<h5 id="分别创建两个module">分别创建两个Module</h5>
+<p>JacketModule与JacketModule2</p>
+<h5 id="创建component">创建Component</h5>
+<h6 id="方法一dependencies">方法一：dependencies</h6>
+<pre><code class="language-java">@JacketSingleton
+@Component(modules = JacketModule.class,dependencies = BaseComponent.class)
+public interface JacketComponent {
+    void inject(MainActivity mainActivity);
+}
+</code></pre>
+<h6 id="方法二subcomponent">方法二：Subcomponent</h6>
+<pre><code class="language-java">@JacketSingleton
+@Subcomponent(modules = JacketModule2.class)
+public interface JacketComponent2 {
+    void inject(MainActivity2 mainActivity);
+}
+</code></pre>
+<h5 id="创建basemodule">创建BaseModule</h5>
+<pre><code class="language-java">@Module
+public class BaseModule {
+    @Singleton
+    @Provides
+    public Jacket getJacket(@Named(&quot;Red&quot;) Cloth cloth){
+        return new Jacket(cloth);
+    }
+    @Singleton
+    @Provides
+    @Named(&quot;Red&quot;)
+    public Cloth getRedCloth(){
+        Cloth mCloth=new Cloth();
+        mCloth.setColor(&quot;红&quot;);
+        return mCloth;
+    }
+}
+</code></pre>
+<h5 id="创建basecomponent">创建BaseComponent</h5>
+<pre><code class="language-java">@Singleton
+@Component(modules = BaseModule.class)
+public interface BaseComponent {
+    Jacket getJacket();//dependencies依赖声明的方式
+    JacketComponent2 getJacketComponent2(JacketModule2 jacketModule2);//@Subcomponent使用的声明方式,声明一个返回值为子组件的方法,子组件需要什么Module,就在方法参数中添加什么
+}
+</code></pre>
+<h5 id="在app中初始化basecomponent">在app中初始化BaseComponent</h5>
+<pre><code class="language-java">public class App extends Application {
+        private BaseComponent baseComponent;
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            baseComponent = DaggerBaseComponent.builder().baseModule(new BaseModule()).build();
+        }
+
+        public BaseComponent getBaseComponent() {
+            return baseComponent;
+        }
+}
+</code></pre>
+<h5 id="在两个activity中使用">在两个Activity中使用</h5>
+<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
+    TextView mTextView;
+    @Named(&quot;Red&quot;)
+    @Inject
+    Cloth mClothRed;
+    @Inject
+    Jacket mJacketRed;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mTextView= (TextView) findViewById(R.id.tv1);
+        JacketComponent mJacketComponent = DaggerJacketComponent.builder().baseComponent(((App) getApplication()).getBaseComponent()).jacketModule(new JacketModule()).build();
+        mJacketComponent.inject(this);
+        mTextView.setText(mJacketRed.hashCode()+&quot;&quot;);
+    }
+    public void go(View view) {
+        Intent intent = new Intent(this,MainActivity2.class);
+        intent.putExtra(&quot;xx&quot;,mJacketRed.hashCode()+&quot;&quot;);
+        startActivity(intent);
+    }
+}
+</code></pre>
+<pre><code class="language-java">public class MainActivity2 extends AppCompatActivity {
+    TextView mTextView;
+    @Named(&quot;Red&quot;)
+    @Inject
+    Cloth mClothRed;
+    @Inject
+    Jacket mJacketRed;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+        mTextView= (TextView) findViewById(R.id.tv2);
+        App application = (App) getApplication();
+        application.getBaseComponent().getJacketComponent2(new JacketModule2()).inject(this);
+        String mString = (String) getIntent().getExtras().get(&quot;xx&quot;);
+        mTextView.setText(mString+&quot;\n&quot;+mJacketRed.hashCode()+&quot;&quot;);
+    }
+}
+</code></pre>
+<h5 id="结论">结论</h5>
+<p>分别在两个Activity中初始化的Jacket哈希值相同，为同一个变量，app层单例。</p>
+<h4 id="lazy与provider">Lazy与Provider</h4>
+<p>Lazy用于延迟加载,所谓的懒加载就是当你需要用到该依赖对象时,Dagger2才帮你去获取一个;Provide用于强制重新加载,也就是每一要用到依赖对象时,Dagger2都会帮你依赖注入一次</p>
+<pre><code class="language-java">    @Inject //Lazy声明方式
+    Lazy&lt;Cloth&gt; redCloth;
+    @Inject //Provider声明方式
+    Provider&lt;Shoe&gt; shoe;
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[dagger2由简入深]]></title>
+        <id>https://Joshua-Chang.github.io/post/dagger2由简入深/</id>
+        <link href="https://Joshua-Chang.github.io/post/dagger2由简入深/">
+        </link>
+        <updated>2017-05-21T06:47:07.000Z</updated>
+        <summary type="html"><![CDATA[<p>Dagger2是Android中比较热门的依赖注入框架。控制反转（Inversion of Control，缩写为IoC），是面向对象编程中的一种设计原则，可以用来减低计算机代码之间的耦合度。其中最常见的方式叫做依赖注入（Dependency Injection，简称DI）</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Dagger2是Android中比较热门的依赖注入框架。控制反转（Inversion of Control，缩写为IoC），是面向对象编程中的一种设计原则，可以用来减低计算机代码之间的耦合度。其中最常见的方式叫做依赖注入（Dependency Injection，简称DI）</p>
+<!--more-->
+<h4 id="gradle引入">Gradle引入</h4>
+<p>项目下</p>
+<pre><code>//添加apt插件
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+</code></pre>
+<p>app下</p>
+<pre><code>apply plugin: 'com.neenbedankt.android-apt'
+   
+   
+   //引入dagger2
+compile 'com.google.dagger:dagger:2.4'
+    apt 'com.google.dagger:dagger-compiler:2.4'
+    //java注解
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+</code></pre>
+<h3 id="正常创建方法">正常创建方法</h3>
+<h4 id="创建bean类">创建bean类</h4>
+<pre><code class="language-java">public class Cloth {
+    private String color;
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        return color + &quot;布料&quot;;
+    }
+}
+</code></pre>
+<h4 id="创建module类">创建Module类</h4>
+<pre><code class="language-java">@Module
+public class MainModule {
+    @Provides
+    public Cloth getCloth() {
+        Cloth cloth = new Cloth();
+        cloth.setColor(&quot;红色&quot;);
+        return cloth;
+    }
+}
+</code></pre>
+<h4 id="创建component接口">创建Component接口</h4>
+<pre><code class="language-java">@Component(modules=MainModule.class)
+public interface MainComponent {
+    void inject(MainActivity mainActivity);
+}
+</code></pre>
+<h4 id="在mainactivity中声明先rebuild一下">在MainActivity中声明（先Rebuild一下）</h4>
+<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
+    private TextView tv;
+    @Inject
+    Cloth cloth;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        tv = (TextView) findViewById(R.id.tv);
+        MainComponent build = DaggerMainComponent.builder().mainModule(new MainModule()).build();
+        build.inject(this);
+        tv.setText(&quot;我现在有&quot; + cloth);
+    }
+}
+</code></pre>
+<h3 id="极简创建方法">极简创建方法</h3>
+<pre><code class="language-java">public class Shoe {
+    @Inject
+    public Shoe() {
+    }
+    @Override
+    public String toString() {
+        return &quot;鞋子&quot;;
+    }
+}
+</code></pre>
+<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
+    ...
+    @Inject
+    Shoe shoe;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+          ...
+        tv.setText(&quot;我现在有&quot; + cloth + &quot;和&quot; + shoe);
+    }
+}
+</code></pre>
+<h3 id="复杂创建方法">复杂创建方法</h3>
+<h4 id="bean里会依赖到其他参数">bean里会依赖到其他参数</h4>
+<pre><code class="language-java">public class Clothes {
+    private Cloth cloth;
+    public Clothes(Cloth cloth) {
+        this.cloth = cloth;
+    }
+    public Cloth getCloth() {
+        return cloth;
+    }
+    @Override
+    public String toString() {
+        return cloth.getColor() + &quot;衣服&quot;;
+    }
+
+}
+</code></pre>
+<h4 id="在module类中增加提供方法">在Module类中增加提供方法</h4>
+<pre><code class="language-java">    @Provides
+    public Clothes getClothes(Cloth cloth){
+        return new Clothes(cloth);
+    }
+</code></pre>
+<h3 id="依赖总结">依赖总结</h3>
+<p>一个是注解了@Inject的构造方法，一个是在Module里提供的依赖，Dagger2选择依赖提供的规则是：Dagger2递归的提供依赖</p>
+<ul>
+<li>步骤1：查找Module中是否存在创建该类的方法。</li>
+<li>步骤2：若存在创建类方法，查看该方法是否存在参数</li>
+<li>步骤2.1：若存在参数，则按从步骤1开始依次初始化每个参数</li>
+<li>步骤2.2：若不存在参数，则直接初始化该类实例，一次依赖注入到此结束</li>
+<li>步骤3：若不存在创建类方法，则查找Inject注解的构造函数，看构造函数是否存在参数</li>
+<li>步骤3.1：若存在参数，则从步骤1开始依次初始化每个参数</li>
+<li>步骤3.2：若不存在参数，则直接初始化该类实例，一次依赖注入到此结束</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MaterialDesign动画]]></title>
+        <id>https://Joshua-Chang.github.io/post/MaterialDesign动画/</id>
+        <link href="https://Joshua-Chang.github.io/post/MaterialDesign动画/">
+        </link>
+        <updated>2017-05-19T15:55:36.000Z</updated>
+        <summary type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://ws1.sinaimg.cn/large/006tKfTcly1ffr5152xj9g30u01hc1l3.gif" alt="https://ws1.sinaimg.cn/large/006tKfTcly1ffr5152xj9g30u01hc1l3.gif" loading="lazy"></figure>
+]]></summary>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://ws1.sinaimg.cn/large/006tKfTcly1ffr5152xj9g30u01hc1l3.gif" alt="https://ws1.sinaimg.cn/large/006tKfTcly1ffr5152xj9g30u01hc1l3.gif" loading="lazy"></figure>
+<!--more-->
+<h4 id="touch-feedback触摸反馈">Touch Feedback（触摸反馈）</h4>
+<h5 id="水波纹效果">水波纹效果</h5>
+<p>5.0+自带的</p>
+<pre><code class="language-xml"> &lt;Button android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;100dp&quot;
+    android:text=&quot;@string/hello_world&quot; /&gt;
+&lt;Button
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;100dp&quot;
+    android:background=&quot;?attr/selectableItemBackground&quot;
+    android:text=&quot;@string/hello_world&quot; /&gt;
+&lt;Button
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;100dp&quot;
+    android:background=&quot;?attr/selectableItemBackgroundBorderless&quot;//没有边界，圆形
+    android:text=&quot;@string/hello_world&quot; /&gt;
+</code></pre>
+<p>可以修改背景颜色和水波纹的颜色style</p>
+<pre><code class="language-xml">	 &lt;item name=&quot;colorControlHighlight&quot;&gt;@color/colorPrimary_pink&lt;/item&gt;//高亮颜色
+        &lt;item name=&quot;colorButtonNormal&quot;&gt;@color/material_blue_grey_800&lt;/item&gt;//默认的颜色
+</code></pre>
+<h4 id="reveal-effect揭露效果">Reveal Effect（揭露效果）</h4>
+<h5 id="viewanimationutil">ViewAnimationUtil</h5>
+<pre><code class="language-java">//圆形水波纹揭露效果
+	ViewAnimationUtils.createCircularReveal(
+			view, //作用在哪个View上面
+			centerX, centerY, //扩散的中心点
+			startRadius, //开始扩散初始半径
+			endRadius)//扩散结束半径
+</code></pre>
+<pre><code class="language-java">mBt1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Animator mCircularReveal = ViewAnimationUtils.createCircularReveal(mBt1, mBt1.getWidth() / 2, mBt1.getHeight() / 2, 0, mBt1.getHeight());
+                mCircularReveal.setDuration(300);
+                mCircularReveal.setInterpolator(new AccelerateInterpolator());
+                mCircularReveal.start();
+                onBackPressed();
+            }
+        });
+public void jielu2(View view) {
+        Animator mCircularReveal = ViewAnimationUtils.createCircularReveal(view, 0, 0, 0, (float) Math.hypot(view.getWidth(),view.getHeight()));
+        mCircularReveal.setDuration(300);
+        mCircularReveal.setInterpolator(new BounceInterpolator());
+        mCircularReveal.start();
+    }
+</code></pre>
+<h4 id="activity-transitionactivity转场动画效果">Activity transition（Activity转场动画效果）</h4>
+<p>ActivityOptions只支持API21以上的版本</p>
+<p>前提：需要给两个Activity都设置如下，让其允许使用转场动画。</p>
+<pre><code>//方法一：
+getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//方法二：style
+修改主题：&lt;item name=&quot;android:windowContentTransitions&quot;&gt;true&lt;/item&gt;
+</code></pre>
+<p>兼容类：ActivityOptionsCompat 此类在低版本上面并没有转场动画效果，只是解决了我们手动去判断版本的问题而已。</p>
+<h5 id="共享元素转换">共享元素转换</h5>
+<ol>
+<li>给两个Activity当中的共享元素view都设置同一个名字---android:transitionName</li>
+<li>ActivityOptionsCompat设置</li>
+</ol>
+<pre><code class="language-java">//单个元素共享
+ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, iv1, &quot;iv_meinv3&quot;);
+	Intent intent = new Intent(this, SecondActivity.class);
+	startActivity(intent, optionsCompat.toBundle());
+	//多个共享元素
+	ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+			.makeSceneTransitionAnimation(this, Pair.create((View)iv1, &quot;iv1&quot;),Pair.create((View)bt, &quot;bt&quot;));
+	Intent intent = new Intent(this, SecondActivity.class);
+	startActivity(intent, optionsCompat.toBundle());
+</code></pre>
+<h5 id="普通的转换">普通的转换</h5>
+<p>三种系统带的：滑动效果Slide、展开效果Explode、渐变显示隐藏效果Fade（API21+）直接在Activity中设置</p>
+<pre><code class="language-java">Slide mSlide=new Slide();
+        mSlide.setDuration(1000);
+Explode mExplode=new Explode();
+        mExplode.setDuration(1000);
+Fade mFade = new Fade();
+        mFade.setDuration(1000);
+        getWindow().setExitTransition(mExplode);
+        getWindow().setEnterTransition(mExplode);
+</code></pre>
+]]></content>
+    </entry>
+</feed>
