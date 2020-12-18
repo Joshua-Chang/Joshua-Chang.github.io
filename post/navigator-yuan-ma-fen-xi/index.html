@@ -1,0 +1,516 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Navigator源码分析 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1608279807242">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Navigator源码分析 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="讨论案例
+activity_main.xml
+
+&lt;fragment
+    android:id=&quot;@+id/nav_host_fragment&quot;
+    android:name=&quot;androidx.n..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1608279807242" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Navigator源码分析
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-12-15
+              </span>
+              <span>
+                10 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h3 id="讨论案例">讨论案例</h3>
+<pre><code class="language-xml">activity_main.xml
+
+&lt;fragment
+    android:id=&quot;@+id/nav_host_fragment&quot;
+    android:name=&quot;androidx.navigation.fragment.NavHostFragment&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    app:defaultNavHost=&quot;true&quot;
+    app:navGraph=&quot;@navigation/mobile_navigation&quot; /&gt;
+
+mobile_navigation.xml
+
+&lt;navigation
+    android:id=&quot;@+id/mobile_navigation&quot;
+    app:startDestination=&quot;@id/navigation_home&quot;&gt;
+    &lt;fragment
+        android:id=&quot;@+id/navigation_home&quot;
+        android:name=&quot;org.devio.as.hi.hirouter.ui.home.HomeFragment&quot;
+        tools:layout=&quot;@layout/fragment_home&quot;&gt;
+        &lt;argument
+            android:name=&quot;name&quot;
+            app:argType=&quot;string&quot;
+            app:nullable=&quot;true&quot; /&gt;
+        &lt;action
+            android:id=&quot;@+id/action_navigation_home_to_navigation_notifications&quot;
+            app:destination=&quot;@id/navigation_notifications&quot;
+            app:launchSingleTop=&quot;true&quot;
+            app:popUpTo=&quot;@id/navigation_notifications&quot; /&gt;
+        &lt;deepLink
+            android:id=&quot;@+id/deepLink&quot;
+            app:uri=&quot;www.imooc.com&quot; /&gt;
+    &lt;/fragment&gt;
+&lt;/navigation&gt;
+</code></pre>
+<h3 id="navhostfragmentoninflate">NavHostFragment.onInflate:</h3>
+<p>去查找声明在NavHostFragment的xml布局文件中的，defaultNavHost、navGraph属性,得到mGraphId</p>
+<pre><code class="language-kotlin">onInflate：任何能在xml布局文件中声明的组建，当它们被从xml解析完成，被创建成功后都会调用此方法
+activity和dialog是不可以的，因为他们不能在xml布局文件中直接声明
+    @CallSuper
+    @Override
+    public void onInflate(@NonNull Context context, @NonNull AttributeSet attrs,
+            @Nullable Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+
+        final TypedArray navHost = context.obtainStyledAttributes(attrs, R.styleable.NavHost);
+        final int graphId = navHost.getResourceId(R.styleable.NavHost_navGraph, 0);
+        if (graphId != 0) {
+            mGraphId = graphId;
+        }
+        navHost.recycle();
+
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.NavHostFragment);
+        final boolean defaultHost = a.getBoolean(R.styleable.NavHostFragment_defaultNavHost, false);
+        if (defaultHost) {
+            mDefaultNavHost = true;
+        }
+        a.recycle();
+    }
+</code></pre>
+<h3 id="navhostfragmentoncreate">NavHostFragment.onCreate:</h3>
+<ul>
+<li>往NavigatorProvider内addNavigator：</li>
+</ul>
+<p>构造NavHostController方法内，先添加不可或缺的ActivityNavigator、和NavGraphNavigator （<navigation/>startDestination）</p>
+<p>onCreateNavController方法内，添加DialogFragmentNavigator，FragmentNavigator，以支持dialog、fragment类型的导航跳转</p>
+<ul>
+<li>配置回退栈</li>
+<li>NavController.setGraph(mGraphId)。把声明在NavHostFragment的app:navGraph的id，交给NavController处理（和fragmentController设计原因一样，隔离作用）</li>
+</ul>
+<pre><code class="language-kotlin">NavHostFragment:
+@CallSuper
+@Override
+public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    final Context context = requireContext();
+		//构建NavController对象 内部立即注册两个Navigator：start、activity的
+    mNavController = new NavHostController(context);//继承自NavController
+		//设置回退栈
+    mNavController.setOnBackPressedDispatcher(requireActivity().getOnBackPressedDispatcher());
+	  //...
+		//通过controller得到Provider，并对其注册DialogFragmentNavigator，FragmentNavigator。以支持dialog、fragment类型的导航跳转
+    onCreateNavController(mNavController);
+    //。。。
+
+        //把声明在NavHostFragment的xml布局文件中的资源id
+				//app:navGraph=&quot;@navigation/mobile_navigation&quot;（navGraph属性）
+				//交给NavController处理（和fragmentController设计原因一样，隔离作用）
+        mNavController.setGraph(mGraphId);
+}
+//通过controller得到Provider（存储一个个navigator对象），
+//并注册DialogFragmentNavigator，FragmentNavigator，以支持dialog、fragment类型的导航跳转
+protected void onCreateNavController(@NonNull NavController navController) {
+        navController.getNavigatorProvider().addNavigator(
+                new DialogFragmentNavigator(requireContext(), getChildFragmentManager()));
+        navController.getNavigatorProvider().addNavigator(createFragmentNavigator());
+    }
+
+//立即注册两个Navigator
+NavController：
+public NavController(@NonNull Context context) {
+//....路由首页和activity都是不可或缺的，但fragmentNavigator未必，所以这里注册了两个
+//mobile_navigation.xml资源文件加载完，用来启动其中的startDestination对应的页面的
+        mNavigatorProvider.addNavigator(new NavGraphNavigator(mNavigatorProvider));
+//能给activity提供路由服务的navigator
+        mNavigatorProvider.addNavigator(new ActivityNavigator(mContext));
+    }
+//设置dispatcher后将mOnBackPressedCallback加入callback
+void setOnBackPressedDispatcher(@NonNull OnBackPressedDispatcher dispatcher) {
+	      //...
+        dispatcher.addCallback(mLifecycleOwner, mOnBackPressedCallback);
+    }
+
+private final OnBackPressedCallback mOnBackPressedCallback =
+            new OnBackPressedCallback(false) {
+        @Override
+        public void handleOnBackPressed() {
+            popBackStack();//回退栈
+        }
+    };
+</code></pre>
+<h3 id="navinflaterinflate">NavInflater().inflate</h3>
+<p>解析路由资源文件返回NavGraph对象：由路由资源xml定义的节点名，得到相应类型的Navigator，在去创建相应类型的Destination节点。</p>
+<p><navigation/>特殊：会得到NavGraphNavigator类型的navigator，并创建出NavGraph类型的节点。</p>
+<p>NavGraph是特殊的Destination节点：</p>
+<ul>
+<li>成员：含app:startDestination的id，和SparseArrayCompat<NavDestination>的路由节点集合</li>
+<li>自己可以嵌套自己，即mobile_navigation.xml内的<navigation/>标签内还可以有<navigation/>形成一个个的路由组，且每组以各自的app:startDestination为起始点</li>
+<li>NavInflater().inflate时遇到NavGraph类型的节点，递归调用inflate，将自节点加入其路由节点集合</li>
+</ul>
+<p>onGraphCreated：路由文件解析/节点创建完毕，开始路由跳转流程NavController.navigate</p>
+<pre><code class="language-kotlin">NavController：
+		@CallSuper
+    public void setGraph(@NavigationRes int graphResId, @Nullable Bundle startDestinationArgs) {
+        setGraph(getNavInflater().inflate(graphResId)/*得到NavGraph*/, startDestinationArgs);
+    }
+
+		public void setGraph(@NonNull NavGraph graph, @Nullable Bundle startDestinationArgs) {
+        if (mGraph != null) {
+            // Pop everything from the old graph off the back stack
+            popBackStackInternal(mGraph.getId(), true);
+        }
+        mGraph = graph;//将得到的NavGraph保存起来
+				//第一阶段：路由文件解析节点创建流程完毕
+        onGraphCreated(startDestinationArgs);
+				//内部会调用navigate(mGraph, startDestinationArgs, null, null);启动第一个路由节点//第二阶段路由跳转流程开始					
+  }
+
+NavInflater：
+//layoutInflater专门解析布局资源文件，NavInflater专门解析路由资源文件，返回NavGraph对象
+public NavGraph inflate(@NavigationRes int graphResId) {
+      //。。。路由xml文件（app:navGraph=&quot;@navigation/mobile_navigation&quot;）的解析
+			//生产路由节点对象
+			NavDestination destination = inflate(res, parser, attrs, graphResId);
+			if (!(destination instanceof NavGraph)) {//如果返回结果不是NavGraph类型则会抛出异常。即mobile_navigation.xml根结点必须&lt;navigation/&gt;标签
+                throw new IllegalArgumentException(&quot;Root element &lt;&quot; + rootElement + &quot;&gt;&quot;
+                        + &quot; did not inflate into a NavGraph&quot;);
+            }
+            return (NavGraph) destination;
+    }
+
+private NavDestination inflate(@NonNull Resources res, @NonNull XmlResourceParser parser,
+            @NonNull AttributeSet attrs, int graphResId)
+            throws XmlPullParserException, IOException {
+//根据mobile_navigation.xml中的定义的节点类型，
+//特殊：mobile_navigation.xml中的第一个节点为navigation解析出NavGraphNavigator类型的navigator导航
+//正常：后边的节点为activity/fragment等，解析出fragmentnavigator/activitynavigator等类型的navigator
+        Navigator&lt;?&gt; navigator = mNavigatorProvider.getNavigator(parser.getName());
+//使用navigator创建Destination节点（ADestination/FDestination等），以activityNavigator为例
+//使用NavGraphNavigator创建出NavGraph
+        final NavDestination dest = navigator.createDestination();
+        dest.onInflate(mContext, attrs);//NavDestination节点（具体是子类activity或fragment）解析填充
+				//...
+        while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
+              // ....
+            } else if (dest instanceof NavGraph) {//如果节点是NavGraph则递归调用自己，继续解析并加入到NavGraph的节点集合中
+                ((NavGraph) dest).addDestination(inflate(res, parser, attrs, graphResId));
+            }
+        }
+        return dest;
+}
+
+ActivityNavigator：
+public Destination createDestination() {
+        return new Destination(this);//传入navigator自己
+    }
+ActivityNavigator$Destination
+public static class Destination extends NavDestination{
+	super(activityNavigator);//调父类NavDestination
+}
+
+NavDestination节点:的构造需要创建NavDestination的Navigator，或navigatorName
+//无论是activity还是fragment类型的节点，
+//创建时都需要把创建他的Navigator传递进来，以便正确的跳转
+//从而把Destination节点和创建他的Navigator导航 关联起来
+public NavDestination(@NonNull Navigator&lt;? extends NavDestination&gt; navigator) {}
+public NavDestination(@NonNull String navigatorName) {}
+
+NavGraphNavigator：特殊Navigator
+public NavGraph createDestination() {
+        return new NavGraph(this);
+    }
+NavGraph：特殊Destination节点，自己可以嵌套自己，
+即mobile_navigation.xml内的&lt;navigation/&gt;标签内还可以有&lt;navigation/&gt;
+形成一个个的路由组，且每组以各自的app:startDestination为起始点
+例子：电商交易支付完成后，将一组都关闭
+
+NavGraph extends NavDestination implements Iterable&lt;NavDestination&gt; {
+    final SparseArrayCompat&lt;NavDestination&gt; mNodes = new SparseArrayCompat&lt;&gt;();//路由节点的集合
+    private int mStartDestId;//该集合的启动ID app:startDestination=&quot;@id/navigation_home&quot;
+    private String mStartDestIdName;
+}
+</code></pre>
+<h3 id="navcontrollernavigate">NavController.navigate</h3>
+<p>第二阶段路由跳转流程开始</p>
+<p>根据NavGraph这一特殊节点的name，得到NavGraphNavigator对象</p>
+<pre><code class="language-kotlin">private void navigate(@NonNull NavDestination node, @Nullable Bundle args,
+        @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
+    //...
+    Navigator&lt;NavDestination&gt; navigator = mNavigatorProvider.getNavigator(
+            node.getNavigatorName());//根据NavGraph的name，找创建该节点的到navigator对象 即NavGraphNavigator对象
+    Bundle finalArgs = node.addInDefaultArgs(args);
+    NavDestination newDest = navigator.navigate(node, finalArgs,//然后发起真正的路由
+            navOptions, navigatorExtras);
+    mBackStack.add(entry);//把路由节点添加到回退栈
+}
+</code></pre>
+<h3 id="navgraphnavigatornavigate">NavGraphNavigator.navigate</h3>
+<p>找到<navigator/>内 的startDestination节点</p>
+<p>根据startDestination节点的name，在NavigatorProvider里找到创建他的具体的f/a/dialog等类型的Navigator</p>
+<p>再让具体f/a/dialog等类型的Navigator去处理路由</p>
+<pre><code class="language-kotlin">NavGraphNavigator：
+public NavDestination navigate(@NonNull NavGraph destination, @Nullable Bundle args,
+        @Nullable NavOptions navOptions, @Nullable Extras navigatorExtras) {
+    int startId = destination.getStartDestination();//app:startDestination的id
+
+		//根据app:startDestination的id找到相应的startDestination节点
+    NavDestination startDestination = destination.findNode(startId, false);
+	
+		//根据startDestination节点的name属性，找到创建他的具体navigator
+    Navigator&lt;NavDestination&gt; navigator = mNavigatorProvider.getNavigator(
+            startDestination.getNavigatorName());//此时的navigator可能是f/a/dialog等类型的Navigator
+		//再将路由操作委托给f/a/dialog等类型的Navigator
+    return navigator.navigate(startDestination, startDestination.addInDefaultArgs(args),
+            navOptions, navigatorExtras);
+}
+
+1、activityNavigator
+
+public NavDestination navigate(@NonNull Destination destination, @Nullable Bundle args,
+            @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
+				//构造intent
+        Intent intent = new Intent(destination.getIntent());
+        if (args != null) {
+            intent.putExtras(args);//添加args
+            //。。。
+        }
+				//配置启动模式
+        if (!(mContext instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        if (navOptions != null &amp;&amp; navOptions.shouldLaunchSingleTop()) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        }
+
+				//进出动画等。。。
+
+				mContext.startActivity(intent);//通过startActivity完成路由
+    }
+
+2、fragmentNavigator
+
+public NavDestination navigate(@NonNull Destination destination, @Nullable Bundle args,
+            @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
+        String className = destination.getClassName();//根据destination节点得到类名
+        if (className.charAt(0) == '.') {
+            className = mContext.getPackageName() + className;
+        }
+        final Fragment frag = instantiateFragment(mContext, mFragmentManager,
+                className, args);//根据类名反射得到fragment实例
+        frag.setArguments(args);//设置args
+        final FragmentTransaction ft = mFragmentManager.beginTransaction();//开启事务
+				
+        //进出动画等。。。
+
+        ft.replace(mContainerId, frag);
+				//此处使用的是replace，因此使用Navigator路由时切换fragment时，声明周期重新执行
+    }
+
+3、dialogFragmentNavigator
+public NavDestination navigate(@NonNull final Destination destination, @Nullable Bundle args,
+            @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
+        String className = destination.getClassName();
+        if (className.charAt(0) == '.') {
+            className = mContext.getPackageName() + className;
+        }
+        final Fragment frag = mFragmentManager.getFragmentFactory().instantiate(
+                mContext.getClassLoader(), className);//反射
+        if (!DialogFragment.class.isAssignableFrom(frag.getClass())) {//类型判断：是否时dialogFragment类型的
+            throw new IllegalArgumentException(&quot;Dialog destination &quot; + destination.getClassName()
+                    + &quot; is not an instance of DialogFragment&quot;);
+        }
+        final DialogFragment dialogFragment = (DialogFragment) frag;//上文以确定为dialogFragment
+        dialogFragment.setArguments(args);//添加args
+        dialogFragment.getLifecycle().addObserver(mObserver);
+
+				//show出dialogFragment
+        dialogFragment.show(mFragmentManager, DIALOG_TAG + mDialogCount++);
+        return destination;
+    }
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1607965068319.png" alt="" loading="lazy"></figure>
+<h3 id="缺点">缺点：</h3>
+<ol>
+<li>节点必须在路由文件mobile_navigation.xml中定义</li>
+<li>fragment类型节点的路由操作，是使用replace，会导致fragment页面声明周期重启，数据的重新加载</li>
+<li>不支持路由过程的拦截监听</li>
+</ol>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E8%AE%A8%E8%AE%BA%E6%A1%88%E4%BE%8B">讨论案例</a></li>
+<li><a href="#navhostfragmentoninflate">NavHostFragment.onInflate:</a></li>
+<li><a href="#navhostfragmentoncreate">NavHostFragment.onCreate:</a></li>
+<li><a href="#navinflaterinflate">NavInflater().inflate</a></li>
+<li><a href="#navcontrollernavigate">NavController.navigate</a></li>
+<li><a href="#navgraphnavigatornavigate">NavGraphNavigator.navigate</a></li>
+<li><a href="#%E7%BC%BA%E7%82%B9">缺点：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/hello-gridea/">
+              <h3 class="post-title">
+                Hello Gridea
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
