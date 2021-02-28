@@ -2,14 +2,193 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2020-12-18T08:27:10.208Z</updated>
+    <updated>2021-02-28T16:31:57.080Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
     <subtitle>温故而知新</subtitle>
     <logo>https://Joshua-Chang.github.io/images/avatar.png</logo>
     <icon>https://Joshua-Chang.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Joshua-Chang`Blog</rights>
+    <rights>All rights reserved 2021, Joshua-Chang`Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[JetPack Compose 01]]></title>
+        <id>https://Joshua-Chang.github.io/post/jetpack-compose-01/</id>
+        <link href="https://Joshua-Chang.github.io/post/jetpack-compose-01/">
+        </link>
+        <updated>2021-02-28T08:27:34.000Z</updated>
+        <content type="html"><![CDATA[<p>@Composable/<em>标记组合函数，可提供其他函数使用</em>/</p>
+<pre><code class="language-kotlin">@Composable
+fun MyApp(content: @Composable () -&gt; Unit) {/*也可以 组合函数为参数*/
+MyTheme{
+        Surface(color = Color.Yellow) {
+            content()
+        }
+    }
+}
+</code></pre>
+<p>@Preview/<em>只能用与无参函数</em>/</p>
+<h2 id="foundation包">foundation包</h2>
+<pre><code class="language-kotlin">@Composable
+fun NewsStory() {
+    MaterialTheme/*遵循 MaterialTheme板式*/ {
+        val typography = MaterialTheme.typography/*版式即TextStyle*/
+        //val image= ImageBitmap.imageResource(R.drawable.header)/*弃用*/
+        val image2 = painterResource(R.drawable.header)/*BitmapPainter or VectorPainter*/
+        Column(modifier = Modifier.padding(16.dp)) {
+            val modifier = Modifier
+                /*即preferredHeight期望高度，可能改变。不变用requiredHeight，范围用heightIn*/
+                .height(180.dp)
+                .fillMaxWidth()/*可设置百分比，默认1。具体用width，或size同时设置*/
+                .clip(RoundedCornerShape(4.dp))/*Material Design包*/
+            Image(
+                painter = image2,
+                contentDescription = &quot;image&quot;,
+                modifier = modifier,/*ScaleType*/
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.height(16.dp))/*间隔*/
+            Text(
+                text = &quot;A day wandering through the sandhill &quot; +
+                        &quot;in Shark Fin Cove, and a few of the &quot; +
+                        &quot;sights I saw&quot;,
+                style = typography.h6/*定义好的TextStyle*/,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(text = &quot;Davenport,California&quot;,style = typography.body2)
+            Text(text = &quot;December 2018&quot;,style = typography.body2)
+        }
+    }
+}
+</code></pre>
+<h2 id="重组">重组</h2>
+<p>重组是指在输入更改时，再次调用可组合函数的过程。</p>
+<ul>
+<li>在命令式界面模型中，如需更改某个微件，您可以在该微件上调用 setter 以更改其内部状态。</li>
+<li>在声明式Compose 中，您可以使用新数据再次调用可组合函数。</li>
+</ul>
+<p>这样做会导致函数进行重组 -- 系统会根据需要，使用新数据重新绘制函数发出的微件。不依赖于该数据的其他函数跳过，不会进行重组。</p>
+<p>在 Compose 中编程时，有许多事项需要注意：</p>
+<ul>
+<li>
+<p>可组合函数可以按任何顺序执行、可以并行执行。且重组会跳过尽可能多的可组合函数和 lambda。</p>
+<p>因此每个可重组函数应保持独立，且不应有附带效应。</p>
+</li>
+<li>
+<p>重组是乐观的操作，可能会被取消。</p>
+</li>
+<li>
+<p>可组合函数可能会像动画的每一帧一样非常频繁地运行。</p>
+</li>
+</ul>
+<pre><code class="language-kotlin">@Composable
+@Deprecated(&quot;Example with bug&quot;)
+fun ListWithBug(myList: List&lt;String&gt;) {
+    var items = 0
+    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+        Column {
+            for (item in myList) {
+                Text(&quot;Item: $item&quot;)
+                items++ // Avoid! Side-effect of the column recomposing.
+            }
+        }
+        Text(&quot;Count: $items&quot;)
+    }
+}
+</code></pre>
+<pre><code class="language-kotlin">/**
+ * Display a list of names the user can click with a header
+ */
+@Composable
+fun NamePicker(
+    header: String,
+    names: List&lt;String&gt;,
+    onNameClicked: (String) -&gt; Unit
+) {
+    Column {
+        // this will recompose when [header] changes, but not when [names] changes
+        Text(header, style = MaterialTheme.typography.h5)
+        Divider()
+
+        // LazyColumnFor is the Compose version of a RecyclerView.
+        // The lambda passed is similar to a RecyclerView.ViewHolder.
+        LazyColumnFor(names) { name -&gt;
+            // When an item's [name] updates, the adapter for that item
+            // will recompose. This will not recompose when [header] changes
+            NamePickerItem(name, onNameClicked)
+        }
+    }
+}
+
+/**
+ * Display a single name the user can click.
+ */
+@Composable
+private fun NamePickerItem(name: String, onClicked: (String) -&gt; Unit) {
+    Text(name, Modifier.clickable(onClick = { onClicked(name) }))
+}
+</code></pre>
+<h2 id="state">State</h2>
+<pre><code class="language-kotlin">fun MyScreenContent() {
+    val countState = remember {
+        mutableStateOf(0)
+    }
+    Column {
+        Counter()
+        Counter2(count = countState.value,updateCount = {newCount-&gt;
+            countState.value=newCount
+        })
+    }
+}
+
+@Composable
+fun Counter() {
+    val count = remember {
+        mutableStateOf(0)
+    }
+    Button(onClick = { count.value++ }) {
+        Text(text = &quot;${count.value} times&quot;)
+    }
+}
+@Composable
+fun Counter2(count:Int,updateCount:(Int)-&gt;Unit) {
+    Button(onClick = { updateCount(count+1) }) {
+        Text(text = &quot;$count times&quot;)
+    }
+}
+</code></pre>
+<h2 id="lazycolumn">LazyColumn</h2>
+<pre><code class="language-kotlin">@Composable
+fun NameList(names: List&lt;String&gt;, modifier: Modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
+        items(items = names) { name -&gt;
+            Greeting(name = name)
+            Divider(color = Color.Black)
+        }
+    }
+}
+Column(modifier = Modifier.fillMaxHeight()) {
+    NameList(names, Modifier.weight(1f))
+    Counter2(count = countState.value, updateCount = { newCount -&gt;
+        countState.value = newCount
+    })
+}
+</code></pre>
+<pre><code class="language-kotlin">@Composable
+fun Greeting(name: String) {
+    /*by委托：将set/get委托出去*/
+    var isSelected by /*Boolean*/remember { mutableStateOf(false) }
+    val backgroundColor by /*委托State&lt;Color&gt;*/animateColorAsState(if (isSelected) Color.Red else Color.Transparent)
+    Text(text = &quot;hello $name&quot;,
+        modifier = Modifier
+            .padding(24.dp)
+            .background(color = backgroundColor)
+            .clickable(onClick = { isSelected = !isSelected })
+    )
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Navigator源码分析]]></title>
         <id>https://Joshua-Chang.github.io/post/navigator-yuan-ma-fen-xi/</id>
@@ -1062,142 +1241,6 @@ public interface BaseComponent {
     @Inject //Provider声明方式
     Provider&lt;Shoe&gt; shoe;
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[dagger2由简入深]]></title>
-        <id>https://Joshua-Chang.github.io/post/dagger2由简入深/</id>
-        <link href="https://Joshua-Chang.github.io/post/dagger2由简入深/">
-        </link>
-        <updated>2017-05-21T06:47:07.000Z</updated>
-        <summary type="html"><![CDATA[<p>Dagger2是Android中比较热门的依赖注入框架。控制反转（Inversion of Control，缩写为IoC），是面向对象编程中的一种设计原则，可以用来减低计算机代码之间的耦合度。其中最常见的方式叫做依赖注入（Dependency Injection，简称DI）</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>Dagger2是Android中比较热门的依赖注入框架。控制反转（Inversion of Control，缩写为IoC），是面向对象编程中的一种设计原则，可以用来减低计算机代码之间的耦合度。其中最常见的方式叫做依赖注入（Dependency Injection，简称DI）</p>
-<!--more-->
-<h4 id="gradle引入">Gradle引入</h4>
-<p>项目下</p>
-<pre><code>//添加apt插件
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-</code></pre>
-<p>app下</p>
-<pre><code>apply plugin: 'com.neenbedankt.android-apt'
-   
-   
-   //引入dagger2
-compile 'com.google.dagger:dagger:2.4'
-    apt 'com.google.dagger:dagger-compiler:2.4'
-    //java注解
-    provided 'org.glassfish:javax.annotation:10.0-b28'
-</code></pre>
-<h3 id="正常创建方法">正常创建方法</h3>
-<h4 id="创建bean类">创建bean类</h4>
-<pre><code class="language-java">public class Cloth {
-    private String color;
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    @Override
-    public String toString() {
-        return color + &quot;布料&quot;;
-    }
-}
-</code></pre>
-<h4 id="创建module类">创建Module类</h4>
-<pre><code class="language-java">@Module
-public class MainModule {
-    @Provides
-    public Cloth getCloth() {
-        Cloth cloth = new Cloth();
-        cloth.setColor(&quot;红色&quot;);
-        return cloth;
-    }
-}
-</code></pre>
-<h4 id="创建component接口">创建Component接口</h4>
-<pre><code class="language-java">@Component(modules=MainModule.class)
-public interface MainComponent {
-    void inject(MainActivity mainActivity);
-}
-</code></pre>
-<h4 id="在mainactivity中声明先rebuild一下">在MainActivity中声明（先Rebuild一下）</h4>
-<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
-    private TextView tv;
-    @Inject
-    Cloth cloth;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        tv = (TextView) findViewById(R.id.tv);
-        MainComponent build = DaggerMainComponent.builder().mainModule(new MainModule()).build();
-        build.inject(this);
-        tv.setText(&quot;我现在有&quot; + cloth);
-    }
-}
-</code></pre>
-<h3 id="极简创建方法">极简创建方法</h3>
-<pre><code class="language-java">public class Shoe {
-    @Inject
-    public Shoe() {
-    }
-    @Override
-    public String toString() {
-        return &quot;鞋子&quot;;
-    }
-}
-</code></pre>
-<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
-    ...
-    @Inject
-    Shoe shoe;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-          ...
-        tv.setText(&quot;我现在有&quot; + cloth + &quot;和&quot; + shoe);
-    }
-}
-</code></pre>
-<h3 id="复杂创建方法">复杂创建方法</h3>
-<h4 id="bean里会依赖到其他参数">bean里会依赖到其他参数</h4>
-<pre><code class="language-java">public class Clothes {
-    private Cloth cloth;
-    public Clothes(Cloth cloth) {
-        this.cloth = cloth;
-    }
-    public Cloth getCloth() {
-        return cloth;
-    }
-    @Override
-    public String toString() {
-        return cloth.getColor() + &quot;衣服&quot;;
-    }
-
-}
-</code></pre>
-<h4 id="在module类中增加提供方法">在Module类中增加提供方法</h4>
-<pre><code class="language-java">    @Provides
-    public Clothes getClothes(Cloth cloth){
-        return new Clothes(cloth);
-    }
-</code></pre>
-<h3 id="依赖总结">依赖总结</h3>
-<p>一个是注解了@Inject的构造方法，一个是在Module里提供的依赖，Dagger2选择依赖提供的规则是：Dagger2递归的提供依赖</p>
-<ul>
-<li>步骤1：查找Module中是否存在创建该类的方法。</li>
-<li>步骤2：若存在创建类方法，查看该方法是否存在参数</li>
-<li>步骤2.1：若存在参数，则按从步骤1开始依次初始化每个参数</li>
-<li>步骤2.2：若不存在参数，则直接初始化该类实例，一次依赖注入到此结束</li>
-<li>步骤3：若不存在创建类方法，则查找Inject注解的构造函数，看构造函数是否存在参数</li>
-<li>步骤3.1：若存在参数，则从步骤1开始依次初始化每个参数</li>
-<li>步骤3.2：若不存在参数，则直接初始化该类实例，一次依赖注入到此结束</li>
-</ul>
 ]]></content>
     </entry>
 </feed>

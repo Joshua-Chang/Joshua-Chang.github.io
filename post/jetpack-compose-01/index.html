@@ -1,0 +1,367 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JetPack Compose 01 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1614529891677">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="JetPack Compose 01 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="@Composable/标记组合函数，可提供其他函数使用/
+@Composable
+fun MyApp(content: @Composable () -&gt; Unit) {/*也可以 组合函数为参数*/
+MyTheme{
+      ..." />
+    <meta name="keywords" content="Compose" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1614529891677" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              JetPack Compose 01
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-02-28
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://Joshua-Chang.github.io/tag/_mc5L_ebR/" class="post-tag">
+                  # Compose
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://1.bp.blogspot.com/-1PGx_uf4kVs/YDRRg0JlwSI/AAAAAAAAQIA/PBpnzWNqsashjrqb05oO0MBWRuBbw0YegCLcBGAsYHQ/s0/Lego%2BTrophy%2BAnimation_Overlay.gif" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>@Composable/<em>标记组合函数，可提供其他函数使用</em>/</p>
+<pre><code class="language-kotlin">@Composable
+fun MyApp(content: @Composable () -&gt; Unit) {/*也可以 组合函数为参数*/
+MyTheme{
+        Surface(color = Color.Yellow) {
+            content()
+        }
+    }
+}
+</code></pre>
+<p>@Preview/<em>只能用与无参函数</em>/</p>
+<h2 id="foundation包">foundation包</h2>
+<pre><code class="language-kotlin">@Composable
+fun NewsStory() {
+    MaterialTheme/*遵循 MaterialTheme板式*/ {
+        val typography = MaterialTheme.typography/*版式即TextStyle*/
+        //val image= ImageBitmap.imageResource(R.drawable.header)/*弃用*/
+        val image2 = painterResource(R.drawable.header)/*BitmapPainter or VectorPainter*/
+        Column(modifier = Modifier.padding(16.dp)) {
+            val modifier = Modifier
+                /*即preferredHeight期望高度，可能改变。不变用requiredHeight，范围用heightIn*/
+                .height(180.dp)
+                .fillMaxWidth()/*可设置百分比，默认1。具体用width，或size同时设置*/
+                .clip(RoundedCornerShape(4.dp))/*Material Design包*/
+            Image(
+                painter = image2,
+                contentDescription = &quot;image&quot;,
+                modifier = modifier,/*ScaleType*/
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.height(16.dp))/*间隔*/
+            Text(
+                text = &quot;A day wandering through the sandhill &quot; +
+                        &quot;in Shark Fin Cove, and a few of the &quot; +
+                        &quot;sights I saw&quot;,
+                style = typography.h6/*定义好的TextStyle*/,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(text = &quot;Davenport,California&quot;,style = typography.body2)
+            Text(text = &quot;December 2018&quot;,style = typography.body2)
+        }
+    }
+}
+</code></pre>
+<h2 id="重组">重组</h2>
+<p>重组是指在输入更改时，再次调用可组合函数的过程。</p>
+<ul>
+<li>在命令式界面模型中，如需更改某个微件，您可以在该微件上调用 setter 以更改其内部状态。</li>
+<li>在声明式Compose 中，您可以使用新数据再次调用可组合函数。</li>
+</ul>
+<p>这样做会导致函数进行重组 -- 系统会根据需要，使用新数据重新绘制函数发出的微件。不依赖于该数据的其他函数跳过，不会进行重组。</p>
+<p>在 Compose 中编程时，有许多事项需要注意：</p>
+<ul>
+<li>
+<p>可组合函数可以按任何顺序执行、可以并行执行。且重组会跳过尽可能多的可组合函数和 lambda。</p>
+<p>因此每个可重组函数应保持独立，且不应有附带效应。</p>
+</li>
+<li>
+<p>重组是乐观的操作，可能会被取消。</p>
+</li>
+<li>
+<p>可组合函数可能会像动画的每一帧一样非常频繁地运行。</p>
+</li>
+</ul>
+<pre><code class="language-kotlin">@Composable
+@Deprecated(&quot;Example with bug&quot;)
+fun ListWithBug(myList: List&lt;String&gt;) {
+    var items = 0
+    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+        Column {
+            for (item in myList) {
+                Text(&quot;Item: $item&quot;)
+                items++ // Avoid! Side-effect of the column recomposing.
+            }
+        }
+        Text(&quot;Count: $items&quot;)
+    }
+}
+</code></pre>
+<pre><code class="language-kotlin">/**
+ * Display a list of names the user can click with a header
+ */
+@Composable
+fun NamePicker(
+    header: String,
+    names: List&lt;String&gt;,
+    onNameClicked: (String) -&gt; Unit
+) {
+    Column {
+        // this will recompose when [header] changes, but not when [names] changes
+        Text(header, style = MaterialTheme.typography.h5)
+        Divider()
+
+        // LazyColumnFor is the Compose version of a RecyclerView.
+        // The lambda passed is similar to a RecyclerView.ViewHolder.
+        LazyColumnFor(names) { name -&gt;
+            // When an item's [name] updates, the adapter for that item
+            // will recompose. This will not recompose when [header] changes
+            NamePickerItem(name, onNameClicked)
+        }
+    }
+}
+
+/**
+ * Display a single name the user can click.
+ */
+@Composable
+private fun NamePickerItem(name: String, onClicked: (String) -&gt; Unit) {
+    Text(name, Modifier.clickable(onClick = { onClicked(name) }))
+}
+</code></pre>
+<h2 id="state">State</h2>
+<pre><code class="language-kotlin">fun MyScreenContent() {
+    val countState = remember {
+        mutableStateOf(0)
+    }
+    Column {
+        Counter()
+        Counter2(count = countState.value,updateCount = {newCount-&gt;
+            countState.value=newCount
+        })
+    }
+}
+
+@Composable
+fun Counter() {
+    val count = remember {
+        mutableStateOf(0)
+    }
+    Button(onClick = { count.value++ }) {
+        Text(text = &quot;${count.value} times&quot;)
+    }
+}
+@Composable
+fun Counter2(count:Int,updateCount:(Int)-&gt;Unit) {
+    Button(onClick = { updateCount(count+1) }) {
+        Text(text = &quot;$count times&quot;)
+    }
+}
+</code></pre>
+<h2 id="lazycolumn">LazyColumn</h2>
+<pre><code class="language-kotlin">@Composable
+fun NameList(names: List&lt;String&gt;, modifier: Modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
+        items(items = names) { name -&gt;
+            Greeting(name = name)
+            Divider(color = Color.Black)
+        }
+    }
+}
+Column(modifier = Modifier.fillMaxHeight()) {
+    NameList(names, Modifier.weight(1f))
+    Counter2(count = countState.value, updateCount = { newCount -&gt;
+        countState.value = newCount
+    })
+}
+</code></pre>
+<pre><code class="language-kotlin">@Composable
+fun Greeting(name: String) {
+    /*by委托：将set/get委托出去*/
+    var isSelected by /*Boolean*/remember { mutableStateOf(false) }
+    val backgroundColor by /*委托State&lt;Color&gt;*/animateColorAsState(if (isSelected) Color.Red else Color.Transparent)
+    Text(text = &quot;hello $name&quot;,
+        modifier = Modifier
+            .padding(24.dp)
+            .background(color = backgroundColor)
+            .clickable(onClick = { isSelected = !isSelected })
+    )
+}
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#foundation%E5%8C%85">foundation包</a></li>
+<li><a href="#%E9%87%8D%E7%BB%84">重组</a></li>
+<li><a href="#state">State</a></li>
+<li><a href="#lazycolumn">LazyColumn</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/navigator-yuan-ma-fen-xi/">
+              <h3 class="post-title">
+                Navigator源码分析
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
