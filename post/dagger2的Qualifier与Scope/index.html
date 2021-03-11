@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>dagger2的Qualifier与Scope | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615454782062">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615454881700">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="dagger2的Qualifier与Scope | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -14,11 +14,12 @@
 
     <meta name="description" content="Qualifier即Named
 当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化
+
 Module
 @Module
 public class ClothModule {
     @Blue
-    @Provi..." />
+    @Prov..." />
     <meta name="keywords" content="IOC,Qualifier,Scope" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
@@ -31,7 +32,7 @@ public class ClothModule {
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615454782062" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615454881700" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -112,6 +113,7 @@ public class ClothModule {
               <div class="post-content">
                 <h4 id="qualifier即named">Qualifier即Named</h4>
 <p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
+<!--more-->
 <h5 id="module">Module</h5>
 <pre><code class="language-java">@Module
 public class ClothModule {
@@ -131,7 +133,6 @@ public class ClothModule {
     }
 }
 </code></pre>
-<!--more-->
 <h5 id="component">Component</h5>
 <pre><code class="language-java">@Component(modules=ClothModule.class)
 public interface ClothCompetent {

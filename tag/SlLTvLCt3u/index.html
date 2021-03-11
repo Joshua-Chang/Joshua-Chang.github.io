@@ -3,7 +3,7 @@
   <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>IOC | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615454782062">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615454881700">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="IOC | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -19,7 +19,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615454782062" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615454881700" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -105,25 +105,6 @@
       <div class="post-abstract">
         <h4 id="qualifier即named">Qualifier即Named</h4>
 <p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
-<h5 id="module">Module</h5>
-<pre><code class="language-java">@Module
-public class ClothModule {
-    @Blue
-    @Provides
-    public Cloth getBluecloth(){
-        Cloth mCloth=new Cloth();
-        mCloth.setColor(&quot;蓝&quot;);
-        return mCloth;
-    }
-    @Named(&quot;Red&quot;)
-    @Provides
-    public Cloth getRedcloth(){
-        Cloth mCloth=new Cloth();
-        mCloth.setColor(&quot;红&quot;);
-        return mCloth;
-    }
-}
-</code></pre>
 
       </div>
     </article>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-03-11T09:26:28.044Z</updated>
+    <updated>2021-03-11T09:28:14.963Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -1003,28 +1003,10 @@ public void computeScroll() {
         <updated>2017-05-21T11:18:57.000Z</updated>
         <summary type="html"><![CDATA[<h4 id="qualifier即named">Qualifier即Named</h4>
 <p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
-<h5 id="module">Module</h5>
-<pre><code class="language-java">@Module
-public class ClothModule {
-    @Blue
-    @Provides
-    public Cloth getBluecloth(){
-        Cloth mCloth=new Cloth();
-        mCloth.setColor(&quot;蓝&quot;);
-        return mCloth;
-    }
-    @Named(&quot;Red&quot;)
-    @Provides
-    public Cloth getRedcloth(){
-        Cloth mCloth=new Cloth();
-        mCloth.setColor(&quot;红&quot;);
-        return mCloth;
-    }
-}
-</code></pre>
 ]]></summary>
         <content type="html"><![CDATA[<h4 id="qualifier即named">Qualifier即Named</h4>
 <p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
+<!--more-->
 <h5 id="module">Module</h5>
 <pre><code class="language-java">@Module
 public class ClothModule {
@@ -1044,7 +1026,6 @@ public class ClothModule {
     }
 }
 </code></pre>
-<!--more-->
 <h5 id="component">Component</h5>
 <pre><code class="language-java">@Component(modules=ClothModule.class)
 public interface ClothCompetent {
