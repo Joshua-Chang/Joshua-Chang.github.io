@@ -1,101 +1,92 @@
+
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Update MacOS to Mojave Vim: Caught deadly signal SEGV | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445363252">
-<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
-<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Update MacOS to Mojave Vim: Caught deadly signal SEGV | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
-<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
-
-
-
-    <meta name="description" content="极有可能是YouCompleteMe或者Powerline等插件的问题
-Vim: Caught deadly signal SEGV
-
-Error detected while processing function &lt;SNR&gt;..." />
-    <meta name="keywords" content="" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
-      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
-      
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<meta charset="utf-8" >
+
+<title>Update MacOS to Mojave Vim: Caught deadly signal SEGV | Joshua-Chang`Blog</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445528605">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615445363252" alt="">
-  </a>
-  <h1 class="site-title">
-    Joshua-Chang`Blog
-  </h1>
-  <p class="site-description">
-    温故而知新
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
-  </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://Joshua-Chang.github.io">
+        <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615445528605" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://Joshua-Chang.github.io">
+        <h1 class="site-title">Joshua-Chang`Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
   </div>
 </div>
 
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
         <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              Update MacOS to Mojave Vim: Caught deadly signal SEGV
-            </h2>
-            <div class="post-info">
-              <span>
-                2018-10-24
-              </span>
-              <span>
-                1 min read
-              </span>
-              
-            </div>
+          
+          <h2 class="post-title">Update MacOS to Mojave Vim: Caught deadly signal SEGV</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2018-10-24</span>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <h5 id="极有可能是youcompleteme或者powerline等插件的问题">极有可能是<em>YouCompleteMe</em>或者<em>Powerline</em>等插件的问题</h5>
+          </div>
+          <div class="post-content">
+            <h5 id="极有可能是youcompleteme或者powerline等插件的问题">极有可能是<em>YouCompleteMe</em>或者<em>Powerline</em>等插件的问题</h5>
 <pre><code class="language-bash">Vim: Caught deadly signal SEGV
 
 Error detected while processing function &lt;SNR&gt;78_PollServerReady[7]..&lt;SNR&gt;78_Pyeval:Vim: Finished.
@@ -109,104 +100,57 @@ Exception MemoryError: MemoryError() in &lt;module 'threading' from '/System/Lib
 </code></pre>
 <p>and restart shell , fixed</p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#%E6%9E%81%E6%9C%89%E5%8F%AF%E8%83%BD%E6%98%AFyoucompleteme%E6%88%96%E8%80%85powerline%E7%AD%89%E6%8F%92%E4%BB%B6%E7%9A%84%E9%97%AE%E9%A2%98">极有可能是<em>YouCompleteMe</em>或者<em>Powerline</em>等插件的问题</a></li>
-<li><a href="#%E8%A7%A3%E5%86%B3">解决：</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-              </div>
-            </div>
-          </article>
+          </div>
         </div>
 
         
           <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://Joshua-Chang.github.io/post/App时常统计与静默拍摄/">
+            <a class="purple-link" href="https://Joshua-Chang.github.io/post/App时常统计与静默拍摄/">
               <h3 class="post-title">
-                App使用统计与静默拍摄
+                下一篇：App使用统计与静默拍摄
               </h3>
             </a>
           </div>
-        
+          
+      </div>
 
-        
+      
 
-        <div class="site-footer">
-  
-  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+   | <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">RSS</a>
 </div>
 
-      </div>
-      <div id="vcomments"></div>
+
     </div>
-    <script>
-        new Valine({
-            el: '#vcomments',
-            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
-            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
-        })
-    </script>
+    <script type="application/javascript">
 
-    <script>
-      hljs.initHighlightingOnLoad()
+hljs.initHighlightingOnLoad()
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+</script>
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
 
-    </script>
+
   </body>
 </html>

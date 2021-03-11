@@ -1,102 +1,92 @@
+
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>开发一个IntelliJ IDEA插件 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445363252">
-<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
-<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="开发一个IntelliJ IDEA插件 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
-<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
-
-
-
-    <meta name="description" content="灵感
-IDEA和AS中的大小写切换快捷键，一直是比较良心的。
-在声明一些常量时极其省事，但常量由多个单词组成时，还要手动的加上下划线又及其麻烦。
-思路
-开发一个插件，把符合驼峰命名的多单词组成名字，分别加上下划线。反之，把由下划线拼成的名字..." />
-    <meta name="keywords" content="" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
-      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
-      
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<meta charset="utf-8" >
+
+<title>开发一个IntelliJ IDEA插件 | Joshua-Chang`Blog</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445528605">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615445363252" alt="">
-  </a>
-  <h1 class="site-title">
-    Joshua-Chang`Blog
-  </h1>
-  <p class="site-description">
-    温故而知新
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
-  </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://Joshua-Chang.github.io">
+        <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615445528605" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://Joshua-Chang.github.io">
+        <h1 class="site-title">Joshua-Chang`Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
   </div>
 </div>
 
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
         <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              开发一个IntelliJ IDEA插件
-            </h2>
-            <div class="post-info">
-              <span>
-                2017-12-27
-              </span>
-              <span>
-                2 min read
-              </span>
-              
-            </div>
+          
+          <h2 class="post-title">开发一个IntelliJ IDEA插件</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2017-12-27</span>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <h3 id="灵感">灵感</h3>
+          </div>
+          <div class="post-content">
+            <h3 id="灵感">灵感</h3>
 <p>IDEA和AS中的大小写切换快捷键，一直是比较良心的。</p>
 <p>在声明一些常量时极其省事，但常量由多个单词组成时，还要手动的加上下划线又及其麻烦。</p>
 <h3 id="思路">思路</h3>
@@ -172,99 +162,57 @@ IDEA和AS中的大小写切换快捷键，一直是比较良心的。
 <h3 id="完工">完工</h3>
 <p>发布在JetBrains给提提意见：<a href="https://plugins.jetbrains.com/plugin/11121-underline-camel-toggle-case">Underline Camel Toggle Case</a> 或在AS/IDEA的plugin中搜索</p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#%E7%81%B5%E6%84%9F">灵感</a></li>
-<li><a href="#%E6%80%9D%E8%B7%AF">思路</a></li>
-<li><a href="#eg">e.g.</a></li>
-<li><a href="#%E5%AE%9E%E7%8E%B0">实现</a></li>
-<li><a href="#%E5%AE%8C%E5%B7%A5">完工</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-              </div>
-            </div>
-          </article>
+          </div>
         </div>
 
         
           <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://Joshua-Chang.github.io/post/View滑动的几种方式/">
+            <a class="purple-link" href="https://Joshua-Chang.github.io/post/View滑动的几种方式/">
               <h3 class="post-title">
-                View滑动的几种方式
+                下一篇：View滑动的几种方式
               </h3>
             </a>
           </div>
-        
+          
+      </div>
 
-        
+      
 
-        <div class="site-footer">
-  
-  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+   | <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">RSS</a>
 </div>
 
-      </div>
-      <div id="vcomments"></div>
+
     </div>
-    <script>
-        new Valine({
-            el: '#vcomments',
-            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
-            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
-        })
-    </script>
+    <script type="application/javascript">
 
-    <script>
-      hljs.initHighlightingOnLoad()
+hljs.initHighlightingOnLoad()
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+</script>
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
 
-    </script>
+
   </body>
 </html>
