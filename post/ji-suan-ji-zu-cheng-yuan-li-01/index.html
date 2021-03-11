@@ -2,20 +2,19 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Palette调色板 | Joshua-Chang`Blog</title>
+<title>计算机组成原理01 | Joshua-Chang`Blog</title>
 <link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445363252">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Palette调色板 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="计算机组成原理01 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
 
 
 
-    <meta name="description" content="方法一：直接操作（分析不出的默认颜色）
-BitmapDrawable mBitmapDrawable = (BitmapDrawable)imageView.getDrawable();
-Bitmap mBitmap = mBitmapDr..." />
-    <meta name="keywords" content="Palette,Design" />
+    <meta name="description" content="是
+" />
+    <meta name="keywords" content="计算机组成原理" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
       <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
@@ -80,85 +79,31 @@ Bitmap mBitmap = mBitmapDr..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Palette调色板
+              计算机组成原理01
             </h2>
             <div class="post-info">
               <span>
-                2017-05-17
+                2021-03-11
               </span>
               <span>
-                2 min read
+                1 min read
               </span>
               
-                <a href="https://Joshua-Chang.github.io/tag/3AqjHxuw6B/" class="post-tag">
-                  # Palette
-                </a>
-              
-                <a href="https://Joshua-Chang.github.io/tag/kV2tV-_fmf/" class="post-tag">
-                  # Design
+                <a href="https://Joshua-Chang.github.io/tag/oSH6nmGO8/" class="post-tag">
+                  # 计算机组成原理
                 </a>
               
             </div>
             
+              <img class="post-feature-image" src="https://static001.geekbang.org/resource/image/d6/be/d62f691afc8c450b58c19fb69c939cbe.jpg" alt="">
+            
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h4 id="方法一直接操作分析不出的默认颜色">方法一：直接操作（分析不出的默认颜色）</h4>
-<pre><code class="language-java">BitmapDrawable mBitmapDrawable = (BitmapDrawable)imageView.getDrawable();
-Bitmap mBitmap = mBitmapDrawable.getBitmap();
-Palette mPalette=Palette.generate(mBitmap);
-tv_title.setBackgroundColor(mPalette.getDarkMutedColor(Color.BLUE));
-</code></pre>
-<h4 id="方法二异步任务-可能分析的图片会比较大或者颜色分布比较复杂会耗时比较久防止卡死主线程">方法二：异步任务---可能分析的图片会比较大或者颜色分布比较复杂，会耗时比较久，防止卡死主线程。</h4>
-<pre><code class="language-java">Palette.from(bitmap).generate(new PaletteAsyncListener() {
-			
-			@Override
-			public void onGenerated(Palette palette) {
-				//暗、柔和的颜色
-				int darkMutedColor = palette.getDarkMutedColor(Color.BLUE);//如果分析不出来，则返回默认颜色
-				//暗、柔和
-				int lightMutedColor = palette.getLightMutedColor(Color.BLUE);
-				//暗、鲜艳
-				int darkVibrantColor = palette.getDarkVibrantColor(Color.BLUE);
-				//亮、鲜艳
-				int lightVibrantColor = palette.getLightVibrantColor(Color.BLUE);
-				//柔和
-				int mutedColor = palette.getMutedColor(Color.BLUE);
-				//柔和
-				int vibrantColor = palette.getVibrantColor(Color.BLUE);
-				//获取某种特性颜色的样品
-//				Swatch lightVibrantSwatch = palette.getLightVibrantSwatch();
-				Swatch lightVibrantSwatch = palette.getVibrantSwatch();
-				//谷歌推荐的：图片的整体的颜色rgb的混合值---主色调
-				int rgb = lightVibrantSwatch.getRgb();
-				//谷歌推荐：图片中间的文字颜色
-				int bodyTextColor = lightVibrantSwatch.getBodyTextColor();
-				//谷歌推荐：作为标题的颜色（有一定的和图片的对比度的颜色值）
-				int titleTextColor = lightVibrantSwatch.getTitleTextColor();
-				//颜色向量
-				float[] hsl = lightVibrantSwatch.getHsl();
-				//分析该颜色在图片中所占的像素多少值
-				int population = lightVibrantSwatch.getPopulation();
-</code></pre>
+                <p>是</p>
 
               </div>
               <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#%E6%96%B9%E6%B3%95%E4%B8%80%E7%9B%B4%E6%8E%A5%E6%93%8D%E4%BD%9C%E5%88%86%E6%9E%90%E4%B8%8D%E5%87%BA%E7%9A%84%E9%BB%98%E8%AE%A4%E9%A2%9C%E8%89%B2">方法一：直接操作（分析不出的默认颜色）</a></li>
-<li><a href="#%E6%96%B9%E6%B3%95%E4%BA%8C%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1-%E5%8F%AF%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E5%9B%BE%E7%89%87%E4%BC%9A%E6%AF%94%E8%BE%83%E5%A4%A7%E6%88%96%E8%80%85%E9%A2%9C%E8%89%B2%E5%88%86%E5%B8%83%E6%AF%94%E8%BE%83%E5%A4%8D%E6%9D%82%E4%BC%9A%E8%80%97%E6%97%B6%E6%AF%94%E8%BE%83%E4%B9%85%E9%98%B2%E6%AD%A2%E5%8D%A1%E6%AD%BB%E4%B8%BB%E7%BA%BF%E7%A8%8B">方法二：异步任务---可能分析的图片会比较大或者颜色分布比较复杂，会耗时比较久，防止卡死主线程。</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
+                
               </div>
             </div>
           </article>
@@ -167,9 +112,9 @@ tv_title.setBackgroundColor(mPalette.getDarkMutedColor(Color.BLUE));
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Joshua-Chang.github.io/post/RecyclerView添加Item/">
+            <a href="https://Joshua-Chang.github.io/post/jetpack-compose-01/">
               <h3 class="post-title">
-                RecyclerView奇技淫巧：添加Item
+                JetPack Compose 01
               </h3>
             </a>
           </div>
