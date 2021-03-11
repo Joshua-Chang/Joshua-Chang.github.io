@@ -1,0 +1,292 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title> 计算机组成原理02指令和运算 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615474425153">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title=" 计算机组成原理02指令和运算 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="从硬件角度来看，CPU 就是一个超大规模集成电路，通过电路实现了加法、乘法乃至各种各样的处理逻辑
+从软件角度讲，CPU 就是一个执行各种计算机指令（Instruction Code）的逻辑机器。计算机指令，就好比一门 CPU 能够听得懂的语..." />
+    <meta name="keywords" content="计算机组成原理" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615474425153" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+               计算机组成原理02指令和运算
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-03-11
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+                <a href="https://Joshua-Chang.github.io/tag/oSH6nmGO8/" class="post-tag">
+                  # 计算机组成原理
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://static001.geekbang.org/resource/image/d6/be/d62f691afc8c450b58c19fb69c939cbe.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>从硬件角度来看，CPU 就是一个超大规模集成电路，通过电路实现了加法、乘法乃至各种各样的处理逻辑<br>
+从软件角度讲，CPU 就是一个执行各种计算机指令（Instruction Code）的逻辑机器。计算机指令，就好比一门 CPU 能够听得懂的语言，我们也可以把它叫作机器语言（Machine Language）。</p>
+<!-- more -->
+<p>不同的 CPU 能够听懂的语言不太一样，即计算机指令集Instruction Set</p>
+<h2 id="指令和机器码">指令和机器码</h2>
+<ol>
+<li>
+<p>把高级语言程序翻译成汇编语言（ASM，Assembly Language）程序，的过程叫编译（Compile）成汇编代码</p>
+</li>
+<li>
+<p>再用汇编器（Assembler）翻译成机器码（Machine Code），CPU 能够真正认识的计算机指令<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615460135310.png" alt="" loading="lazy"><br>
+<img src="https://Joshua-Chang.github.io/post-images/1615460148801.jpg" alt="" loading="lazy"></p>
+</li>
+</ol>
+<blockquote>
+<p>e.g.<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615460725402.jpg" alt="" loading="lazy"><br>
+MIPS 的指令是一个 32 位的整数，高 6 位叫操作码（Opcode），分别是 R、I 和 J，代表这条指令具体的操作类别。rt、rt、rd均为寄存器地址。<br>
+R 指令是一般用来做算术和逻辑操作，里面有读取和写入数据的寄存器的地址。如果是逻辑位移操作，后面还有位移操作的位移量，而最后的功能码，则是在前面的操作码不够的时候，扩展操作码表示对应的具体指令的。</p>
+<p>I 指令，则通常是用在数据传输、条件分支，以及在运算的时候使用的并非变量还是常数的时候。这个时候，没有了位移量和操作码，也没有了第三个寄存器，而是把这三部分直接合并成了一个地址值或者一个常数。</p>
+<p>J 指令就是一个跳转指令，高 6 位之外的 26 位都是一个跳转后的地址。</p>
+<p><code>add $t0,$s2,$s1</code>为例 s1 17    s2 18      t0 8<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615461145867.jpg" alt="" loading="lazy"><br>
+<img src="https://Joshua-Chang.github.io/post-images/1615461154758.png" alt="" loading="lazy"></p>
+</blockquote>
+<p>除了 C 这样的编译型的语言之外，Python 这样的解释型语言，是通过解释器在程序运行的时候逐句翻译，而 Java 这样使用虚拟机的语言，则是由虚拟机对编译出来的中间代码进行解释，或者即时编译(JIT)成为机器码来最终执行。</p>
+<h2 id="指令跳转">指令跳转</h2>
+<blockquote>
+<p>CPU 其实就是由一堆寄存器组成的。而寄存器是由多个触发器（Flip-Flop）或者锁存器（Latches）组成的简单电路。</p>
+<p>N 个触发器或者锁存器，就可以组成一个 N 位（Bit）的寄存器，能够保存 N 位的数据。比方说，我们用的 64 位 Intel 服务器，寄存器就是 64 位的。</p>
+</blockquote>
+<h3 id="cpu-里面的寄存器">CPU 里面的寄存器：</h3>
+<p>一个是<strong>PC 寄存器</strong>（Program Counter Register），我们也叫<strong>指令地址寄存器</strong>（Instruction Address Register）。它就是用来存放下一条需要执行的计算机指令的内存地址。</p>
+<p>第二个是<strong>指令寄存器</strong>（Instruction Register），用来存放当前正在执行的指令。</p>
+<p>第三个是<strong>条件码寄存器</strong>（Status Register），用里面的一个一个标记位（Flag），存放 CPU 进行算术或者逻辑计算的结果。<strong>零标志条件码</strong>（对应的条件码是 ZF，Zero Flag 不等为0）、<strong>进位标志</strong>（CF，Carry Flag A&gt;B 为0）、<strong>符号标志</strong>（SF，Sign Flag正数为0）以及<strong>溢出标志</strong>（OF，Overflow Flag）</p>
+<p>其他用来存储数据和内存地址的寄存器：通常根据存放的数据内容来给它们取名字，比如整数寄存器、浮点数寄存器、向量寄存器和地址寄存器等等，通用寄存器（既可以存放数据，又能存放地址）</p>
+<p>一个程序执行的时候，CPU 会根据 PC 寄存器里的地址，从内存里面把需要执行的指令，读取到指令寄存器里面执行，然后顺序读取下一条指令。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615472744523.jpg" alt="" loading="lazy"></p>
+<h3 id="ifelse">if…else</h3>
+<pre><code class="language-c">#include &lt;time.h&gt;
+#include &lt;stdlib.h&gt;
+int main()
+{
+  srand(time(NULL));
+  int r = rand() % 2;
+  int a = 10;
+  if (r == 0)
+  {
+    a = 1;
+  } else {
+    a = 2;
+  } 
+}
+</code></pre>
+<pre><code class="language-shell">$ gcc -g -c test.c
+$ objdump -d -M intel -S test.o 
+</code></pre>
+<p><strong>汇编代码</strong></p>
+<p>r == 0 的条件判断，被编译成了 cmp 和 jne 这两条指令</p>
+<p>cmp 指令比较了前后两个操作数的值： 操作对象1 - 操作对象2 但不保存结果，只是根据结果修改相应的标志位。</p>
+<ol>
+<li>DWORD PTR 代表操作的数据类型是 32 位的整数，[rbp-0x4] 则是一个寄存器的地址。</li>
+<li>第二个操作数 0x0 就是我们设定的常量 0 的 16 进制表示</li>
+</ol>
+<p>cmp 指令的比较结果，会存入到<strong>条件码寄存器</strong>当中去，<strong>零标志条件码</strong>ZF 相等为1，不等为0</p>
+<p>cmp 指令执行完成之后，PC 寄存器会自动自增，开始执行下一条 jne 的指令</p>
+<p>jne 指令： jump not equal 查看零标志位ZF不等于0，则跳转到4a（当跳转发生的时候，PC 寄存器就不再是自增变成下一条指令的地址）</p>
+<p>CPU 再把 4a 地址里的指令加载到指令寄存器中来执行，mov 指令把 2 设置到对应的寄存器里去，相当于一个赋值操作。然后，PC 寄存器里的值继续自增，执行下一条 mov 指令。</p>
+<p>mov 指令的第一个操作数 eax，代表累加寄存器，这条指令其实没有实际的作用，它的作用是一个占位符。</p>
+<p>if 条件满足的话，在赋值的 mov 指令执行完成之后，有一个 jmp 的无条件跳转指令，跳转的地址就是51。</p>
+<p>main 函数没有设定返回值，而 mov eax, 0x0 其实就是给 main 函数生成了一个默认的为 0 的返回值到累加器里面。</p>
+<pre><code class="language-shell"> if (r == 0)
+  3b:   83 7d fc 00             cmp    DWORD PTR [rbp-0x4],0x0 //只比较，结果存入标识位
+  3f:   75 09                   jne    4a &lt;main+0x4a&gt; //标识位ZF不等于0则执行
+    {
+        a = 1;
+  41:   c7 45 f8 01 00 00 00    mov    DWORD PTR [rbp-0x8],0x1
+  48:   eb 07                   jmp    51 &lt;main+0x51&gt;
+    }
+    else
+    {
+        a = 2;
+  4a:   c7 45 f8 02 00 00 00    mov    DWORD PTR [rbp-0x8],0x2
+  51:   b8 00 00 00 00          mov    eax,0x0
+    } 
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615472764389.jpg" alt="" loading="lazy"></figure>
+<h3 id="forwhile">for/while</h3>
+<p>对应的循环也是用 1e 这个地址上的 cmp 比较指令，和紧接着的 jle 条件跳转指令来实现的。</p>
+<p>jle 跳转的地址，是在这条指令之前的地址 14。往前跳转使得，PC 寄存器会把指令地址设置到之前执行过的指令位置，重新执行之前执行过的指令，直到条件不满足，顺序往下执行 jle 之后的指令，整个循环才结束。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615472775030.jpg" alt="" loading="lazy"></p>
+<p>除了简单地通过 PC 寄存器自增的方式顺序执行外，条件码寄存器会记录下当前执行指令的条件判断状态，然后通过跳转指令读取对应的条件码，修改 PC 寄存器内的下一条指令的地址，最终实现 if…else 以及 for/while 这样的程序控制流程。</p>
+<h2 id="函数调用">函数调用</h2>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E6%8C%87%E4%BB%A4%E5%92%8C%E6%9C%BA%E5%99%A8%E7%A0%81">指令和机器码</a></li>
+<li><a href="#%E6%8C%87%E4%BB%A4%E8%B7%B3%E8%BD%AC">指令跳转</a>
+<ul>
+<li><a href="#cpu-%E9%87%8C%E9%9D%A2%E7%9A%84%E5%AF%84%E5%AD%98%E5%99%A8">CPU 里面的寄存器：</a></li>
+<li><a href="#ifelse">if…else</a></li>
+<li><a href="#forwhile">for/while</a></li>
+</ul>
+</li>
+<li><a href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8">函数调用</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-01/">
+              <h3 class="post-title">
+                计算机组成原理01计算机的基本组成
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

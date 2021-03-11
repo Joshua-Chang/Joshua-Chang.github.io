@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-03-11T09:29:41.794Z</updated>
+    <updated>2021-03-11T14:53:59.549Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -10,6 +10,111 @@
     <logo>https://Joshua-Chang.github.io/images/avatar.png</logo>
     <icon>https://Joshua-Chang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Joshua-Chang`Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[ 计算机组成原理02指令和运算]]></title>
+        <id>https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-02-zhi-ling-he-yun-suan/</id>
+        <link href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-02-zhi-ling-he-yun-suan/">
+        </link>
+        <updated>2021-03-11T09:41:24.000Z</updated>
+        <summary type="html"><![CDATA[<p>从硬件角度来看，CPU 就是一个超大规模集成电路，通过电路实现了加法、乘法乃至各种各样的处理逻辑<br>
+从软件角度讲，CPU 就是一个执行各种计算机指令（Instruction Code）的逻辑机器。计算机指令，就好比一门 CPU 能够听得懂的语言，我们也可以把它叫作机器语言（Machine Language）。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>从硬件角度来看，CPU 就是一个超大规模集成电路，通过电路实现了加法、乘法乃至各种各样的处理逻辑<br>
+从软件角度讲，CPU 就是一个执行各种计算机指令（Instruction Code）的逻辑机器。计算机指令，就好比一门 CPU 能够听得懂的语言，我们也可以把它叫作机器语言（Machine Language）。</p>
+<!-- more -->
+<p>不同的 CPU 能够听懂的语言不太一样，即计算机指令集Instruction Set</p>
+<h2 id="指令和机器码">指令和机器码</h2>
+<ol>
+<li>
+<p>把高级语言程序翻译成汇编语言（ASM，Assembly Language）程序，的过程叫编译（Compile）成汇编代码</p>
+</li>
+<li>
+<p>再用汇编器（Assembler）翻译成机器码（Machine Code），CPU 能够真正认识的计算机指令<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615460135310.png" alt="" loading="lazy"><br>
+<img src="https://Joshua-Chang.github.io/post-images/1615460148801.jpg" alt="" loading="lazy"></p>
+</li>
+</ol>
+<blockquote>
+<p>e.g.<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615460725402.jpg" alt="" loading="lazy"><br>
+MIPS 的指令是一个 32 位的整数，高 6 位叫操作码（Opcode），分别是 R、I 和 J，代表这条指令具体的操作类别。rt、rt、rd均为寄存器地址。<br>
+R 指令是一般用来做算术和逻辑操作，里面有读取和写入数据的寄存器的地址。如果是逻辑位移操作，后面还有位移操作的位移量，而最后的功能码，则是在前面的操作码不够的时候，扩展操作码表示对应的具体指令的。</p>
+<p>I 指令，则通常是用在数据传输、条件分支，以及在运算的时候使用的并非变量还是常数的时候。这个时候，没有了位移量和操作码，也没有了第三个寄存器，而是把这三部分直接合并成了一个地址值或者一个常数。</p>
+<p>J 指令就是一个跳转指令，高 6 位之外的 26 位都是一个跳转后的地址。</p>
+<p><code>add $t0,$s2,$s1</code>为例 s1 17    s2 18      t0 8<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615461145867.jpg" alt="" loading="lazy"><br>
+<img src="https://Joshua-Chang.github.io/post-images/1615461154758.png" alt="" loading="lazy"></p>
+</blockquote>
+<p>除了 C 这样的编译型的语言之外，Python 这样的解释型语言，是通过解释器在程序运行的时候逐句翻译，而 Java 这样使用虚拟机的语言，则是由虚拟机对编译出来的中间代码进行解释，或者即时编译(JIT)成为机器码来最终执行。</p>
+<h2 id="指令跳转">指令跳转</h2>
+<blockquote>
+<p>CPU 其实就是由一堆寄存器组成的。而寄存器是由多个触发器（Flip-Flop）或者锁存器（Latches）组成的简单电路。</p>
+<p>N 个触发器或者锁存器，就可以组成一个 N 位（Bit）的寄存器，能够保存 N 位的数据。比方说，我们用的 64 位 Intel 服务器，寄存器就是 64 位的。</p>
+</blockquote>
+<h3 id="cpu-里面的寄存器">CPU 里面的寄存器：</h3>
+<p>一个是<strong>PC 寄存器</strong>（Program Counter Register），我们也叫<strong>指令地址寄存器</strong>（Instruction Address Register）。它就是用来存放下一条需要执行的计算机指令的内存地址。</p>
+<p>第二个是<strong>指令寄存器</strong>（Instruction Register），用来存放当前正在执行的指令。</p>
+<p>第三个是<strong>条件码寄存器</strong>（Status Register），用里面的一个一个标记位（Flag），存放 CPU 进行算术或者逻辑计算的结果。<strong>零标志条件码</strong>（对应的条件码是 ZF，Zero Flag 不等为0）、<strong>进位标志</strong>（CF，Carry Flag A&gt;B 为0）、<strong>符号标志</strong>（SF，Sign Flag正数为0）以及<strong>溢出标志</strong>（OF，Overflow Flag）</p>
+<p>其他用来存储数据和内存地址的寄存器：通常根据存放的数据内容来给它们取名字，比如整数寄存器、浮点数寄存器、向量寄存器和地址寄存器等等，通用寄存器（既可以存放数据，又能存放地址）</p>
+<p>一个程序执行的时候，CPU 会根据 PC 寄存器里的地址，从内存里面把需要执行的指令，读取到指令寄存器里面执行，然后顺序读取下一条指令。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615472744523.jpg" alt="" loading="lazy"></p>
+<h3 id="ifelse">if…else</h3>
+<pre><code class="language-c">#include &lt;time.h&gt;
+#include &lt;stdlib.h&gt;
+int main()
+{
+  srand(time(NULL));
+  int r = rand() % 2;
+  int a = 10;
+  if (r == 0)
+  {
+    a = 1;
+  } else {
+    a = 2;
+  } 
+}
+</code></pre>
+<pre><code class="language-shell">$ gcc -g -c test.c
+$ objdump -d -M intel -S test.o 
+</code></pre>
+<p><strong>汇编代码</strong></p>
+<p>r == 0 的条件判断，被编译成了 cmp 和 jne 这两条指令</p>
+<p>cmp 指令比较了前后两个操作数的值： 操作对象1 - 操作对象2 但不保存结果，只是根据结果修改相应的标志位。</p>
+<ol>
+<li>DWORD PTR 代表操作的数据类型是 32 位的整数，[rbp-0x4] 则是一个寄存器的地址。</li>
+<li>第二个操作数 0x0 就是我们设定的常量 0 的 16 进制表示</li>
+</ol>
+<p>cmp 指令的比较结果，会存入到<strong>条件码寄存器</strong>当中去，<strong>零标志条件码</strong>ZF 相等为1，不等为0</p>
+<p>cmp 指令执行完成之后，PC 寄存器会自动自增，开始执行下一条 jne 的指令</p>
+<p>jne 指令： jump not equal 查看零标志位ZF不等于0，则跳转到4a（当跳转发生的时候，PC 寄存器就不再是自增变成下一条指令的地址）</p>
+<p>CPU 再把 4a 地址里的指令加载到指令寄存器中来执行，mov 指令把 2 设置到对应的寄存器里去，相当于一个赋值操作。然后，PC 寄存器里的值继续自增，执行下一条 mov 指令。</p>
+<p>mov 指令的第一个操作数 eax，代表累加寄存器，这条指令其实没有实际的作用，它的作用是一个占位符。</p>
+<p>if 条件满足的话，在赋值的 mov 指令执行完成之后，有一个 jmp 的无条件跳转指令，跳转的地址就是51。</p>
+<p>main 函数没有设定返回值，而 mov eax, 0x0 其实就是给 main 函数生成了一个默认的为 0 的返回值到累加器里面。</p>
+<pre><code class="language-shell"> if (r == 0)
+  3b:   83 7d fc 00             cmp    DWORD PTR [rbp-0x4],0x0 //只比较，结果存入标识位
+  3f:   75 09                   jne    4a &lt;main+0x4a&gt; //标识位ZF不等于0则执行
+    {
+        a = 1;
+  41:   c7 45 f8 01 00 00 00    mov    DWORD PTR [rbp-0x8],0x1
+  48:   eb 07                   jmp    51 &lt;main+0x51&gt;
+    }
+    else
+    {
+        a = 2;
+  4a:   c7 45 f8 02 00 00 00    mov    DWORD PTR [rbp-0x8],0x2
+  51:   b8 00 00 00 00          mov    eax,0x0
+    } 
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615472764389.jpg" alt="" loading="lazy"></figure>
+<h3 id="forwhile">for/while</h3>
+<p>对应的循环也是用 1e 这个地址上的 cmp 比较指令，和紧接着的 jle 条件跳转指令来实现的。</p>
+<p>jle 跳转的地址，是在这条指令之前的地址 14。往前跳转使得，PC 寄存器会把指令地址设置到之前执行过的指令位置，重新执行之前执行过的指令，直到条件不满足，顺序往下执行 jle 之后的指令，整个循环才结束。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615472775030.jpg" alt="" loading="lazy"></p>
+<p>除了简单地通过 PC 寄存器自增的方式顺序执行外，条件码寄存器会记录下当前执行指令的条件判断状态，然后通过跳转指令读取对应的条件码，修改 PC 寄存器内的下一条指令的地址，最终实现 if…else 以及 for/while 这样的程序控制流程。</p>
+<h2 id="函数调用">函数调用</h2>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[计算机组成原理01计算机的基本组成]]></title>
         <id>https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-01/</id>
@@ -992,267 +1097,6 @@ public void computeScroll() {
     android:name=&quot;.MyService&quot;
     android:process=&quot;com.coolapk.developer_verify_package&quot;&gt;
 &lt;/service&gt;
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[dagger2的Qualifier与Scope]]></title>
-        <id>https://Joshua-Chang.github.io/post/dagger2的Qualifier与Scope/</id>
-        <link href="https://Joshua-Chang.github.io/post/dagger2的Qualifier与Scope/">
-        </link>
-        <updated>2017-05-21T11:18:57.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="qualifier即named">Qualifier即Named</h4>
-<p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="qualifier即named">Qualifier即Named</h4>
-<p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
-<!--more-->
-<h5 id="module">Module</h5>
-<pre><code class="language-java">@Module
-public class ClothModule {
-    @Blue
-    @Provides
-    public Cloth getBluecloth(){
-        Cloth mCloth=new Cloth();
-        mCloth.setColor(&quot;蓝&quot;);
-        return mCloth;
-    }
-    @Named(&quot;Red&quot;)
-    @Provides
-    public Cloth getRedcloth(){
-        Cloth mCloth=new Cloth();
-        mCloth.setColor(&quot;红&quot;);
-        return mCloth;
-    }
-}
-</code></pre>
-<h5 id="component">Component</h5>
-<pre><code class="language-java">@Component(modules=ClothModule.class)
-public interface ClothCompetent {
-    void inject(MainActivity mainActivity);
-}
-</code></pre>
-<h5 id="activity">Activity</h5>
-<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
-    TextView mTextView;
-    @Named(&quot;Red&quot;)
-    @Inject
-    Cloth mClothRed;
-    @Blue
-    @Inject
-    Cloth mClothBlue;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mTextView= (TextView) findViewById(R.id.tv1);
-        ClothCompetent mClothCompetent=DaggerClothCompetent.builder().clothModule(new ClothModule()).build();
-        mClothCompetent.inject(this);
-        mTextView.setText(mClothRed+&quot;\n&quot;+mClothBlue);
-    }
-}
-</code></pre>
-<h5 id="qualifier">Qualifier</h5>
-<p>自定义的Qualifier与官方的Named原理一样</p>
-<pre><code class="language-java">@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Blue {
-}
-</code></pre>
-<p>官方的Named</p>
-<pre><code class="language-java">@Qualifier
-@Documented
-@Retention(RUNTIME)
-public @interface Named {
-
-    /** The name. */
-    String value() default &quot;&quot;;
-}
-</code></pre>
-<h4 id="scope即singleton">Scope即Singleton</h4>
-<p>以Component为依据，在指定范围内的单例</p>
-<h5 id="module-2">Module</h5>
-<ol>
-<li>在@Provides为外界提供Jacket时，参数中用到了Cloth，必须在Module中@Provides为Jacket提供Cloth</li>
-<li>自定义的Qualifier和Named也可以在参数中使用</li>
-</ol>
-<pre><code class="language-java">@Module
-public class JacketModule {
-    @Provides
-    public Jacket getJacket(@Named(&quot;Red&quot;) Cloth cloth){
-        return new Jacket(cloth);
-    }
-    @Singleton
-    @Named(&quot;Red&quot;)
-    @Provides
-    public Cloth getRedCloth(){
-       Cloth mCloth=new Cloth();
-        mCloth.setColor(&quot;红&quot;);
-        return mCloth;
-    }
-    @Blue
-    @Provides
-    public Cloth getBluecloth(){
-        Cloth mCloth=new Cloth();
-        mCloth.setColor(&quot;蓝&quot;);
-        return mCloth;
-    }
-}
-</code></pre>
-<h5 id="component-2">Component</h5>
-<p>在用到的Cloth和Component上同时添加@Singleton，此时Cloth为单例</p>
-<pre><code class="language-java">@Singleton
-@Component(modules = JacketModule.class)
-public interface JacketComponent {
-    void inject(MainActivity mainActivity);
-}
-</code></pre>
-<h5 id="activity-2">Activity</h5>
-<p>此时的Cloth和JacketRed.getCloth()为同一个</p>
-<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
-    TextView mTextView;
-    @Named(&quot;Red&quot;)
-    @Inject
-    Cloth mClothRed;
-    @Inject
-    Jacket mJacketRed;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mTextView= (TextView) findViewById(R.id.tv1);
-        JacketComponent mJacketComponent = DaggerJacketComponent.builder().jacketModule(new JacketModule()).build();
-        mJacketComponent.inject(this);
-        mTextView.setText((mJacketRed.getCloth() == mClothRed) + &quot;&quot;);
-    }
-}
-</code></pre>
-<h5 id="scope">Scope</h5>
-<p>自定义的Scope与官方的Singleton原理一样，替换Singleton为JacketSingleton仍返回true</p>
-<p>自定义的JacketSingleton：在JacketSingleton作用域内单例</p>
-<pre><code class="language-java">@Scope
-@Retention(RetentionPolicy.RUNTIME)
-public @interface JacketSingleton {
-}
-</code></pre>
-<p>官方的Singleton</p>
-<pre><code class="language-java">@Scope
-@Documented
-@Retention(RUNTIME)
-public @interface Singleton {}
-</code></pre>
-<h4 id="dependencies">dependencies</h4>
-<p>实例：分别创建两个Activity，跳转后的实例为同一个（工具类多此用法在app层单例）</p>
-<h5 id="分别创建两个module">分别创建两个Module</h5>
-<p>JacketModule与JacketModule2</p>
-<h5 id="创建component">创建Component</h5>
-<h6 id="方法一dependencies">方法一：dependencies</h6>
-<pre><code class="language-java">@JacketSingleton
-@Component(modules = JacketModule.class,dependencies = BaseComponent.class)
-public interface JacketComponent {
-    void inject(MainActivity mainActivity);
-}
-</code></pre>
-<h6 id="方法二subcomponent">方法二：Subcomponent</h6>
-<pre><code class="language-java">@JacketSingleton
-@Subcomponent(modules = JacketModule2.class)
-public interface JacketComponent2 {
-    void inject(MainActivity2 mainActivity);
-}
-</code></pre>
-<h5 id="创建basemodule">创建BaseModule</h5>
-<pre><code class="language-java">@Module
-public class BaseModule {
-    @Singleton
-    @Provides
-    public Jacket getJacket(@Named(&quot;Red&quot;) Cloth cloth){
-        return new Jacket(cloth);
-    }
-    @Singleton
-    @Provides
-    @Named(&quot;Red&quot;)
-    public Cloth getRedCloth(){
-        Cloth mCloth=new Cloth();
-        mCloth.setColor(&quot;红&quot;);
-        return mCloth;
-    }
-}
-</code></pre>
-<h5 id="创建basecomponent">创建BaseComponent</h5>
-<pre><code class="language-java">@Singleton
-@Component(modules = BaseModule.class)
-public interface BaseComponent {
-    Jacket getJacket();//dependencies依赖声明的方式
-    JacketComponent2 getJacketComponent2(JacketModule2 jacketModule2);//@Subcomponent使用的声明方式,声明一个返回值为子组件的方法,子组件需要什么Module,就在方法参数中添加什么
-}
-</code></pre>
-<h5 id="在app中初始化basecomponent">在app中初始化BaseComponent</h5>
-<pre><code class="language-java">public class App extends Application {
-        private BaseComponent baseComponent;
-        @Override
-        public void onCreate() {
-            super.onCreate();
-            baseComponent = DaggerBaseComponent.builder().baseModule(new BaseModule()).build();
-        }
-
-        public BaseComponent getBaseComponent() {
-            return baseComponent;
-        }
-}
-</code></pre>
-<h5 id="在两个activity中使用">在两个Activity中使用</h5>
-<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
-    TextView mTextView;
-    @Named(&quot;Red&quot;)
-    @Inject
-    Cloth mClothRed;
-    @Inject
-    Jacket mJacketRed;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mTextView= (TextView) findViewById(R.id.tv1);
-        JacketComponent mJacketComponent = DaggerJacketComponent.builder().baseComponent(((App) getApplication()).getBaseComponent()).jacketModule(new JacketModule()).build();
-        mJacketComponent.inject(this);
-        mTextView.setText(mJacketRed.hashCode()+&quot;&quot;);
-    }
-    public void go(View view) {
-        Intent intent = new Intent(this,MainActivity2.class);
-        intent.putExtra(&quot;xx&quot;,mJacketRed.hashCode()+&quot;&quot;);
-        startActivity(intent);
-    }
-}
-</code></pre>
-<pre><code class="language-java">public class MainActivity2 extends AppCompatActivity {
-    TextView mTextView;
-    @Named(&quot;Red&quot;)
-    @Inject
-    Cloth mClothRed;
-    @Inject
-    Jacket mJacketRed;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-        mTextView= (TextView) findViewById(R.id.tv2);
-        App application = (App) getApplication();
-        application.getBaseComponent().getJacketComponent2(new JacketModule2()).inject(this);
-        String mString = (String) getIntent().getExtras().get(&quot;xx&quot;);
-        mTextView.setText(mString+&quot;\n&quot;+mJacketRed.hashCode()+&quot;&quot;);
-    }
-}
-</code></pre>
-<h5 id="结论">结论</h5>
-<p>分别在两个Activity中初始化的Jacket哈希值相同，为同一个变量，app层单例。</p>
-<h4 id="lazy与provider">Lazy与Provider</h4>
-<p>Lazy用于延迟加载,所谓的懒加载就是当你需要用到该依赖对象时,Dagger2才帮你去获取一个;Provide用于强制重新加载,也就是每一要用到依赖对象时,Dagger2都会帮你依赖注入一次</p>
-<pre><code class="language-java">    @Inject //Lazy声明方式
-    Lazy&lt;Cloth&gt; redCloth;
-    @Inject //Provider声明方式
-    Provider&lt;Shoe&gt; shoe;
 </code></pre>
 ]]></content>
     </entry>
