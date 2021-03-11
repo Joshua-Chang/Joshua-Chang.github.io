@@ -2,18 +2,21 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>计算机组成原理01 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445919274">
+<title>计算机组成原理01计算机的基本组成 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615454782062">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="计算机组成原理01 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="计算机组成原理01计算机的基本组成 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
 
 
 
-    <meta name="description" content="是
-" />
+    <meta name="description" content="
+冯·诺依曼体系结构
+也叫存储程序计算机 : 即“可编程” 、“可存储”计算机
+First Draft里面说了一台计算机应该有哪些部分组成。
+首先是一个包含算术逻辑单元（Arithmetic Logic Unit，ALU）和处理器寄存器（P..." />
     <meta name="keywords" content="计算机组成原理" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
@@ -26,7 +29,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615445919274" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615454782062" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -79,14 +82,14 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              计算机组成原理01
+              计算机组成原理01计算机的基本组成
             </h2>
             <div class="post-info">
               <span>
                 2021-03-11
               </span>
               <span>
-                1 min read
+                5 min read
               </span>
               
                 <a href="https://Joshua-Chang.github.io/tag/oSH6nmGO8/" class="post-tag">
@@ -99,11 +102,82 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>是</p>
+                <figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615446914479.jpg" alt="" loading="lazy"></figure>
+<h1 id="冯诺依曼体系结构">冯·诺依曼体系结构</h1>
+<p>也叫<strong>存储程序计算机</strong> : 即“<strong>可编程</strong>” 、“<strong>可存储</strong>”计算机</p>
+<p><strong>First Draft</strong>里面说了一台计算机应该有哪些部分组成。</p>
+<p>首先是一个包含算术逻辑单元（Arithmetic Logic Unit，ALU）和处理器寄存器（Processor Register）的<strong>处理器单元</strong>（Processing Unit），用来完成各种算术和逻辑运算。因为它能够完成各种数据的处理或者计算工作，因此也有人把这个叫作数据通路（Datapath）或者运算器。</p>
+<p>然后是一个包含指令寄存器（Instruction Reigster）和程序计数器（Program Counter）的<strong>控制器单元</strong>（Control Unit/CU），用来控制程序的流程，通常就是不同条件下的分支和跳转。在现在的计算机里，上面的算术逻辑单元和这里的控制器单元，共同组成了我们说的 CPU。</p>
+<p>接着是用来存储数据（Data）和指令（Instruction）的<strong>内存</strong>。以及更大容量的<strong>外部存储</strong>，在过去，可能是磁带、磁鼓这样的设备，现在通常就是硬盘。</p>
+<p>最后就是各种<strong>输入和输出设备</strong>，以及对应的输入和输出机制。</p>
+<p>所有的计算机程序，也都可以抽象为从<strong>输入设备</strong>读取输入信息，通过<strong>运算器</strong>和<strong>控制器</strong>来执行存储在<strong>存储器</strong>里的程序，最终把结果输出到<strong>输出设备</strong>中。</p>
+<figure data-type="image" tabindex="2"><img src="https://Joshua-Chang.github.io/post-images/1615448091025.jpg" alt="" loading="lazy"></figure>
+<h1 id="计算机性能">计算机性能</h1>
+<h2 id="什么是性能时间的倒数">什么是性能：时间的倒数</h2>
+<p>第一个是<strong>响应时间</strong>（Response time）或者叫执行时间（Execution time）。想要提升响应时间这个性能指标，你可以理解为让计算机“跑得更快”</p>
+<p>第二个是<strong>吞吐率</strong>（Throughput）或者带宽（Bandwidth），想要提升这个指标，你可以理解为让计算机“搬得更多”。</p>
+<p>我们一般把性能，定义成响应时间的倒数，也就是：</p>
+<p>性能 = 1/ 响应时间</p>
+<h2 id="计算机的计时单位cpu-时钟">计算机的计时单位：CPU 时钟</h2>
+<p><strong>首先，自然时间不“准”</strong></p>
+<figure data-type="image" tabindex="3"><img src="https://Joshua-Chang.github.io/post-images/1615451589290.jpg" alt="" loading="lazy"></figure>
+<blockquote>
+<p>Wall Clock Time 或者 Elapsed Time，我们自然统计时间，就是在运行程序期间，挂在墙上的钟走掉的时间。</p>
+<p>P2/P3，CPU 在各个程序之间进行切换、从网络、硬盘去读取数据的时间</p>
+<p><strong>程序实际花费的 CPU 执行时间（CPU Time），就是 user time （在用户态运行指令的时间）加上 sys （在操作系统内核里运行指令的时间）time</strong>。</p>
+</blockquote>
+<p><strong>其次， CPU 执行时间也受到影响</strong>。 CPU 可能满载/降频运行，还会受到主板、内存这些其他相关硬件的影响。</p>
+<p>**结果，**程序的 CPU 执行时间 =CPU 时钟周期数（CPU Cycles）×时钟周期时间 （Clock Cycle）</p>
+<blockquote>
+<p>在 CPU 内部，和我们平时戴的电子石英表类似，有一个叫晶体振荡器（Oscillator Crystal）的东西，简称为晶振。我们把晶振当成 CPU 内部的电子表来使用。晶振带来的每一次“滴答”，就是时钟周期时间。</p>
+<p>在2.8GHz 的 CPU 上，这个时钟周期时间，就是 1/2.8G。超频，就相当于把 CPU 内部的钟给调快了</p>
+</blockquote>
+<p>CPU 时钟周期数（CPU Cycles）=指令数×<strong>每条指令的平均时钟周期数</strong>（Cycles Per Instruction，简称 CPI）</p>
+<p><strong>程序的 CPU 执行时间 = 指令数×CPI×Clock Cycle Time</strong>  性能提升从这三方面</p>
+<h1 id="计算机功耗">计算机功耗</h1>
+<h2 id="功耗">功耗</h2>
+<blockquote>
+<p>CPU，一般都被叫作<strong>超大规模集成电路</strong>（Very-Large-Scale Integration，VLSI）。这些电路，实际上都是一个个晶体管组合而成的。CPU 在计算，其实就是让晶体管里面的“开关”不断地去“打开”和“关闭”，来组合完成各种运算和功能。</p>
+</blockquote>
+<p>想要计算得快：都会增加功耗，带来耗电和散热的问题。</p>
+<ol>
+<li><strong>增加密度</strong>（在 CPU 里，同样的面积里面，多放一些晶体管）；</li>
+<li><strong>提升主频</strong>（让晶体管“打开”和“关闭”得更快一点）。</li>
+</ol>
+<p>在 CPU 里面，能够放下的晶体管数量和晶体管的“开关”频率也都是有限的。一个 CPU 的功率，可以用这样一个公式来表示：</p>
+<p>功耗 ~= 1/2 ×负载电容×电压的平方×开关频率×晶体管数量</p>
+<p>要提升性能，同样的面积下，我们想要增加晶体管数量，就要把晶体管造得小一点。这个就是提升“制程”。</p>
+<p>功耗和电压的平方是成正比的，</p>
+<h2 id="并行优化">并行优化</h2>
+<p>通过多核提升“吞吐率”而不是“响应时间”</p>
+<p><strong>阿姆达尔定律</strong></p>
+<p>优化后的执行时间 = 受优化影响的执行时间 / 加速倍数 + 不受影响的执行时间</p>
+<h2 id="其他优化">其他优化</h2>
+<ol>
+<li><strong>加速大概率事件</strong>。cpu-&gt;gpu-&gt;tpu深度学习</li>
+<li><strong>通过流水线提高性能</strong>。</li>
+<li><strong>通过预测提高性能</strong>。</li>
+</ol>
 
               </div>
               <div class="toc-container">
-                
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84">冯·诺依曼体系结构</a></li>
+<li><a href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%80%A7%E8%83%BD">计算机性能</a>
+<ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%80%A7%E8%83%BD%E6%97%B6%E9%97%B4%E7%9A%84%E5%80%92%E6%95%B0">什么是性能：时间的倒数</a></li>
+<li><a href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E8%AE%A1%E6%97%B6%E5%8D%95%E4%BD%8Dcpu-%E6%97%B6%E9%92%9F">计算机的计时单位：CPU 时钟</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8A%9F%E8%80%97">计算机功耗</a>
+<ul>
+<li><a href="#%E5%8A%9F%E8%80%97">功耗</a></li>
+<li><a href="#%E5%B9%B6%E8%A1%8C%E4%BC%98%E5%8C%96">并行优化</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96">其他优化</a></li>
+</ul>
+</li>
+</ul>
+
               </div>
             </div>
           </article>
