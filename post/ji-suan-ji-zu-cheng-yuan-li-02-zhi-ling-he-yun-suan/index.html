@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title> 计算机组成原理02指令和运算 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615474425153">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615482322764">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title=" 计算机组成原理02指令和运算 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -26,7 +26,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615474425153" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615482322764" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -86,7 +86,7 @@
                 2021-03-11
               </span>
               <span>
-                7 min read
+                15 min read
               </span>
               
                 <a href="https://Joshua-Chang.github.io/tag/oSH6nmGO8/" class="post-tag">
@@ -102,7 +102,8 @@
                 <p>从硬件角度来看，CPU 就是一个超大规模集成电路，通过电路实现了加法、乘法乃至各种各样的处理逻辑<br>
 从软件角度讲，CPU 就是一个执行各种计算机指令（Instruction Code）的逻辑机器。计算机指令，就好比一门 CPU 能够听得懂的语言，我们也可以把它叫作机器语言（Machine Language）。</p>
 <!-- more -->
-<p>不同的 CPU 能够听懂的语言不太一样，即计算机指令集Instruction Set</p>
+<p>不同的 CPU 能够听懂的语言不太一样，即计算机指令集Instruction Set<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615480260058.png" alt="" loading="lazy"></p>
 <h2 id="指令和机器码">指令和机器码</h2>
 <ol>
 <li>
@@ -193,6 +194,125 @@ $ objdump -d -M intel -S test.o
 <img src="https://Joshua-Chang.github.io/post-images/1615472775030.jpg" alt="" loading="lazy"></p>
 <p>除了简单地通过 PC 寄存器自增的方式顺序执行外，条件码寄存器会记录下当前执行指令的条件判断状态，然后通过跳转指令读取对应的条件码，修改 PC 寄存器内的下一条指令的地址，最终实现 if…else 以及 for/while 这样的程序控制流程。</p>
 <h2 id="函数调用">函数调用</h2>
+<blockquote>
+<p>函数调用和 if…else 和 for/while 循环有点像。都是在原来顺序执行的指令过程里，执行了一个内存地址的跳转指令，让指令从原来顺序执行的过程里跳开，从新的跳转后的位置开始执行。</p>
+<p>区别是，if…else 和 for/while 的跳转，是跳转走了就不再回来了，就在跳转后的新地址开始顺序地执行指令。</p>
+<p>而函数调用的跳转，在对应函数的指令执行完了之后，还要再回到函数调用的地方，继续执行 call 之后的指令。</p>
+<p>把被调用函数的指令直接插入在调用处的方法不太好。那就把后面要跳回来执行的指令地址给记录下来。</p>
+</blockquote>
+<p>我们在内存里面开辟一段空间，用栈这个<strong>后进先出</strong>（LIFO，Last In First Out）的数据结构。</p>
+<p>每次程序调用函数之前，都把函数调用完成后的返回地址、参数数据等开辟一块内存空间，即<strong>栈帧</strong>（Stack Frame）。<strong>压栈</strong>。如果函数执行完了，这就<strong>出栈</strong>。栈底的内存地址是在一开始就固定的，而一层层压栈之后，栈顶的内存地址是在逐渐变小。</p>
+<p>指令地址本身的压栈和出栈是在 call 和 ret 的部分进行的。</p>
+<p>call 的同时进行了一次 push把PC寄存器里面的内容压栈了，而在 ret 的时候 pop 把这部分数据出栈写回到PC寄存器里面了。</p>
+<pre><code class="language-c">// function_example.c
+#include &lt;stdio.h&gt;
+int static add(int a, int b)
+{
+    return a+b;
+}
+int main()
+{
+    int x = 5;
+    int y = 10;
+    int u = add(x, y);
+}
+</code></pre>
+<pre><code class="language-shell">int static add(int a, int b)
+{
+   0:   55                      push   rbp //压栈register base pointer原栈帧指针
+   1:   48 89 e5                mov    rbp,rsp //register stack pointer当前栈指针
+   4:   89 7d fc                mov    DWORD PTR [rbp-0x4],edi
+   7:   89 75 f8                mov    DWORD PTR [rbp-0x8],esi
+    return a+b;
+   a:   8b 55 fc                mov    edx,DWORD PTR [rbp-0x4]
+   d:   8b 45 f8                mov    eax,DWORD PTR [rbp-0x8]
+  10:   01 d0                   add    eax,edx
+}
+  12:   5d                      pop    rbp //将当前的栈顶出栈
+  13:   c3                      ret //出栈 到call调用时PC里的下一条地址  
+0000000000000014 &lt;main&gt;:
+int main()
+{
+  14:   55                      push   rbp
+  15:   48 89 e5                mov    rbp,rsp
+  18:   48 83 ec 10             sub    rsp,0x10
+    int x = 5;
+  1c:   c7 45 fc 05 00 00 00    mov    DWORD PTR [rbp-0x4],0x5
+    int y = 10;
+  23:   c7 45 f8 0a 00 00 00    mov    DWORD PTR [rbp-0x8],0xa
+    int u = add(x, y);
+  2a:   8b 55 f8                mov    edx,DWORD PTR [rbp-0x8]
+  2d:   8b 45 fc                mov    eax,DWORD PTR [rbp-0x4]
+  30:   89 d6                   mov    esi,edx
+  32:   89 c7                   mov    edi,eax
+  34:   e8 c7 ff ff ff          call   0 &lt;add&gt;//跳转后的程序地址 PC里的下一条地址等信息压栈
+  39:   89 45 f4                mov    DWORD PTR [rbp-0xc],eax
+  3c:   b8 00 00 00 00          mov    eax,0x0
+}
+  41:   c9                      leave  
+  42:   c3                      ret    
+</code></pre>
+<h3 id="stack-overflow">stack overflow</h3>
+<p>通过引入栈，函数调用只需要通过维持 rbp 和 rsp，这两个维护栈顶所在地址的寄存器，就能管理好不同函数之间的跳转。但函数调用层数太多，我们往栈里压入它存不下的内容，程序在执行的过程中就会遇到栈溢出的错误。（如：函数调用自己，并且不设任何终止条件）</p>
+<p>除了无限递归，递归层数过深，在栈空间里面创建非常占内存的变量（比如一个巨大的数组），这些情况都很可能给你带来 stack overflow。</p>
+<h3 id="函数内联inline">函数内联inline</h3>
+<p>只要在 GCC 编译的时候，加上对应的一个让编译器自动优化的参数 -O，编译器就会在可行的情况下，进行这样的指令替换。或者在定义函数的地方，加上 inline 的关键字，来提示编译器对函数进行内联。</p>
+<p>内联意味着，我们把可以复用的程序指令在调用它的地方完全展开了。</p>
+<p>没有调用其他函数，只会被调用的函数，我们一般称之为<strong>叶子函数（或叶子过程）</strong></p>
+<h2 id="elf和静态链接">ELF和静态链接</h2>
+<blockquote>
+<p><strong>C 语言代码 - 汇编代码 - 机器码</strong></p>
+<p>这个描述把过程大大简化了。</p>
+<p>通过 objdump 命令查看它们的汇编代码，发现两个程序的地址都是从 0 开始的，如果需要通过 call 指令调用函数的话，它怎么知道应该跳转到哪一个文件里呢？</p>
+</blockquote>
+<pre><code class="language-c">// add_lib.c
+int add(int a, int b)
+{
+    return a+b;
+}
+</code></pre>
+<pre><code class="language-c">// link_example.c
+#include &lt;stdio.h&gt;
+int main()
+{
+    int a = 10;
+    int b = 5;
+    int c = add(a, b);
+    printf(&quot;c = %d\n&quot;, c);
+}
+</code></pre>
+<pre><code class="language-shell">$ gcc -g -c add_lib.c link_example.c
+$ objdump -d -M intel -S add_lib.o
+$ objdump -d -M intel -S link_example.o
+</code></pre>
+<p>add_lib.o 以及 link_example.o 并不是一个<strong>可执行文件</strong>（Executable Program），而是<strong>目标文件</strong>（Object File）。</p>
+<p>只有通过链接器（Linker）把多个目标文件以及调用的各种函数库链接起来，我们才能得到一个可执行文件。</p>
+<pre><code class="language-shell">$ gcc -o link-example add_lib.o link_example.o
+$ ./link_example
+c = 15
+</code></pre>
+<p>“<strong>C 语言代码 - 汇编代码 - 机器码</strong>” 这个过程，在我们的计算机上进行的时候是由两部分组成的。</p>
+<p>第一个部分由编译（Compile）、汇编（Assemble）以及链接（Link）三个阶段组成。在这三个阶段完成之后，我们就生成了一个可执行文件。</p>
+<p>第二部分，我们通过装载器（Loader）把可执行文件装载（Load）到内存中。CPU 从内存中读取指令和数据，来开始真正执行程序。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615482190792.jpg" alt="" loading="lazy"></p>
+<h3 id="elf-格式和链接">ELF 格式和链接</h3>
+<p>可执行代码 通过objdump命令dump 出来的内容，不仅有编译成的汇编指令，还保留了很多别的数据。因为在 Linux 下，可执行文件和目标文件所使用的都是一种叫<strong>ELF</strong>（Execuatable and Linkable File Format）的文件格式，中文名字叫<strong>可执行与可链接文件格式</strong>。</p>
+<p>ELF 文件格式把各种信息，分成一个一个的 Section 保存起来。ELF 有一个基本的文件头（File Header），用来表示这个文件的基本属性，比如是否是可执行文件，对应的 CPU、操作系统等等<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615482163121.jpg" alt="" loading="lazy"><br>
+除了这些基本属性之外，大部分程序还有这么一些 Section：</p>
+<ol>
+<li>首先是.text Section，也叫作<strong>代码段</strong>或者指令段（Code Section），用来保存程序的代码和指令；</li>
+<li>接着是.data Section，也叫作<strong>数据段</strong>（Data Section），用来保存程序里面设置好的初始化数据信息；</li>
+<li>然后就是.rel.text Secion，叫作<strong>重定位表</strong>（Relocation Table）。重定位表里，保留的是当前的文件里面，哪些跳转地址其实是我们不知道的。比如上面的 link_example.o 里面，我们在 main 函数里面调用了 add 和 printf 这两个函数，但是在链接发生之前，我们并不知道该跳转到哪里，这些信息就会存储在重定位表里；</li>
+<li>最后是.symtab Section，叫作<strong>符号表</strong>（Symbol Table）。符号表保留了我们所说的当前文件里面定义的函数名称和对应地址的地址簿。</li>
+</ol>
+<h3 id="链接过程">链接过程</h3>
+<figure data-type="image" tabindex="2"><img src="https://Joshua-Chang.github.io/post-images/1615482146761.jpg" alt="" loading="lazy"></figure>
+<blockquote>
+<p>链接器会扫描所有输入的目标文件，然后把所有符号表里的信息收集起来，构成一个全局的符号表。然后再根据重定位表，把所有不确定要跳转地址的代码，根据符号表里面存储的地址，进行一次修正。最后，把所有的目标文件的对应段进行一次合并，变成了最终的可执行代码。因此可执行文件里面的函数调用的地址都是正确的。</p>
+</blockquote>
+<h3 id="延伸">延伸</h3>
+<p>Windows 的可执行文件格式是一种叫作<strong>PE</strong>（Portable Executable Format）的文件格式。Linux 下的装载器只能解析 ELF 格式而不能解析 PE 格式，Linux 的Wine/ 微软的WSL，也就是 Windows Subsystem for Linux可以兼容</p>
 
               </div>
               <div class="toc-container">
@@ -207,7 +327,19 @@ $ objdump -d -M intel -S test.o
 <li><a href="#forwhile">for/while</a></li>
 </ul>
 </li>
-<li><a href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8">函数调用</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8">函数调用</a>
+<ul>
+<li><a href="#stack-overflow">stack overflow</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E5%86%85%E8%81%94inline">函数内联inline</a></li>
+</ul>
+</li>
+<li><a href="#elf%E5%92%8C%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5">ELF和静态链接</a>
+<ul>
+<li><a href="#elf-%E6%A0%BC%E5%BC%8F%E5%92%8C%E9%93%BE%E6%8E%A5">ELF 格式和链接</a></li>
+<li><a href="#%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B">链接过程</a></li>
+<li><a href="#%E5%BB%B6%E4%BC%B8">延伸</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
