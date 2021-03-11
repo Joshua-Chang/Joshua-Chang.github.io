@@ -1,108 +1,97 @@
 <html>
   <head>
-    
-<meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Joshua-Chang`Blog</title>
-<meta name="description" content="温故而知新">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445602406">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445919274">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-
-
+    <meta name="description" content="温故而知新" />
   </head>
   <body>
-    <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://Joshua-Chang.github.io">
-        <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615445602406" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://Joshua-Chang.github.io">
-        <h1 class="site-title">Joshua-Chang`Blog</h1>
-      </a>
-    </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615445919274" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
   </div>
 </div>
 
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
-      
+    
         
-          <a href="/" class="menu purple-link">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="menu purple-link">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="menu purple-link">
-            标签
-          </a>
-        
-      
-        
-          <a href="/post/about" class="menu purple-link">
-            关于
-          </a>
-        
-      
-    </div>
-  </div>
-</transition>
-
-
-        <div class="content-container">
-          
-          
 
 <div class="archives-container">
   
     <h2 class="year">2021</h2>
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-01/">
-            <h2 class="post-title">
-              计算机组成原理01
-              <small>2021-03-11</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-01/" class="post">
+          <h2 class="post-title">
+            计算机组成原理01
+          </h2>
+          <div class="time">2021-03-11</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/jetpack-compose-01/">
-            <h2 class="post-title">
-              JetPack Compose 01
-              <small>2021-02-28</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/jetpack-compose-01/" class="post">
+          <h2 class="post-title">
+            JetPack Compose 01
+          </h2>
+          <div class="time">2021-02-28</div>
+        </a>
       
     
       
@@ -141,14 +130,12 @@
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/navigator-yuan-ma-fen-xi/">
-            <h2 class="post-title">
-              Navigator源码分析
-              <small>2020-12-15</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/navigator-yuan-ma-fen-xi/" class="post">
+          <h2 class="post-title">
+            Navigator源码分析
+          </h2>
+          <div class="time">2020-12-15</div>
+        </a>
       
     
       
@@ -187,25 +174,21 @@
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/Update-MacOS-to-Mojave-Vim-Caught-deadly-signal-SEGVE/">
-            <h2 class="post-title">
-              Update MacOS to Mojave Vim: Caught deadly signal SEGV
-              <small>2018-10-24</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/Update-MacOS-to-Mojave-Vim-Caught-deadly-signal-SEGVE/" class="post">
+          <h2 class="post-title">
+            Update MacOS to Mojave Vim: Caught deadly signal SEGV
+          </h2>
+          <div class="time">2018-10-24</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/App时常统计与静默拍摄/">
-            <h2 class="post-title">
-              App使用统计与静默拍摄
-              <small>2018-10-03</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/App时常统计与静默拍摄/" class="post">
+          <h2 class="post-title">
+            App使用统计与静默拍摄
+          </h2>
+          <div class="time">2018-10-03</div>
+        </a>
       
     
       
@@ -244,168 +227,122 @@
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/开发一个IntelliJ-IDEA插件/">
-            <h2 class="post-title">
-              开发一个IntelliJ IDEA插件
-              <small>2017-12-27</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/开发一个IntelliJ-IDEA插件/" class="post">
+          <h2 class="post-title">
+            开发一个IntelliJ IDEA插件
+          </h2>
+          <div class="time">2017-12-27</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/View滑动的几种方式/">
-            <h2 class="post-title">
-              View滑动的几种方式
-              <small>2017-09-28</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/View滑动的几种方式/" class="post">
+          <h2 class="post-title">
+            View滑动的几种方式
+          </h2>
+          <div class="time">2017-09-28</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/TabLayout-indicator宽度工具类/">
-            <h2 class="post-title">
-              TabLayout indicator宽度工具类
-              <small>2017-09-22</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/TabLayout-indicator宽度工具类/" class="post">
+          <h2 class="post-title">
+            TabLayout indicator宽度工具类
+          </h2>
+          <div class="time">2017-09-22</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/IPC机制之Messenger/">
-            <h2 class="post-title">
-              IPC机制之Messenger
-              <small>2017-06-02</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/IPC机制之Messenger/" class="post">
+          <h2 class="post-title">
+            IPC机制之Messenger
+          </h2>
+          <div class="time">2017-06-02</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/dagger2的Qualifier与Scope/">
-            <h2 class="post-title">
-              dagger2的Qualifier与Scope
-              <small>2017-05-21</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/dagger2的Qualifier与Scope/" class="post">
+          <h2 class="post-title">
+            dagger2的Qualifier与Scope
+          </h2>
+          <div class="time">2017-05-21</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/dagger2由简入深/">
-            <h2 class="post-title">
-              dagger2由简入深
-              <small>2017-05-21</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/dagger2由简入深/" class="post">
+          <h2 class="post-title">
+            dagger2由简入深
+          </h2>
+          <div class="time">2017-05-21</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/MaterialDesign动画/">
-            <h2 class="post-title">
-              MaterialDesign动画
-              <small>2017-05-19</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/MaterialDesign动画/" class="post">
+          <h2 class="post-title">
+            MaterialDesign动画
+          </h2>
+          <div class="time">2017-05-19</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/Palette调色板/">
-            <h2 class="post-title">
-              Palette调色板
-              <small>2017-05-17</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/Palette调色板/" class="post">
+          <h2 class="post-title">
+            Palette调色板
+          </h2>
+          <div class="time">2017-05-17</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/RecyclerView添加Item/">
-            <h2 class="post-title">
-              RecyclerView奇技淫巧：添加Item
-              <small>2017-05-17</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/RecyclerView添加Item/" class="post">
+          <h2 class="post-title">
+            RecyclerView奇技淫巧：添加Item
+          </h2>
+          <div class="time">2017-05-17</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/RecyclerView添加首尾布局/">
-            <h2 class="post-title">
-              RecyclerView奇技淫巧：添加首尾布局
-              <small>2017-05-17</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/RecyclerView添加首尾布局/" class="post">
+          <h2 class="post-title">
+            RecyclerView奇技淫巧：添加首尾布局
+          </h2>
+          <div class="time">2017-05-17</div>
+        </a>
       
     
       
-        <article class="post">
-          <a href="https://Joshua-Chang.github.io/post/简析事件分发机制/">
-            <h2 class="post-title">
-              简析事件分发机制
-              <small>2017-03-10</small>
-            </h2>
-          </a>
-        </article>
+        <a href="https://Joshua-Chang.github.io/post/简析事件分发机制/" class="post">
+          <h2 class="post-title">
+            简析事件分发机制
+          </h2>
+          <div class="time">2017-03-10</div>
+        </a>
       
     
   
 </div>
 
-
-        </div>
-
-        <div class="site-footer">
-  <div class="slogan">温故而知新</div>
-  <div class="social-container">
     
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-   | <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">RSS</a>
+        <div class="pagination-container">
+  
+  
 </div>
 
+    
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
 
       </div>
-      <script type="application/javascript">
-
-hljs.initHighlightingOnLoad()
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
-</script>
-
-
-
-
     </div>
   </body>
 </html>

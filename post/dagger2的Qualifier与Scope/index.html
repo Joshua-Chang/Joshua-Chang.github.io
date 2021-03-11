@@ -1,116 +1,116 @@
-
-<!DOCTYPE html>
 <html>
   <head>
-    
-<meta charset="utf-8" >
-
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>dagger2的Qualifier与Scope | Joshua-Chang`Blog</title>
-<meta name="description" content="温故而知新">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445602406">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615445919274">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="dagger2的Qualifier与Scope | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-
-
+    <meta name="description" content="Qualifier即Named
+当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化
+Module
+@Module
+public class ClothModule {
+    @Blue
+    @Provi..." />
+    <meta name="keywords" content="IOC,Qualifier,Scope" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://Joshua-Chang.github.io">
-        <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615445602406" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://Joshua-Chang.github.io">
-        <h1 class="site-title">Joshua-Chang`Blog</h1>
-      </a>
-    </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615445919274" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
   </div>
 </div>
 
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
-      
-        
-          <a href="/" class="menu purple-link">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="menu purple-link">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="menu purple-link">
-            标签
-          </a>
-        
-      
-        
-          <a href="/post/about" class="menu purple-link">
-            关于
-          </a>
-        
-      
-    </div>
-  </div>
-</transition>
-
-
-      <div class="content-container">
         <div class="post-detail">
-          
-          <h2 class="post-title">dagger2的Qualifier与Scope</h2>
-          <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2017-05-21</span>
-            
+          <article class="post">
+            <h2 class="post-title">
+              dagger2的Qualifier与Scope
+            </h2>
+            <div class="post-info">
               <span>
-                <i class="icon-pricetags-outline"></i>
-                
-                  <a href="https://Joshua-Chang.github.io/tag/SlLTvLCt3u/">
-                    IOC
-                    
-                      ，
-                    
-                  </a>
-                
-                  <a href="https://Joshua-Chang.github.io/tag/JlEfQ4lwpF/">
-                    Qualifier
-                    
-                      ，
-                    
-                  </a>
-                
-                  <a href="https://Joshua-Chang.github.io/tag/j_I7aMNmgh/">
-                    Scope
-                    
-                  </a>
-                
+                2017-05-21
               </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://Joshua-Chang.github.io/tag/SlLTvLCt3u/" class="post-tag">
+                  # IOC
+                </a>
+              
+                <a href="https://Joshua-Chang.github.io/tag/JlEfQ4lwpF/" class="post-tag">
+                  # Qualifier
+                </a>
+              
+                <a href="https://Joshua-Chang.github.io/tag/j_I7aMNmgh/" class="post-tag">
+                  # Scope
+                </a>
+              
+            </div>
             
-          </div>
-          <div class="post-content">
-            <h4 id="qualifier即named">Qualifier即Named</h4>
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h4 id="qualifier即named">Qualifier即Named</h4>
 <p>当module的@Provides提供相同变量的不同属性时：用于区分把哪一个初始化</p>
 <h5 id="module">Module</h5>
 <pre><code class="language-java">@Module
@@ -361,57 +361,131 @@ public interface BaseComponent {
     Provider&lt;Shoe&gt; shoe;
 </code></pre>
 
-          </div>
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#qualifier%E5%8D%B3named">Qualifier即Named</a>
+<ul>
+<li><a href="#module">Module</a></li>
+<li><a href="#component">Component</a></li>
+<li><a href="#activity">Activity</a></li>
+<li><a href="#qualifier">Qualifier</a></li>
+</ul>
+</li>
+<li><a href="#scope%E5%8D%B3singleton">Scope即Singleton</a>
+<ul>
+<li><a href="#module-2">Module</a></li>
+<li><a href="#component-2">Component</a></li>
+<li><a href="#activity-2">Activity</a></li>
+<li><a href="#scope">Scope</a></li>
+</ul>
+</li>
+<li><a href="#dependencies">dependencies</a>
+<ul>
+<li><a href="#%E5%88%86%E5%88%AB%E5%88%9B%E5%BB%BA%E4%B8%A4%E4%B8%AAmodule">分别创建两个Module</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BAcomponent">创建Component</a>
+<ul>
+<li><a href="#%E6%96%B9%E6%B3%95%E4%B8%80dependencies">方法一：dependencies</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95%E4%BA%8Csubcomponent">方法二：Subcomponent</a></li>
+</ul>
+</li>
+<li><a href="#%E5%88%9B%E5%BB%BAbasemodule">创建BaseModule</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BAbasecomponent">创建BaseComponent</a></li>
+<li><a href="#%E5%9C%A8app%E4%B8%AD%E5%88%9D%E5%A7%8B%E5%8C%96basecomponent">在app中初始化BaseComponent</a></li>
+<li><a href="#%E5%9C%A8%E4%B8%A4%E4%B8%AAactivity%E4%B8%AD%E4%BD%BF%E7%94%A8">在两个Activity中使用</a></li>
+<li><a href="#%E7%BB%93%E8%AE%BA">结论</a></li>
+</ul>
+</li>
+<li><a href="#lazy%E4%B8%8Eprovider">Lazy与Provider</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
         </div>
 
         
           <div class="next-post">
-            <a class="purple-link" href="https://Joshua-Chang.github.io/post/dagger2由简入深/">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/dagger2由简入深/">
               <h3 class="post-title">
-                下一篇：dagger2由简入深
+                dagger2由简入深
               </h3>
             </a>
           </div>
-          
-      </div>
+        
 
-      
+        
 
-      <div class="site-footer">
-  <div class="slogan">温故而知新</div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-   | <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">RSS</a>
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
 </div>
 
-
+      </div>
+      <div id="vcomments"></div>
     </div>
-    <script type="application/javascript">
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
 
-hljs.initHighlightingOnLoad()
+    <script>
+      hljs.initHighlightingOnLoad()
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
-</script>
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-
+    </script>
   </body>
 </html>
