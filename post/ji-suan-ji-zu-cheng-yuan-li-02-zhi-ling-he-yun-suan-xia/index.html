@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>计算机组成原理02指令和运算 下 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615536084255">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615548998324">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="计算机组成原理02指令和运算 下 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -12,9 +12,14 @@
 
 
 
-    <meta name="description" content="
+    <meta name="description" content="程序 = 算法 + 数据结构
+算法：各种计算机指令
+数据结构：二进制数据
 
-..." />
+
+二进制
+二进制转十进制：从 0 开始，从右到左的第 N 位✖️2 的 N 次方，然后相加。
+十进制转二进制：短除法，递归除以 2 的余数，从右往左填入，直到商0。..." />
     <meta name="keywords" content="计算机组成原理" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
@@ -27,7 +32,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615536084255" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615548998324" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -87,7 +92,7 @@
                 2021-03-12
               </span>
               <span>
-                0 min read
+                7 min read
               </span>
               
                 <a href="https://Joshua-Chang.github.io/tag/oSH6nmGO8/" class="post-tag">
@@ -100,12 +105,94 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <!-- more -->
+                <p>程序 = 算法 + 数据结构</p>
+<p>算法：各种计算机指令</p>
+<p>数据结构：二进制数据</p>
+<!-- more -->
 <figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615480260058.png" alt="" loading="lazy"></figure>
+<h2 id="二进制">二进制</h2>
+<p>二进制转十进制：从 0 开始，从右到左的第 N 位✖️2 的 N 次方，然后相加。</p>
+<p>十进制转二进制：<strong>短除法</strong>，递归除以 2 的余数，从右往左填入，直到商0。</p>
+<p>负数：一个 4 位的二进制数，补码最左侧的一位，当成正负号，0 为正数，1 为负数。这一位并非单独的符号位。在计算整个二进制值的时候，在左侧最高位前面加个正负号。 十进制−5，用4 位的二进制补码数值 1011。-2<sup>3+2</sup>1+2^0。首位前加负号：-8+2+1=-5。</p>
+<h3 id="字符串">字符串</h3>
+<p>最早计算机只需要使用英文字符，加上数字和一些特殊符号，然后用 8 位的二进制就能表示，即<strong>ASCII 码</strong>（American Standard Code for Information Interchange，美国信息交换标准代码）。ASCII 码就好比一个字典，用 8 位二进制中的 128 个不同的数，映射成 128 个不同的字符。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615548790038.png" alt="" loading="lazy"></p>
+<blockquote>
+<p>小写字母 a 在 ASCII 里面，就是第 97 个，8位二进制的 0110 0001，十六进制61</p>
+<p>大写字母 A 在 ASCII 里面，就是第 65 个，8位二进制的 0100 0001，十六进制41</p>
+<p>单个数字不再用整数表示法，反而用8位二进制，字符串数字9，第57个，用8位二进制0011 1001 ，十六进制39</p>
+<p>字符串 数字15 不用 0000 1111 这 8 位来表示，而用两个 8 位来表示，即用两个字符 1 和 5 连续在一起，也就是 0011 0001 和 0011 0101。</p>
+</blockquote>
+<p>因此在存储数据的时候，采用二进制序列化这样的方式，而不是 CSV 或者 JSON，这样的文本格式。<strong>不管是整数也好，浮点数也好，采用二进制序列化会比存储文本省下不少空间。</strong></p>
+<p>随着越来越多的不同国家的人都用上了计算机，ASCII 码128 个字符不够用。于是出现了不同的的<strong>字符集</strong>（Charset）和<strong>字符编码</strong>（Character Encoding）。</p>
+<p>其中Unicode字符集，包含了 150 种语言的 14 万个不同的字符。</p>
+<p>字符编码则是对于字符集里的字符，用二进制表示出来的一个字典。Unicode，可以用 UTF-8、UTF-16，UTF-32、GB2312等来进行编码，存储成二进制。解码和展示时使用不同的编码方式，就会出现乱码。</p>
+<p><strong>ASCII 码</strong>是对有128个字符的“小字符集”的编码。编码的目的就是把文字二进制存储。</p>
+<h2 id="理解电路">理解电路</h2>
+<p>我们通过电路的“开”和“关”，来表示“1”和“0”，晶体管在不同的情况下，表现为导电的“1”和绝缘的“0”的状态。</p>
+<p>一方面，我们可以通过继电器或者中继（Relay），进行长距离的信号传输。另一方面，我们也可以通过设置不同的线路和开关状态，实现更多不同的信号表示和处理方式，这些线路的连接方式就是我们在数字电路中所说的门电路。</p>
+<blockquote>
+<p>“与（AND）”：提供串联的两个开关，只有两个开关都打开，电路才接通</p>
+<p>“或（OR）”：两条线路上各有一个开关，任何一个开关打开了，电路都接通</p>
+<p>“非（NOT）”：数字电路中使用<strong>反向器</strong>（Inverter）</p>
+</blockquote>
+<p><strong>门电路</strong>是我们创建 CPU 和内存的基本逻辑单元。各种对于计算机二进制的“0”和“1”的门电路操作，叫作组合逻辑电路。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615548823929.jpg" alt="" loading="lazy"></p>
+<h2 id="加法器">加法器</h2>
+<p><strong>bit</strong> （缩写b）位。是计算机存储数据的最小单位，只有0和1两种值。</p>
+<p><strong>byte</strong>（缩写B）字节。是8个bit组成了信息的最小单位，也就是字节。来源于<strong>ASCII码</strong>有128个字符，需用8位表示。</p>
+<p>二进制，从右往左数，第一列是个位，第二列是“二位”，对应的再往左，就应该分别是四位、八位。</p>
+<h3 id="异或门">异或门</h3>
+<p>四种个位数相加</p>
+<figure data-type="image" tabindex="2"><img src="https://Joshua-Chang.github.io/post-images/1615548862709.jpg" alt="" loading="lazy"></figure>
+<p>输入：4 种组合00、01、10、11。</p>
+<p>输出：00/11 情况下输出0，10/01 情况下输出1</p>
+<p>这种输入输出的对应关系即“异或门（XOR / ^）”。虽然在逻辑运算里面没有出现的形式，但作为一个基本电路。<strong>异或门就是一个最简单的整数加法所需要的基本门电路</strong>。</p>
+<h3 id="半加器">半加器</h3>
+<p>输入的是 11 的情况下，还需向更左侧进位。对应一个与门：即当且仅当加数和被加数都是 1 的时候，才进位 1。</p>
+<p>通过一个异或门计算出个位，通过一个与门计算出是否进位，就通过电路算出了一个一位数的加法。<strong>我们把两个门电路打包，给它取一个名字，就叫作半加器</strong>（Half Adder）。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615548907425.jpg" alt="" loading="lazy"></p>
+<h3 id="全加器">全加器</h3>
+<p>半加器不能计算“二位”，因为“二位”是加数、被加数、进位信号 三个数相加。<strong>我们用两个半加器和一个或门，就能组合成一个全加器</strong>。（此处的二位与非个位的其他位原理相同）</p>
+<p>第一个半加器，个位的加法，得到是否进位 X 和对应的二个数加和后的结果 Y；</p>
+<p>然后把结果 Y和右侧个位数相加后的进位信息 ，连接到第二个半加器上；</p>
+<p>就产生一个是否进位的信号 V 和对应的加和后的结果 W 即二位的结果；</p>
+<figure data-type="image" tabindex="3"><img src="https://Joshua-Chang.github.io/post-images/1615548945005.jpg" alt="" loading="lazy"></figure>
+<p>最后把两个半加器的进位信息，输入或门连接起来。即两次加法中，任何一个需要进位，都向左侧进位。</p>
+<p>（即使三个 bit 相加，即使 3 个 bit 都是 1，也最多会进一位）</p>
+<p>有了全加器，对两个 8 bit 数相加变得容易，只要把 8 个全加器串联起来即可。个位的全加器的进位信号作为二位全加器的输入信号，二位全加器的进位信号再作为四位的全加器的进位信号。同理可扩展到 16 位、32 位，乃至 64 位。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615548959815.jpg" alt="" loading="lazy"></p>
+<p>对于这个8位串联全加器：</p>
+<p>在最右侧个位，我们只需要用一个半加器，或者让全加器的进位输入始终是 0。</p>
+<p>在最左侧的一位输出的进位信号，并不表示再进一位，而表示加法是否溢出。</p>
+<p><strong>分层</strong><br>
+<img src="https://Joshua-Chang.github.io/post-images/1615548968172.jpg" alt="" loading="lazy"></p>
+<p>在上面的一层，我们只需要考虑怎么用下一层的组件搭建出自己的功能，而不需要下沉到更低层的其他组件。就像你之前并没有深入学习过计算机组成原理，一样可以直接通过高级语言撰写代码，实现功能。</p>
+<p>在硬件层面，通过门电路、半加器、全加器一层层搭出了加法器这样的功能组件。这些用来做算术逻辑计算的组件叫作 ALU，也就是算术逻辑单元。</p>
+<p>当进一步打造强大的 CPU 时，我们不再关注最细颗粒的门电路，只需要把门电路组合而成的 ALU，当成一个能够完成基础计算的黑盒子就可以了。</p>
 
               </div>
               <div class="toc-container">
-                
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%BA%8C%E8%BF%9B%E5%88%B6">二进制</a>
+<ul>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2">字符串</a></li>
+</ul>
+</li>
+<li><a href="#%E7%90%86%E8%A7%A3%E7%94%B5%E8%B7%AF">理解电路</a></li>
+<li><a href="#%E5%8A%A0%E6%B3%95%E5%99%A8">加法器</a>
+<ul>
+<li><a href="#%E5%BC%82%E6%88%96%E9%97%A8">异或门</a></li>
+<li><a href="#%E5%8D%8A%E5%8A%A0%E5%99%A8">半加器</a></li>
+<li><a href="#%E5%85%A8%E5%8A%A0%E5%99%A8">全加器</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
               </div>
             </div>
           </article>
