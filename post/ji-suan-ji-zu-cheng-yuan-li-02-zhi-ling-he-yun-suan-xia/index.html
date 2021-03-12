@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>计算机组成原理02指令和运算 下 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615564008761">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615571367001">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="计算机组成原理02指令和运算 下 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -32,7 +32,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615564008761" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615571367001" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -92,7 +92,7 @@
                 2021-03-12
               </span>
               <span>
-                10 min read
+                17 min read
               </span>
               
                 <a href="https://Joshua-Chang.github.io/tag/oSH6nmGO8/" class="post-tag">
@@ -116,7 +116,7 @@
 <p>负数：一个 4 位的二进制数，补码最左侧的一位，当成正负号，0 为正数，1 为负数。这一位并非单独的符号位。在计算整个二进制值的时候，在左侧最高位前面加个正负号。 十进制−5，用4 位的二进制补码数值 1011。-2<sup>3+2</sup>1+2^0。首位前加负号：-8+2+1=-5。</p>
 <h3 id="字符串">字符串</h3>
 <p>最早计算机只需要使用英文字符，加上数字和一些特殊符号，然后用 8 位的二进制就能表示，即<strong>ASCII 码</strong>（American Standard Code for Information Interchange，美国信息交换标准代码）。ASCII 码就好比一个字典，用 8 位二进制中的 128 个不同的数，映射成 128 个不同的字符。<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615548790038.png" alt="" loading="lazy"></p>
+<img src="https://Joshua-Chang.github.io/post-images/1615548790038.png" style="zoom: 33%;" /></p>
 <blockquote>
 <p>小写字母 a 在 ASCII 里面，就是第 97 个，8位二进制的 0110 0001，十六进制61</p>
 <p>大写字母 A 在 ASCII 里面，就是第 65 个，8位二进制的 0100 0001，十六进制41</p>
@@ -166,7 +166,7 @@
 <p>在最右侧个位，我们只需要用一个半加器，或者让全加器的进位输入始终是 0。</p>
 <p>在最左侧的一位输出的进位信号，并不表示再进一位，而表示加法是否溢出。</p>
 <p><strong>分层</strong><br>
-<img src="https://Joshua-Chang.github.io/post-images/1615548968172.jpg" alt="" loading="lazy"></p>
+<img src="https://Joshua-Chang.github.io/post-images/1615548968172.jpg" style="zoom: 25%;" /></p>
 <p>在上面的一层，我们只需要考虑怎么用下一层的组件搭建出自己的功能，而不需要下沉到更低层的其他组件。就像你之前并没有深入学习过计算机组成原理，一样可以直接通过高级语言撰写代码，实现功能。</p>
 <p>在硬件层面，通过门电路、半加器、全加器一层层搭出了加法器这样的功能组件。这些用来做算术逻辑计算的组件叫作 ALU，也就是算术逻辑单元。</p>
 <p>当进一步打造强大的 CPU 时，我们不再关注最细颗粒的门电路，只需要把门电路组合而成的 ALU，当成一个能够完成基础计算的黑盒子就可以了。</p>
@@ -184,18 +184,104 @@
 <p>一个顺序乘法器硬件进行计算的时间复杂度是 O(N)。这里的 N，就是乘法的数里面的<strong>位数</strong>。</p>
 <h3 id="电路并行">电路并行</h3>
 <p>目前的乘法实现就像是单败淘汰赛</p>
-<figure data-type="image" tabindex="4"><img src="https://Joshua-Chang.github.io/post-images/1615563936931.jpg" alt="" loading="lazy"></figure>
-<p>我们 CPU 的硬件上，用更多的晶体管开关，来放下中间计算结果。把 O(https://Joshua-Chang.github.io/post-images/1615563995243.jpg)</p>
+<img src="https://Joshua-Chang.github.io/post-images/1615563936931.jpg" style="zoom:25%;" />
+<p>我们 CPU 的硬件上，用更多的晶体管开关，来放下中间计算结果。把 O(https://Joshua-Chang.github.io/post-images/1615563995243.jpg&quot; style=&quot;zoom:25%;&quot; /&gt;</p>
 <p>加法器中每一个全加器，都要等待上一个全加器，这个等待的时间叫作<strong>门延迟</strong>（Gate Delay）。每通过一个门电路，计作1“T”。全加器就已经有了 3T 的延迟（进位需要经过 3 个门电路），而 4 位整数，最高位的计算需要等待前面三个全加器的进位结果，即等 9T 延迟。</p>
 <p>除了门延迟外，还有<strong>时钟频率</strong>，在上面的顺序乘法计算里面，如果我们想要用更少的电路，计算的中间结果需要保存在寄存器里面，然后等待下一个时钟周期的到来，控制测试信号才能进行下一次移位和加法。</p>
 <p>因为电路是天然并行的，一个输入信号，可以同时传播到所有接通的线路当中。下图展示了加法器。如果完全展开电路，高位的进位和计算结果，可以和低位的计算结果同时获得。</p>
 <blockquote>
-<p><img src="https://Joshua-Chang.github.io/post-images/1615564005050.jpg" alt="" loading="lazy"><br>
-C4 是前 4 位的计算结果是否进位的门电路表示。因此一个 4 位整数最高位是否进位，展开门电路图，你会发现，我们只需要 3T 的延迟就可以拿到是否进位的计算结果。</p>
+<img src="https://Joshua-Chang.github.io/post-images/1615564005050.jpg" style="zoom:25%;" />
+C4 是前 4 位的计算结果是否进位的门电路表示。因此一个 4 位整数最高位是否进位，展开门电路图，你会发现，我们只需要 3T 的延迟就可以拿到是否进位的计算结果。
 </blockquote>
 <p>电路天然的并行性。电路只要接通，输入的信号自动传播到了所有接通的线路里面，这其实也是硬件和软件最大的不同。</p>
 <p>无论是把对应的门电路逻辑进行完全展开以减少门延迟，还是通过并行计算多个位的乘法，都把一个计算的电路变复杂了。而电路变复杂了，也就意味着晶体管变多了。通过更多的晶体管，就可以拿到更低的门延迟，以及用更少的时钟周期完成一个计算指令。</p>
 <p>是用更少更简单的电路，但是需要更长的门延迟和时钟周期；还是用更复杂的电路，但是更短的门延迟和时钟周期来计算一个复杂的指令，就是RISC 和 CISC 的区别。</p>
+<h2 id="浮点数和定点数">浮点数和定点数</h2>
+<p>计算机通常用 16或32 个比特（bit）4/8byte来表示一个数，只能表示 2 的 32 次方个不同的数，差不多是 40 亿个。</p>
+<p>实数集合是无限多的，让这 40 亿个数映射到实数集合上的哪些数呢？</p>
+<h3 id="定点数的表示">定点数的表示</h3>
+<p>每4bit来表示 0～9 的整数，32bit即可表示8个这样的正数，把最右边的 2 个 0～9 的整数，当成小数部分；把左边 6 个 0～9 的整数，当成整数部分。这样用 32 个bit，表示从 0 到 999999.99 共 1 亿个实数这种直观的表示法叫<a href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E9%80%B2%E7%A2%BC%E5%8D%81%E9%80%B2%E6%95%B8"><strong>BCD 编码</strong></a>（Binary-Coded Decimal），用于超市、银行这样需要用小数记录金额。</p>
+<p><strong>第一，这样的表示方式有点“浪费”</strong>：本来可以表示2^32约40亿个数，结果才表示了1亿个。</p>
+<p><strong>第二，这样的表示方式没办法同时表示很大的数字和很小的数字。</strong></p>
+<h3 id="浮点数的表示">浮点数的表示</h3>
+<p><strong>浮点数</strong>（Floating Point），用科学计数法来表示实数。</p>
+<p>因为这个数对应的小数点的位置是“浮动”的，它才被称为浮点数。随着指数位 e 的值的不同，小数点的位置也在变动。而BCD 编码的实数，小数点固定在某一位的方式称为<strong>定点数</strong>。</p>
+<p><strong>IEEE</strong>标准定义了，用32 比特表示单精度的浮点数即 float 或者 float32 类型，用 64 比特表示双精度的浮点数即double 或者 float64 类型。</p>
+<p>浮点数的组成分成三部分</p>
+<p>单精度的 32 个比特如下，双精度则每部分bit增加一倍</p>
+<figure data-type="image" tabindex="4"><img src="https://Joshua-Chang.github.io/post-images/1615571233192.jpg" alt="" loading="lazy"></figure>
+<ol>
+<li>第一部分是一个<strong>符号位</strong> S，用来表示是正数还是负数。浮点数都是有符号的。负数1正数0</li>
+<li>接下来的8 bit组成<strong>指数位</strong> e。8bit能够表示的整数是 0～255，用 1～254 映射到 -126～127 这 254 个有正有负的数上。e作为指数可正可负，可以同时表示很大或很小的数。0和255单独表示。</li>
+<li>最后是一个 23 bit组成的<strong>有效数位</strong>f</li>
+</ol>
+<p>最终浮点数表示为：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mo>−</mo><mn>1</mn><msup><mo>)</mo><mi>s</mi></msup><mo>∗</mo><mn>1.</mn><mi>f</mi><mo>∗</mo><msup><mn>2</mn><mi>e</mi></msup></mrow><annotation encoding="application/x-tex">(-1)^s*1.f*2^e
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord">1</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">s</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.7143919999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">e</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>在e=0且f=0时表示浮点数的0。当e=255且f=0时，s为0表示无穷大，s为1表示无穷小。</p>
+<p>浮点数无论是表示还是计算其实都是近似计算，比如0.3、0.9难以用指数绝对表达。</p>
+<h3 id="浮点数的二进制转化">浮点数的二进制转化</h3>
+<p>浮点数二进制：<strong>符号位 s+ 指数位 e+ 有效位数 f</strong></p>
+<h4 id="二进制小数转十进制小数">二进制小数转十进制小数</h4>
+<p>0.1001</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>×</mo><msup><mn>2</mn><mi mathvariant="normal">−</mi></msup><mn>1</mn><mo>+</mo><mn>0</mn><mo>×</mo><msup><mn>2</mn><mi mathvariant="normal">−</mi></msup><mn>2</mn><mo>+</mo><mn>0</mn><mo>×</mo><msup><mn>2</mn><mi mathvariant="normal">−</mi></msup><mn>3</mn><mo>+</mo><mn>1</mn><mo>×</mo><msup><mn>2</mn><mi mathvariant="normal">−</mi></msup><mn>4</mn><mo>=</mo><mn>0.5625</mn></mrow><annotation encoding="application/x-tex">1×2^−1+0×2^−2+0×2^−3+1×2^−4=0.5625
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.904661em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.821331em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">−</span></span></span></span></span></span></span></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.904661em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.821331em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">−</span></span></span></span></span></span></span></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.904661em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.821331em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">−</span></span></span></span></span></span></span></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.821331em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.821331em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">−</span></span></span></span></span></span></span></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">5</span><span class="mord">6</span><span class="mord">2</span><span class="mord">5</span></span></span></span></span></p>
+<h4 id="十进制小数转二进制小数">十进制小数转二进制小数</h4>
+<p>和整数的二进制表示采用“除以 2，然后看余数”的方式相反。</p>
+<p>乘以 2，看是否超过 1。如果超过 1，我们就记下 1，并把结果减去 1；减去1的结果继续乘以2，进一步循环操作。</p>
+<blockquote>
+<p><img src="https://Joshua-Chang.github.io/post-images/1615571288146.jpg" alt="" loading="lazy"><br>
+以0.1为例，0.000110011。这里的“0011”会无限循环下去。</p>
+</blockquote>
+<h4 id="例子">例子</h4>
+<p><strong>十进制9.1的的二进制表示</strong></p>
+<p>1001.000110011…</p>
+<p>用科学记数法1.001000110011…×2^3</p>
+<p>符号位 s = 0,有效位 f=00100011001100110011001共23位，指数 e=3</p>
+<blockquote>
+<p>因为指数位有正又有负，指数位在 127 之前代表负数，之后代表正数，那 3 其实对应的是加上 127 的偏移量 130，转化成二进制就是 10000010。</p>
+</blockquote>
+<figure data-type="image" tabindex="5"><img src="https://Joshua-Chang.github.io/post-images/1615571313898.jpg" alt="" loading="lazy"></figure>
+<p>把“s+e+f”拼在一起，浮点数 9.1 的二进制表示为</p>
+<p>01000<strong>0010</strong> 0010 <strong>0011001100110011</strong> <strong>001</strong></p>
+<p>换算成十进制是 9.09999942779541015625</p>
+<h3 id="浮点数的加法和精度损失">浮点数的加法和精度损失</h3>
+<p>十进制的数值，转化成 IEEE-754 标准下的浮点数在做加法。</p>
+<p>浮点数的加法是<strong>先对齐、再计算</strong>。</p>
+<p>两个浮点数的指数位可能是不一样的，所以我们要把两个的指数位，变成一样的，然后只去计算有效位的加法。</p>
+<h4 id="例子-2">例子</h4>
+<p>0.5，表示成浮点数，指数位是 -1，有效位是 00…（后面全是 0，记住 f 前默认有一个 1）</p>
+<p>0.125 表示成浮点数，对应的指数位是 -3，有效位也还是 00…（后面全是 0，记住 f 前默认有一个 1）</p>
+<ol>
+<li>指数位对齐：把指数位都统一成两个其中较大的 -1，0.125 的有效位 1.00…也要对应右移两位变成0.01。</li>
+<li>然后计算两者相加的有效位 1.0+0.01=1.01</li>
+<li>得到结果浮点数，符号位是0，指数位是 -1，有效位是1.01</li>
+</ol>
+<figure data-type="image" tabindex="6"><img src="https://Joshua-Chang.github.io/post-images/1615571340870.jpg" alt="" loading="lazy"></figure>
+<h4 id="丢失精度">丢失精度</h4>
+<p>浮点数的加法过程中，需要先对齐，其中指数位较小的数，需要在有效位进行右移，在右移的过程中，最右侧的有效位就被丢弃掉了。导致对应的指数位较小的数，在加法发生之前，就<strong>丢失精度</strong>。</p>
+<p>两个相加数的指数位差的越大，位移的位数越大，可能丢失的精度也就越大。（丢失的有效位都是 0例外）</p>
+<p>在32位浮点数中，有效位长度一共只有 23 位，指数位较小的数右移 24 位之后，所有的有效位就都丢失了。</p>
+<p>因此32位浮点数实际计算中，只要两个数差出 2^24，那这两个数相加之后，结果完全不会变化。</p>
+<h4 id="kahan-summation-算法">Kahan Summation 算法</h4>
+<p>在一些“积少成多”的计算过程中，比如在机器学习中，我们经常要计算海量样本计算出来的梯度或者 loss，于是会出现几亿个浮点数的相加。每个浮点数可能都差不多大，但是随着累积值的越来越大，就会出现“大数吃小数”的情况。</p>
+<p>Kahan累加算法：在每次的计算过程中，都用一次减法，把当前加法计算中损失的精度记录下来。然后在后面的循环中，把这个精度损失放在要加的小数上，再做一次运算。</p>
+<pre><code class="language-java">public class KahanSummation {
+  public static void main(String[] args) {
+    float sum = 0.0f;
+    float c = 0.0f;
+    for (int i = 0; i &lt; 20000000; i++) {
+    	float x = 1.0f;
+    	float y = x - c;
+    	float t = sum + y;
+    	c = (t-sum)-y;
+    	sum = t;    	
+    }
+    System.out.println(&quot;sum is &quot; + sum);   
+  }	
+}
+</code></pre>
+<p>一般情况下，在实践应用中，对于需要精确数值的，比如银行存款、电商交易，我们都会使用定点数或者整数类型。比如在 MySQL 里的 decimal(12,2)，</p>
 
               </div>
               <div class="toc-container">
@@ -218,6 +304,26 @@ C4 是前 4 位的计算结果是否进位的门电路表示。因此一个 4 �
 <li><a href="#%E4%B9%98%E6%B3%95%E5%99%A8">乘法器</a>
 <ul>
 <li><a href="#%E7%94%B5%E8%B7%AF%E5%B9%B6%E8%A1%8C">电路并行</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B5%AE%E7%82%B9%E6%95%B0%E5%92%8C%E5%AE%9A%E7%82%B9%E6%95%B0">浮点数和定点数</a>
+<ul>
+<li><a href="#%E5%AE%9A%E7%82%B9%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BA">定点数的表示</a></li>
+<li><a href="#%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BA">浮点数的表示</a></li>
+<li><a href="#%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E4%BA%8C%E8%BF%9B%E5%88%B6%E8%BD%AC%E5%8C%96">浮点数的二进制转化</a>
+<ul>
+<li><a href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%B0%8F%E6%95%B0%E8%BD%AC%E5%8D%81%E8%BF%9B%E5%88%B6%E5%B0%8F%E6%95%B0">二进制小数转十进制小数</a></li>
+<li><a href="#%E5%8D%81%E8%BF%9B%E5%88%B6%E5%B0%8F%E6%95%B0%E8%BD%AC%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%B0%8F%E6%95%B0">十进制小数转二进制小数</a></li>
+<li><a href="#%E4%BE%8B%E5%AD%90">例子</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E5%8A%A0%E6%B3%95%E5%92%8C%E7%B2%BE%E5%BA%A6%E6%8D%9F%E5%A4%B1">浮点数的加法和精度损失</a>
+<ul>
+<li><a href="#%E4%BE%8B%E5%AD%90-2">例子</a></li>
+<li><a href="#%E4%B8%A2%E5%A4%B1%E7%B2%BE%E5%BA%A6">丢失精度</a></li>
+<li><a href="#kahan-summation-%E7%AE%97%E6%B3%95">Kahan Summation 算法</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
