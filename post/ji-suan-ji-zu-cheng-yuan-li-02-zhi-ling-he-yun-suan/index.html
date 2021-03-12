@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title> 计算机组成原理02指令和运算 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615482390037">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615534326735">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title=" 计算机组成原理02指令和运算 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -26,7 +26,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615482390037" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615534326735" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -86,7 +86,7 @@
                 2021-03-11
               </span>
               <span>
-                15 min read
+                18 min read
               </span>
               
                 <a href="https://Joshua-Chang.github.io/tag/oSH6nmGO8/" class="post-tag">
@@ -297,6 +297,7 @@ c = 15
 <img src="https://Joshua-Chang.github.io/post-images/1615482190792.jpg" alt="" loading="lazy"></p>
 <h3 id="elf-格式和链接">ELF 格式和链接</h3>
 <p>可执行代码 通过objdump命令dump 出来的内容，不仅有编译成的汇编指令，还保留了很多别的数据。因为在 Linux 下，可执行文件和目标文件所使用的都是一种叫<strong>ELF</strong>（Execuatable and Linkable File Format）的文件格式，中文名字叫<strong>可执行与可链接文件格式</strong>。</p>
+<p>ELF文件有三类:可重定向文件、可执行文件、共享目标文件。代码经过预处理、编译、汇编后形成可重定向文件，可重定向文件经过链接后生成可执行文件。</p>
 <p>ELF 文件格式把各种信息，分成一个一个的 Section 保存起来。ELF 有一个基本的文件头（File Header），用来表示这个文件的基本属性，比如是否是可执行文件，对应的 CPU、操作系统等等<br>
 <img src="https://Joshua-Chang.github.io/post-images/1615482163121.jpg" alt="" loading="lazy"><br>
 除了这些基本属性之外，大部分程序还有这么一些 Section：</p>
@@ -313,6 +314,32 @@ c = 15
 </blockquote>
 <h3 id="延伸">延伸</h3>
 <p>Windows 的可执行文件格式是一种叫作<strong>PE</strong>（Portable Executable Format）的文件格式。Linux 下的装载器只能解析 ELF 格式而不能解析 PE 格式，Linux 的Wine/ 微软的WSL，也就是 Windows Subsystem for Linux可以兼容</p>
+<h2 id="程序装载">程序装载</h2>
+<blockquote>
+<p>在运行这些可执行文件的时候，我们其实是通过一个装载器，解析 ELF 或者 PE 格式的可执行文件。装载器会把对应的指令和数据加载到内存里面来，实际上装载器需要满足两个要求。</p>
+<p><strong>第一，可执行程序加载后占用的内存空间应该是连续的</strong>。PC程序计数器是顺序地一条一条指令执行下去</p>
+<p>**第二，我们需要同时加载很多个程序，并且不能让程序自己规定在内存中加载的位置。**因为我们现在的计算机通常会同时运行很多个程序，可能你想要的内存地址已经被其他加载了的程序占用了。</p>
+</blockquote>
+<h3 id="虚拟内存">虚拟内存</h3>
+<p>在内存里面，找到一段连续的内存空间，然后分配给装载的程序，然后把这段连续的内存空间地址，和整个程序指令里指定的内存地址做一个映射。我们维护一个虚拟内存到物理内存的映射表，这样实际程序指令执行的时候，会通过虚拟内存地址，找到对应的物理内存地址，然后执行。因为是连续的内存地址空间，所以我们只需要维护映射关系的起始地址和对应的空间大小就可以了。</p>
+<p>指令里用到的内存地址叫作<strong>虚拟内存地址</strong>（Virtual Memory Address），实际在内存硬件里面的空间地址，叫<strong>物理内存地址</strong>（Physical Memory Address）<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615484615617.png" alt="" loading="lazy"></p>
+<h3 id="内存分段">内存分段</h3>
+<p>这种找出一段连续的物理内存和虚拟内存地址进行映射的方法，我们叫<strong>分段</strong>（Segmentation）**。**这里的段，就是指系统分配出来的那个连续的内存空间。</p>
+<p>缺点第一个就是<strong>内存碎片</strong>（Memory Fragmentation）的问题。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615484604209.png" alt="" loading="lazy"><br>
+解决的办法叫<strong>内存交换</strong>（Memory Swapping），即把不足够连续的程序占用的内存写到硬盘上，再从硬盘上读回来到内存里面，不过读回来的时候，我们不再把它加载到原来的位置，而是放在连续的位置。</p>
+<h3 id="内存分页">内存分页</h3>
+<p>硬盘的访问速度要比内存慢很多，因此简单的内存交换并不高效。</p>
+<p><strong>和分段这样分配一整段连续的空间给到程序相比，分页是把整个物理内存空间切成一段段固定尺寸的大小</strong>。</p>
+<p>对应的程序所需要占用的虚拟内存空间，也会同样切成一段段固定尺寸的大小。这样一个连续并且尺寸固定的内存空间，我们叫<strong>页</strong>（Page）。从虚拟内存到物理内存的映射，不再是拿整段连续的内存的物理地址，而是按照一个一个页来的。<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615484579925.png" alt="" loading="lazy"><br>
+即使内存空间不够，需要让现有的、正在运行的其他程序，通过内存交换释放出一些内存的页出来更加高效。</p>
+<p>分页的方式使得我们在加载程序的时候，不再需要一次性都把程序加载到物理内存中。</p>
+<blockquote>
+<p>在进行虚拟内存和物理内存的页之间的映射之后，并不真的把页加载到物理内存里，而是只在程序运行中，需要用到对应虚拟内存页里面的指令和数据时，再加载到物理内存里面去。当要读取特定的页，却发现数据并没有加载到物理内存里的时候，就会触发一个来自于 CPU 的<strong>缺页错误</strong>（Page Fault）。我们的操作系统会捕捉到这个错误，然后将对应的页，从存放在硬盘上的虚拟内存里读取出来，加载到物理内存里。可以运行那些远大于我们实际物理内存的程序</p>
+</blockquote>
+<h2 id="动态链接">动态链接</h2>
 
               </div>
               <div class="toc-container">
@@ -340,6 +367,14 @@ c = 15
 <li><a href="#%E5%BB%B6%E4%BC%B8">延伸</a></li>
 </ul>
 </li>
+<li><a href="#%E7%A8%8B%E5%BA%8F%E8%A3%85%E8%BD%BD">程序装载</a>
+<ul>
+<li><a href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98">虚拟内存</a></li>
+<li><a href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5">内存分段</a></li>
+<li><a href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5">内存分页</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5">动态链接</a></li>
 </ul>
 </li>
 </ul>
