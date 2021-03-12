@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-03-12T07:59:24.196Z</updated>
+    <updated>2021-03-12T08:01:27.098Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -10,6 +10,16 @@
     <logo>https://Joshua-Chang.github.io/images/avatar.png</logo>
     <icon>https://Joshua-Chang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Joshua-Chang`Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[计算机组成原理02指令和运算 下]]></title>
+        <id>https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-02-zhi-ling-he-yun-suan-xia/</id>
+        <link href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-02-zhi-ling-he-yun-suan-xia/">
+        </link>
+        <updated>2021-03-12T08:00:23.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615480260058.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ 计算机组成原理02指令和运算 上]]></title>
         <id>https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-02-zhi-ling-he-yun-suan/</id>
@@ -1178,119 +1188,6 @@ public void computeScroll() {
     });
 
 }
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[IPC机制之Messenger]]></title>
-        <id>https://Joshua-Chang.github.io/post/IPC机制之Messenger/</id>
-        <link href="https://Joshua-Chang.github.io/post/IPC机制之Messenger/">
-        </link>
-        <updated>2017-06-02T02:42:31.000Z</updated>
-        <summary type="html"><![CDATA[<h4 id="概念">概念</h4>
-<p>Messenger是一种轻量级的IPC方案，它的底层实现是AIDL，通过Messenger可以在不同进程中传递Message对象，在Message中放入我们需要传递的数据就可以轻松实现数据在进程间传递了。</p>
-<p>在Messenger中进行数据传递必须将数据放入Message中，而Messenger和Message都实现了Parcelable接口，因此可以跨进程传输。</p>
-<p>Messenger的使用很简单，由于它一次处理一个请求，因此在服务端不用考虑线程同步的问题。Messenger实现进程间通信大致可以分为以下几步，分为服务端和客户端。</p>
-]]></summary>
-        <content type="html"><![CDATA[<h4 id="概念">概念</h4>
-<p>Messenger是一种轻量级的IPC方案，它的底层实现是AIDL，通过Messenger可以在不同进程中传递Message对象，在Message中放入我们需要传递的数据就可以轻松实现数据在进程间传递了。</p>
-<p>在Messenger中进行数据传递必须将数据放入Message中，而Messenger和Message都实现了Parcelable接口，因此可以跨进程传输。</p>
-<p>Messenger的使用很简单，由于它一次处理一个请求，因此在服务端不用考虑线程同步的问题。Messenger实现进程间通信大致可以分为以下几步，分为服务端和客户端。</p>
-<!--more-->
-<h4 id="服务端进程">服务端进程</h4>
-<p>服务端新建一个Service来处理客户端发起的请求，同时创建一个Handler并通过它来创建一个Messenger对象，然后在Service的onBind中返回这个Messenger对象底层的Binder即可。</p>
-<p>如果需要客服端能够回应客户端，那么和服务端一样，在客户端还需要创建一个新的Messenger,并把这个Messenger对象通过Message的replyTo参数传递给服务端，服务端通过这个replyTo参数就可以回应客户端。</p>
-<pre><code class="language-java">public class MyService extends Service {
-    public static final int MSG_FROM_SERVICE=2;
-    public MyService() {}
-    public static class MessagerHandler extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what==MainActivity.MSG_FROM_CLIENT){
-                Log.e(&quot;xxx&quot;,&quot;msg from client: &quot;+msg.getData().getString(&quot;msg&quot;));
-
-                Messenger mReplyTo = msg.replyTo;
-                Message mMessage=Message.obtain(null,MSG_FROM_SERVICE);
-                Bundle mBundle=new Bundle();
-                mBundle.putString(&quot;reply&quot;,&quot;Hi,service received succeed&quot;);
-                mMessage.setData(mBundle);
-                try {
-                    mReplyTo.send(mMessage);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-  //1.创建Messenger（需要handler）对象
-    private Messenger mMessenger=new Messenger(new MessagerHandler());
-    @Override
-    public IBinder onBind(Intent intent) {
-      //2.在Service的onBind中返回这个Messenger对象底层的Binder 供客户端使用
-        return mMessenger.getBinder();
-    }
-}
-</code></pre>
-<h4 id="客户端进程">客户端进程</h4>
-<p>客户端进程中首先要绑定服务端的Service，绑定成功后用服务端返回的IBinder对象创建一个Messenger，通过这个Messenger就可以向服务端发送类型为Message的消息了，message内可以存入Bundle。</p>
-<pre><code class="language-java">public class MainActivity extends AppCompatActivity {
-    public static final int MSG_FROM_CLIENT=1;
-
-    private ServiceConnection mServiceConnection=new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-          //2.绑定成功后,根据上文返回的IBinder对象创建一个Messenger
-            Messenger mMessenger=new Messenger(service);
-            Message mMessage = Message.obtain(null, MSG_FROM_CLIENT);
-            Bundle mBundle=new Bundle();
-            mBundle.putString(&quot;msg&quot;,&quot;hello,this msg from client&quot;);
-            mMessage.setData(mBundle);
-
-            mMessage.replyTo=mReplyMessenger;
-            try {
-                mMessenger.send(mMessage);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
-    private static class ReceiveHandler extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what==MyService.MSG_FROM_SERVICE){
-                Log.e(&quot;xxx&quot;,&quot;msg from service: &quot;+msg.getData().getString(&quot;reply&quot;));
-            }
-        }
-    }
-    private Messenger mReplyMessenger=new Messenger(new ReceiveHandler());
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-      //1.绑定服务端的Service
-        Intent mIntent=new Intent(this,MyService.class);
-        bindService(mIntent,mServiceConnection,BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onDestroy() {
-        unbindService(mServiceConnection);
-        super.onDestroy();
-    }
-}
-</code></pre>
-<h4 id="extra">Extra</h4>
-<p>注册service时为新的全局进程</p>
-<pre><code class="language-xml">&lt;service
-    android:name=&quot;.MyService&quot;
-    android:process=&quot;com.coolapk.developer_verify_package&quot;&gt;
-&lt;/service&gt;
 </code></pre>
 ]]></content>
     </entry>
