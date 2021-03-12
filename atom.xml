@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-03-12T07:32:10.194Z</updated>
+    <updated>2021-03-12T07:59:24.196Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -11,7 +11,7 @@
     <icon>https://Joshua-Chang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Joshua-Chang`Blog</rights>
     <entry>
-        <title type="html"><![CDATA[ 计算机组成原理02指令和运算]]></title>
+        <title type="html"><![CDATA[ 计算机组成原理02指令和运算 上]]></title>
         <id>https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-02-zhi-ling-he-yun-suan/</id>
         <link href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-02-zhi-ling-he-yun-suan/">
         </link>
@@ -232,6 +232,54 @@ c = 15
 <blockquote>
 <p>链接器会扫描所有输入的目标文件，然后把所有符号表里的信息收集起来，构成一个全局的符号表。然后再根据重定位表，把所有不确定要跳转地址的代码，根据符号表里面存储的地址，进行一次修正。最后，把所有的目标文件的对应段进行一次合并，变成了最终的可执行代码。因此可执行文件里面的函数调用的地址都是正确的。</p>
 </blockquote>
+<h3 id="动态链接">动态链接</h3>
+<p>在动态链接的过程中，我们想要“链接”的，不是存储在硬盘上的目标文件代码，而是加载到内存中的<strong>共享库</strong>（Shared Libraries）</p>
+<blockquote>
+<p>Windows 下，.dll 文件，Dynamic-Link Libary（DLL，动态链接库）。</p>
+<p>Linux 下，这些共享库文件就是.so 文件，Shared Object（一般我们也称之为动态链接库）。</p>
+<p>“动态链接”、“共享”</p>
+</blockquote>
+<p>在程序运行的时候共享代码，这些机器码必须是“<strong>地址无关</strong>”的。编译出来的共享库文件的指令代码，是地址无关码（Position-Independent Code）。动态代码库内部变量和函数调用要使用<strong>相对地址</strong>（Relative Address）<br>
+<img src="https://Joshua-Chang.github.io/post-images/1615535954056.jpg" alt="" loading="lazy"><br>
+虽然共享库用的都是同一段物理内存地址，但是在不同的应用程序里，它所在的虚拟内存地址是不同的。</p>
+<h4 id="plt-got">PLT GOT</h4>
+<pre><code class="language-c">// lib.c
+#include &lt;stdio.h&gt;
+void show_me_the_money(int money)
+{
+    printf(&quot;Show me USD %d from lib.c \n&quot;, money);
+}
+// show_me_poor.c
+#include &quot;lib.h&quot;
+int main()
+{
+    int money = 5;
+    show_me_the_money(money);
+}
+</code></pre>
+<pre><code class="language-shell">$ gcc lib.c -fPIC -shared -o lib.so
+$ gcc -o show_me_poor show_me_poor.c ./lib.so
+</code></pre>
+<pre><code class="language-shell">……
+0000000000400540 &lt;show_me_the_money@plt-0x10&gt;:
+  400540:       ff 35 12 05 20 00       push   QWORD PTR [rip+0x200512]        # 600a58 &lt;_GLOBAL_OFFSET_TABLE_+0x8&gt;//全局偏移表GOT
+  400546:       ff 25 14 05 20 00       jmp    QWORD PTR [rip+0x200514]        # 600a60 &lt;_GLOBAL_OFFSET_TABLE_+0x10&gt;
+  40054c:       0f 1f 40 00             nop    DWORD PTR [rax+0x0]
+ 
+0000000000400550 &lt;show_me_the_money@plt&gt;:
+  400550:       ff 25 12 05 20 00       jmp    QWORD PTR [rip+0x200512]        # 600a68 &lt;_GLOBAL_OFFSET_TABLE_+0x18&gt;
+  400556:       68 00 00 00 00          push   0x0
+  40055b:       e9 e0 ff ff ff          jmp    400540 &lt;_init+0x28&gt;
+……
+0000000000400676 &lt;main&gt;:
+....
+  40068a:       e8 c1 fe ff ff          call   400550 &lt;show_me_the_money@plt&gt;
+....//从PLT（程序链接表Procedure Link Table）里找要调用的函数,地址 400550 
+……
+</code></pre>
+<p>在动态链接对应的共享库时，在共享库的 data section 里面，保存了一张<strong>全局偏移表</strong>（GOT，Global Offset Table）。<strong>虽然共享库的代码部分的物理内存是共享的，但是数据部分是各个动态链接它的应用程序里面各加载一份的。</strong><br>
+<img src="https://Joshua-Chang.github.io/post-images/1615535922650.jpg" alt="" loading="lazy"><br>
+不同的进程，调用同样的动态库，各自 GOT 里面指向最终加载的动态链接库里面的虚拟内存地址是不同的。</p>
 <h3 id="延伸">延伸</h3>
 <p>Windows 的可执行文件格式是一种叫作<strong>PE</strong>（Portable Executable Format）的文件格式。Linux 下的装载器只能解析 ELF 格式而不能解析 PE 格式，Linux 的Wine/ 微软的WSL，也就是 Windows Subsystem for Linux可以兼容</p>
 <h2 id="程序装载">程序装载</h2>
@@ -259,7 +307,6 @@ c = 15
 <blockquote>
 <p>在进行虚拟内存和物理内存的页之间的映射之后，并不真的把页加载到物理内存里，而是只在程序运行中，需要用到对应虚拟内存页里面的指令和数据时，再加载到物理内存里面去。当要读取特定的页，却发现数据并没有加载到物理内存里的时候，就会触发一个来自于 CPU 的<strong>缺页错误</strong>（Page Fault）。我们的操作系统会捕捉到这个错误，然后将对应的页，从存放在硬盘上的虚拟内存里读取出来，加载到物理内存里。可以运行那些远大于我们实际物理内存的程序</p>
 </blockquote>
-<h2 id="动态链接">动态链接</h2>
 ]]></content>
     </entry>
     <entry>
