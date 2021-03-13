@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title> 计算机组成原理02指令和运算 上 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615571777681">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615617525256">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title=" 计算机组成原理02指令和运算 上 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -26,7 +26,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615571777681" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615617525256" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -103,7 +103,7 @@
 从软件角度讲，CPU 就是一个执行各种计算机指令（Instruction Code）的逻辑机器。计算机指令，就好比一门 CPU 能够听得懂的语言，我们也可以把它叫作机器语言（Machine Language）。</p>
 <!-- more -->
 <p>不同的 CPU 能够听懂的语言不太一样，即计算机指令集Instruction Set<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615480260058.png" alt="" loading="lazy"></p>
+<img src="https://Joshua-Chang.github.io/post-images/1615480260058.png" style="zoom:25%;" /></p>
 <h2 id="指令和机器码">指令和机器码</h2>
 <ol>
 <li>
@@ -111,7 +111,7 @@
 </li>
 <li>
 <p>再用汇编器（Assembler）翻译成机器码（Machine Code），CPU 能够真正认识的计算机指令<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615460135310.png" alt="" loading="lazy"><br>
+<img src="https://Joshua-Chang.github.io/post-images/1615460135310.png" style="zoom: 33%;" /><br>
 <img src="https://Joshua-Chang.github.io/post-images/1615460148801.jpg" alt="" loading="lazy"></p>
 </li>
 </ol>
@@ -124,7 +124,7 @@ R 指令是一般用来做算术和逻辑操作，里面有读取和写入数据
 <p>J 指令就是一个跳转指令，高 6 位之外的 26 位都是一个跳转后的地址。</p>
 <p><code>add $t0,$s2,$s1</code>为例 s1 17    s2 18      t0 8<br>
 <img src="https://Joshua-Chang.github.io/post-images/1615461145867.jpg" alt="" loading="lazy"><br>
-<img src="https://Joshua-Chang.github.io/post-images/1615461154758.png" alt="" loading="lazy"></p>
+<img src="https://Joshua-Chang.github.io/post-images/1615461154758.png" style="zoom: 15%;" /></p>
 </blockquote>
 <p>除了 C 这样的编译型的语言之外，Python 这样的解释型语言，是通过解释器在程序运行的时候逐句翻译，而 Java 这样使用虚拟机的语言，则是由虚拟机对编译出来的中间代码进行解释，或者即时编译(JIT)成为机器码来最终执行。</p>
 <h2 id="指令跳转">指令跳转</h2>
@@ -294,7 +294,7 @@ c = 15
 <p>“<strong>C 语言代码 - 汇编代码 - 机器码</strong>” 这个过程，在我们的计算机上进行的时候是由两部分组成的。</p>
 <p>第一个部分由编译（Compile）、汇编（Assemble）以及链接（Link）三个阶段组成。在这三个阶段完成之后，我们就生成了一个可执行文件。</p>
 <p>第二部分，我们通过装载器（Loader）把可执行文件装载（Load）到内存中。CPU 从内存中读取指令和数据，来开始真正执行程序。<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615482190792.jpg" alt="" loading="lazy"></p>
+<img src="https://Joshua-Chang.github.io/post-images/1615482190792.jpg" style="zoom: 25%;" /></p>
 <h3 id="elf-格式和链接">ELF 格式和链接</h3>
 <p>可执行代码 通过objdump命令dump 出来的内容，不仅有编译成的汇编指令，还保留了很多别的数据。因为在 Linux 下，可执行文件和目标文件所使用的都是一种叫<strong>ELF</strong>（Execuatable and Linkable File Format）的文件格式，中文名字叫<strong>可执行与可链接文件格式</strong>。</p>
 <p>ELF文件有三类:可重定向文件、可执行文件、共享目标文件。代码经过预处理、编译、汇编后形成可重定向文件，可重定向文件经过链接后生成可执行文件。</p>
@@ -308,7 +308,7 @@ c = 15
 <li>最后是.symtab Section，叫作<strong>符号表</strong>（Symbol Table）。符号表保留了我们所说的当前文件里面定义的函数名称和对应地址的地址簿。</li>
 </ol>
 <h3 id="链接过程">链接过程</h3>
-<figure data-type="image" tabindex="2"><img src="https://Joshua-Chang.github.io/post-images/1615482146761.jpg" alt="" loading="lazy"></figure>
+<img src="https://Joshua-Chang.github.io/post-images/1615482146761.jpg" style="zoom:50%;" />
 <blockquote>
 <p>链接器会扫描所有输入的目标文件，然后把所有符号表里的信息收集起来，构成一个全局的符号表。然后再根据重定位表，把所有不确定要跳转地址的代码，根据符号表里面存储的地址，进行一次修正。最后，把所有的目标文件的对应段进行一次合并，变成了最终的可执行代码。因此可执行文件里面的函数调用的地址都是正确的。</p>
 </blockquote>

@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title> 计算机组成原理04处理器设计 上 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615571777681">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615617525256">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title=" 计算机组成原理04处理器设计 上 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -12,8 +12,12 @@
 
 
 
-    <meta name="description" content="
-..." />
+    <meta name="description" content="指令+运算=CPU
+“指令”部分，代码如何变成机器能够理解的指令，以及是按照什么样的顺序运行的。
+“计算”部分，数据的二进制表示、加法和乘法又是通过什么样的电路来实现的。
+本文把“指令”和“计算”连通起来，完整的 CPU 运转。
+
+建立数据..." />
     <meta name="keywords" content="计算机组成原理" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
@@ -26,7 +30,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615571777681" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615617525256" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -86,7 +90,7 @@
                 2021-03-13
               </span>
               <span>
-                0 min read
+                1 min read
               </span>
               
                 <a href="https://Joshua-Chang.github.io/tag/oSH6nmGO8/" class="post-tag">
@@ -97,11 +101,29 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615571610811.png" alt="" loading="lazy"></figure>
+                <p>指令+运算=CPU</p>
+<p>“<strong>指令</strong>”部分，代码如何变成机器能够理解的指令，以及是按照什么样的顺序运行的。</p>
+<p>“<strong>计算</strong>”部分，数据的二进制表示、加法和乘法又是通过什么样的电路来实现的。</p>
+<p>本文把“指令”和“计算”连通起来，完整的 CPU 运转。</p>
+<img src="https://Joshua-Chang.github.io/post-images/1615571610811.png" style="zoom:25%;" />
+<h2 id="建立数据通路">建立数据通路</h2>
+<h4 id="指令周期instruction-cycle">指令周期（Instruction Cycle）</h4>
 
               </div>
               <div class="toc-container">
-                
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%BB%BA%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF">建立数据通路</a><br>
+*
+<ul>
+<li><a href="#%E6%8C%87%E4%BB%A4%E5%91%A8%E6%9C%9Finstruction-cycle">指令周期（Instruction Cycle）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
               </div>
             </div>
           </article>

@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>计算机组成原理03指令和运算 下 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615571777681">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615617525256">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="计算机组成原理03指令和运算 下 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -32,7 +32,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615571777681" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1615617525256" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -109,7 +109,7 @@
 <p>算法：各种计算机指令</p>
 <p>数据结构：二进制数据</p>
 <!-- more -->
-<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615480260058.png" alt="" loading="lazy"></figure>
+<img src="https://Joshua-Chang.github.io/post-images/1615480260058.png" style="zoom:25%;" />
 <h2 id="二进制">二进制</h2>
 <p>二进制转十进制：从 0 开始，从右到左的第 N 位✖️2 的 N 次方，然后相加。</p>
 <p>十进制转二进制：<strong>短除法</strong>，递归除以 2 的余数，从右往左填入，直到商0。</p>
@@ -144,7 +144,7 @@
 <p>二进制，从右往左数，第一列是个位，第二列是“二位”，对应的再往左，就应该分别是四位、八位。</p>
 <h3 id="异或门">异或门</h3>
 <p>四种个位数相加</p>
-<figure data-type="image" tabindex="2"><img src="https://Joshua-Chang.github.io/post-images/1615548862709.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615548862709.jpg" alt="" loading="lazy"></figure>
 <p>输入：4 种组合00、01、10、11。</p>
 <p>输出：00/11 情况下输出0，10/01 情况下输出1</p>
 <p>这种输入输出的对应关系即“异或门（XOR / ^）”。虽然在逻辑运算里面没有出现的形式，但作为一个基本电路。<strong>异或门就是一个最简单的整数加法所需要的基本门电路</strong>。</p>
@@ -157,7 +157,7 @@
 <p>第一个半加器，个位的加法，得到是否进位 X 和对应的二个数加和后的结果 Y；</p>
 <p>然后把结果 Y和右侧个位数相加后的进位信息 ，连接到第二个半加器上；</p>
 <p>就产生一个是否进位的信号 V 和对应的加和后的结果 W 即二位的结果；</p>
-<figure data-type="image" tabindex="3"><img src="https://Joshua-Chang.github.io/post-images/1615548945005.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://Joshua-Chang.github.io/post-images/1615548945005.jpg" alt="" loading="lazy"></figure>
 <p>最后把两个半加器的进位信息，输入或门连接起来。即两次加法中，任何一个需要进位，都向左侧进位。</p>
 <p>（即使三个 bit 相加，即使 3 个 bit 都是 1，也最多会进一位）</p>
 <p>有了全加器，对两个 8 bit 数相加变得容易，只要把 8 个全加器串联起来即可。个位的全加器的进位信号作为二位全加器的输入信号，二位全加器的进位信号再作为四位的全加器的进位信号。同理可扩展到 16 位、32 位，乃至 64 位。<br>
@@ -166,7 +166,7 @@
 <p>在最右侧个位，我们只需要用一个半加器，或者让全加器的进位输入始终是 0。</p>
 <p>在最左侧的一位输出的进位信号，并不表示再进一位，而表示加法是否溢出。</p>
 <p><strong>分层</strong><br>
-<img src="https://Joshua-Chang.github.io/post-images/1615548968172.jpg" style="zoom: 25%;" /></p>
+<img src="https://Joshua-Chang.github.io/post-images/1615548968172.jpg" style="zoom: 10%;" /></p>
 <p>在上面的一层，我们只需要考虑怎么用下一层的组件搭建出自己的功能，而不需要下沉到更低层的其他组件。就像你之前并没有深入学习过计算机组成原理，一样可以直接通过高级语言撰写代码，实现功能。</p>
 <p>在硬件层面，通过门电路、半加器、全加器一层层搭出了加法器这样的功能组件。这些用来做算术逻辑计算的组件叫作 ALU，也就是算术逻辑单元。</p>
 <p>当进一步打造强大的 CPU 时，我们不再关注最细颗粒的门电路，只需要把门电路组合而成的 ALU，当成一个能够完成基础计算的黑盒子就可以了。</p>
@@ -190,7 +190,7 @@
 <p>除了门延迟外，还有<strong>时钟频率</strong>，在上面的顺序乘法计算里面，如果我们想要用更少的电路，计算的中间结果需要保存在寄存器里面，然后等待下一个时钟周期的到来，控制测试信号才能进行下一次移位和加法。</p>
 <p>因为电路是天然并行的，一个输入信号，可以同时传播到所有接通的线路当中。下图展示了加法器。如果完全展开电路，高位的进位和计算结果，可以和低位的计算结果同时获得。</p>
 <blockquote>
-<img src="https://Joshua-Chang.github.io/post-images/1615564005050.jpg" style="zoom:25%;" />
+<img src="https://Joshua-Chang.github.io/post-images/1615564005050.jpg" style="zoom:15%;" />
 C4 是前 4 位的计算结果是否进位的门电路表示。因此一个 4 位整数最高位是否进位，展开门电路图，你会发现，我们只需要 3T 的延迟就可以拿到是否进位的计算结果。
 </blockquote>
 <p>电路天然的并行性。电路只要接通，输入的信号自动传播到了所有接通的线路里面，这其实也是硬件和软件最大的不同。</p>
@@ -209,7 +209,7 @@ C4 是前 4 位的计算结果是否进位的门电路表示。因此一个 4 �
 <p><strong>IEEE</strong>标准定义了，用32 比特表示单精度的浮点数即 float 或者 float32 类型，用 64 比特表示双精度的浮点数即double 或者 float64 类型。</p>
 <p>浮点数的组成分成三部分</p>
 <p>单精度的 32 个比特如下，双精度则每部分bit增加一倍</p>
-<figure data-type="image" tabindex="4"><img src="https://Joshua-Chang.github.io/post-images/1615571233192.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://Joshua-Chang.github.io/post-images/1615571233192.jpg" alt="" loading="lazy"></figure>
 <ol>
 <li>第一部分是一个<strong>符号位</strong> S，用来表示是正数还是负数。浮点数都是有符号的。负数1正数0</li>
 <li>接下来的8 bit组成<strong>指数位</strong> e。8bit能够表示的整数是 0～255，用 1～254 映射到 -126～127 这 254 个有正有负的数上。e作为指数可正可负，可以同时表示很大或很小的数。0和255单独表示。</li>
@@ -241,7 +241,7 @@ C4 是前 4 位的计算结果是否进位的门电路表示。因此一个 4 �
 <blockquote>
 <p>因为指数位有正又有负，指数位在 127 之前代表负数，之后代表正数，那 3 其实对应的是加上 127 的偏移量 130，转化成二进制就是 10000010。</p>
 </blockquote>
-<figure data-type="image" tabindex="5"><img src="https://Joshua-Chang.github.io/post-images/1615571313898.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://Joshua-Chang.github.io/post-images/1615571313898.jpg" alt="" loading="lazy"></figure>
 <p>把“s+e+f”拼在一起，浮点数 9.1 的二进制表示为</p>
 <p>01000<strong>0010</strong> 0010 <strong>0011001100110011</strong> <strong>001</strong></p>
 <p>换算成十进制是 9.09999942779541015625</p>
@@ -257,7 +257,7 @@ C4 是前 4 位的计算结果是否进位的门电路表示。因此一个 4 �
 <li>然后计算两者相加的有效位 1.0+0.01=1.01</li>
 <li>得到结果浮点数，符号位是0，指数位是 -1，有效位是1.01</li>
 </ol>
-<figure data-type="image" tabindex="6"><img src="https://Joshua-Chang.github.io/post-images/1615571340870.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://Joshua-Chang.github.io/post-images/1615571340870.jpg" alt="" loading="lazy"></figure>
 <h4 id="丢失精度">丢失精度</h4>
 <p>浮点数的加法过程中，需要先对齐，其中指数位较小的数，需要在有效位进行右移，在右移的过程中，最右侧的有效位就被丢弃掉了。导致对应的指数位较小的数，在加法发生之前，就<strong>丢失精度</strong>。</p>
 <p>两个相加数的指数位差的越大，位移的位数越大，可能丢失的精度也就越大。（丢失的有效位都是 0例外）</p>
