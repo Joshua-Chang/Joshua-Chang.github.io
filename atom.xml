@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-03-13T07:47:42.277Z</updated>
+    <updated>2021-03-13T07:48:06.120Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -38,21 +38,6 @@
 <p>时间复杂度可转化成$$2^i=n$$求$$i$$的问题</p>
 <p>结果为$$log_2n$$以2为底n的对数，因此这段代码时间复杂度为$$O(log_2n)$$</p>
 </blockquote>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[数据结构与算法01]]></title>
-        <id>https://Joshua-Chang.github.io/post/shu-ju-jie-gou-yu-suan-fa-01/</id>
-        <link href="https://Joshua-Chang.github.io/post/shu-ju-jie-gou-yu-suan-fa-01/">
-        </link>
-        <updated>2021-03-13T06:46:49.000Z</updated>
-        <summary type="html"><![CDATA[<p>10 个数据结构：数组、链表、栈、队列、散列表、二叉树、堆、跳表、图、Trie 树；<br>
-10 个算法：递归、排序、二分查找、搜索、哈希算法、贪心算法、分治算法、回溯算法、动态规划、字符串匹配算法。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>10 个数据结构：数组、链表、栈、队列、散列表、二叉树、堆、跳表、图、Trie 树；<br>
-10 个算法：递归、排序、二分查找、搜索、哈希算法、贪心算法、分治算法、回溯算法、动态规划、字符串匹配算法。</p>
-<!-- more -->
-<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615618183150.jpg" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
@@ -1154,6 +1139,69 @@ Exception MemoryError: MemoryError() in &lt;module 'threading' from '/System/Lib
 <pre><code class="language-bash">brew install vim --with-lua --with-override-system-vi
 </code></pre>
 <p>and restart shell , fixed</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[App使用统计与静默拍摄]]></title>
+        <id>https://Joshua-Chang.github.io/post/App时常统计与静默拍摄/</id>
+        <link href="https://Joshua-Chang.github.io/post/App时常统计与静默拍摄/">
+        </link>
+        <updated>2018-10-03T10:29:46.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="app使用统计">App使用统计</h3>
+<p>监控或统计手机内的app使用情况可以从两个思路考虑</p>
+<ul>
+<li>
+<p>统计每个app的使用时长</p>
+<p>UsageStatsManager这一统计管理类，可以查出每个app简单的最近开启时间、某时限内的使用时长等信息。更复杂的手机亮屏次数，开启<!--more-->应用次数可以使用UsageStatsService或者过滤包名的形式统计。</p>
+</li>
+<li>
+<p>统计每个Android系统耗电情况的每个app占比</p>
+<p>在做电量优化的时候经常会通过adb使用Battery-Historian分析电量报告，所以由此灵感，具体的实现还需要头脑风暴一下。</p>
+</li>
+</ul>
+<h5 id="对app使用时常统计的简单实现">对app使用时常统计的简单实现</h5>
+<ol>
+<li>
+<p>开启ACTION_USAGE_ACCESS_SETTINGS权限</p>
+<figure data-type="image" tabindex="1"><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fvv9r2lhoyj308r0fkt9b.jpg" alt="" loading="lazy"></figure>
+</li>
+<li>
+<p>得到使用分析管理UsageStatsManager并根据时限查询统计状态</p>
+<pre><code class="language-java">UsageStatsManager manager = (UsageStatsManager) getApplicationContext().getSystemService(USAGE_STATS_SERVICE);
+List&lt;UsageStats&gt; stats = manager.queryUsageStats(UsageStatsManager.INTERVAL_MONTHLY, beginCal.getTimeInMillis(), endCal.getTimeInMillis());
+</code></pre>
+</li>
+<li>
+<p>根据UsageStats查询每个app的统计信息</p>
+<pre><code class="language-java">for (UsageStats us : stats) {
+    try {
+        PackageManager pm = getApplicationContext().getPackageManager();
+        ApplicationInfo applicationInfo = pm.getApplicationInfo(us.getPackageName(), PackageManager.GET_META_DATA);
+        if ((applicationInfo.flags &amp; applicationInfo.FLAG_SYSTEM) &lt;= 0) {
+            sb.append(pm.getApplicationLabel(applicationInfo)+&quot; 使用时长：&quot;+formatTime(us.getTotalTimeInForeground())+&quot;\n&quot;);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fvv9r2tdo9j308r0fkabf.jpg" alt="" loading="lazy"></figure>
+</li>
+</ol>
+<h3 id="静默后台拍摄">静默后台拍摄</h3>
+<h5 id="静默拍摄的简单思路">静默拍摄的简单思路</h5>
+<ul>
+<li>
+<p>将SurfaceView或TextureView这一采集呈现的layout参数设为最小。（不能设置visibility：gone 不会采集到图像），可见现在采集时没有采集预览，但采集到的bitmap可以成功设置。</p>
+<figure data-type="image" tabindex="3"><img src="https://thumbs.gfycat.com/DenseFailingGroundhog-size_restricted.gif" alt="" loading="lazy"></figure>
+</li>
+<li>
+<p>再将SurfaceView所在的Activity主题透明化</p>
+<p>可见此时的采集效果从UI上看静默进行。”拍摄“按键只是方便展示效果，如果使用Service去掉用则</p>
+<p>真正实现了后台静默采集的效果，至于采集到bitmap可以储存也可以直接用三方sdk做一些图像分析。</p>
+<figure data-type="image" tabindex="4"><img src="https://thumbs.gfycat.com/SpryBeautifulChafer-size_restricted.gif" alt="" loading="lazy"></figure>
+</li>
+</ul>
 ]]></content>
     </entry>
 </feed>
