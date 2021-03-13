@@ -1,18 +1,18 @@
 <html>
   <head>
-  <meta charset="utf-8" />
+    <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>TabLayout | Joshua-Chang`Blog</title>
+<title>Joshua-Chang`Blog</title>
 <link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615621627697">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="TabLayout | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
 
 
 
-  <meta name="description" content="温故而知新" />
+    <meta name="description" content="温故而知新" />
   </head>
   <body>
     <div class="main">
@@ -69,49 +69,79 @@
   </div>
 </div>
 
-        <div class="current-tag-container">
-            <h2 class="title">
-                标签：# TabLayout
-            </h2> 
-        </div>
+    
         <div class="post-container">
   
     <article class="post">
-      <a href="https://Joshua-Chang.github.io/post/TabLayout-indicator宽度工具类/">
-        <h2 class="post-title">TabLayout indicator宽度工具类</h2>
+      <a href="https://Joshua-Chang.github.io/post/RecyclerView添加首尾布局/">
+        <h2 class="post-title">RecyclerView奇技淫巧：添加首尾布局</h2>
       </a>
       <div class="post-info">
         <span>
-          2017-09-22
+          2017-05-17
         </span>
         <span>
-          2 min read
+          4 min read
         </span>
         
-          <a href="https://Joshua-Chang.github.io/tag/Z6Mdga9W70/" class="post-tag">
-            # TabLayout
+          <a href="https://Joshua-Chang.github.io/tag/kV2tV-_fmf/" class="post-tag">
+            # Design
           </a>
         
-          <a href="https://Joshua-Chang.github.io/tag/-atgUu_Tzm/" class="post-tag">
-            # indicator
+          <a href="https://Joshua-Chang.github.io/tag/gS22UP4Uvz/" class="post-tag">
+            # RecyclerView
+          </a>
+        
+          <a href="https://Joshua-Chang.github.io/tag/itRk9vqWe9/" class="post-tag">
+            # Item
           </a>
         
       </div>
       
       <div class="post-abstract">
-        <h4 id="宽度工具类">宽度工具类</h4>
-<p>一劳永逸之法</p>
+        <ol>
+<li>自定义View继承自RecyclerView 建立添加首尾布局的方法，复写setAdapter()方法让其自主选择是否有首尾布局</li>
+</ol>
+
+      </div>
+    </article>
+  
+    <article class="post">
+      <a href="https://Joshua-Chang.github.io/post/简析事件分发机制/">
+        <h2 class="post-title">简析事件分发机制</h2>
+      </a>
+      <div class="post-info">
+        <span>
+          2017-03-10
+        </span>
+        <span>
+          2 min read
+        </span>
+        
+      </div>
+      
+      <div class="post-abstract">
+        <p>一、View的事件分发。<br>
+结论：</p>
+<p>1.控件的Listener事件触发的顺序是先onTouch，再onClick。<br>
+2.控件的onTouch返回true，将会onClick事件没有了---阻止了事件的传递。<br>
+返回false，才会传递onClick事件(才会传递up事件)</p>
+<p>源码依据：</p>
 
       </div>
     </article>
   
 </div>
 
+    
         <div class="pagination-container">
+  
+    <a href="https://Joshua-Chang.github.io/page/2/" class="prev-page">上一页</a>
   
   
 </div>
 
+    
         <div class="site-footer">
   
   <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">

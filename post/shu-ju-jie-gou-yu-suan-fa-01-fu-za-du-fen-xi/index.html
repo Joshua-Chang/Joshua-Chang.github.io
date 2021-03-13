@@ -2,18 +2,22 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title> 计算机组成原理05处理器设计 下 | Joshua-Chang`Blog</title>
+<title>数据结构与算法01复杂度分析 | Joshua-Chang`Blog</title>
 <link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1615621627697">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title=" 计算机组成原理05处理器设计 下 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="数据结构与算法01复杂度分析 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
 
 
 
-    <meta name="description" content="" />
-    <meta name="keywords" content="计算机组成原理" />
+    <meta name="description" content="10 个数据结构：数组、链表、栈、队列、散列表、二叉树、堆、跳表、图、Trie 树；
+10 个算法：递归、排序、二分查找、搜索、哈希算法、贪心算法、分治算法、回溯算法、动态规划、字符串匹配算法。
+
+
+通过统计、监控，就能得到算法执行的时间和..." />
+    <meta name="keywords" content="数据结构,算法" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
       <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
@@ -78,27 +82,50 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-               计算机组成原理05处理器设计 下
+              数据结构与算法01复杂度分析
             </h2>
             <div class="post-info">
               <span>
                 2021-03-13
               </span>
               <span>
-                0 min read
+                1 min read
               </span>
               
-                <a href="https://Joshua-Chang.github.io/tag/oSH6nmGO8/" class="post-tag">
-                  # 计算机组成原理
+                <a href="https://Joshua-Chang.github.io/tag/BErOFr5XG/" class="post-tag">
+                  # 数据结构
+                </a>
+              
+                <a href="https://Joshua-Chang.github.io/tag/adLQuSjePQ/" class="post-tag">
+                  # 算法
                 </a>
               
             </div>
             
-              <img class="post-feature-image" src="https://static001.geekbang.org/resource/image/d6/be/d62f691afc8c450b58c19fb69c939cbe.jpg" alt="">
+              <img class="post-feature-image" src="https://static001.geekbang.org/resource/image/56/49/56f17c4b9c5a3cc329ca37cc6b328c49.jpg" alt="">
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <img src="https://Joshua-Chang.github.io/post-images/1615571610811.png" style="zoom:25%;" />
+                <p>10 个数据结构：数组、链表、栈、队列、散列表、二叉树、堆、跳表、图、Trie 树；<br>
+10 个算法：递归、排序、二分查找、搜索、哈希算法、贪心算法、分治算法、回溯算法、动态规划、字符串匹配算法。</p>
+<!-- more -->
+<p><img src="https://Joshua-Chang.github.io/post-images/1615618183150.jpg" alt="" loading="lazy"><br>
+通过统计、监控，就能得到算法执行的时间和占用的内存大小<strong>事后统计法</strong>有缺陷</p>
+<ol>
+<li>测试结果非常依赖测试环境</li>
+<li>测试结果受数据规模的影响很大</li>
+</ol>
+<p>因此需要一个不用具体的测试数据来测试，就可以粗略地估计算法的执行效率的方法。即<strong>时间、空间复杂度分析方法</strong>。</p>
+<blockquote>
+<pre><code class="language-java">i=1;
+ while (i &lt;= n)  {
+   i = i * 2;
+ }
+</code></pre>
+<p>时间复杂度可转化成$$2^i=n$$求$$i$$的问题</p>
+<p>结果为$$log_2n$$以2为底n的对数，因此这段代码时间复杂度为$$O(log_2n)$$</p>
+</blockquote>
+
               </div>
               <div class="toc-container">
                 
@@ -110,9 +137,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-04-chu-li-qi-she-ji-shang/">
+            <a href="https://Joshua-Chang.github.io/post/shu-ju-jie-gou-yu-suan-fa-01/">
               <h3 class="post-title">
-                 计算机组成原理04处理器设计 上
+                数据结构与算法01
               </h3>
             </a>
           </div>
