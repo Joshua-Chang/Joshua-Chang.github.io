@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>JetPack Compose 01 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1619180181420">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1619181113467">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="JetPack Compose 01 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -29,7 +29,7 @@ MyTheme{
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1619180181420" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1619181113467" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -103,7 +103,7 @@ MyTheme{
             <div class="post-content-wrapper">
               <div class="post-content">
                 <p>@Composable/<em>标记组合函数，可提供其他函数使用</em>/</p>
-<pre><code class="language-kotlin">@Composable
+<pre><code class="language-java">@Composable
 fun MyApp(content: @Composable () -&gt; Unit) {/*也可以 组合函数为参数*/
 MyTheme{
         Surface(color = Color.Yellow) {
@@ -114,7 +114,7 @@ MyTheme{
 </code></pre>
 <p>@Preview/<em>只能用与无参函数</em>/</p>
 <h2 id="foundation包">foundation包</h2>
-<pre><code class="language-kotlin">@Composable
+<pre><code class="language-java">@Composable
 fun NewsStory() {
     MaterialTheme/*遵循 MaterialTheme板式*/ {
         val typography = MaterialTheme.typography/*版式即TextStyle*/
@@ -167,7 +167,7 @@ fun NewsStory() {
 <p>可组合函数可能会像动画的每一帧一样非常频繁地运行。</p>
 </li>
 </ul>
-<pre><code class="language-kotlin">@Composable
+<pre><code class="language-java">@Composable
 @Deprecated(&quot;Example with bug&quot;)
 fun ListWithBug(myList: List&lt;String&gt;) {
     var items = 0
@@ -182,7 +182,7 @@ fun ListWithBug(myList: List&lt;String&gt;) {
     }
 }
 </code></pre>
-<pre><code class="language-kotlin">/**
+<pre><code class="language-java">/**
  * Display a list of names the user can click with a header
  */
 @Composable
@@ -215,7 +215,7 @@ private fun NamePickerItem(name: String, onClicked: (String) -&gt; Unit) {
 }
 </code></pre>
 <h2 id="state">State</h2>
-<pre><code class="language-kotlin">fun MyScreenContent() {
+<pre><code class="language-java">fun MyScreenContent() {
     val countState = remember {
         mutableStateOf(0)
     }
@@ -244,7 +244,7 @@ fun Counter2(count:Int,updateCount:(Int)-&gt;Unit) {
 }
 </code></pre>
 <h2 id="lazycolumn">LazyColumn</h2>
-<pre><code class="language-kotlin">@Composable
+<pre><code class="language-java">@Composable
 fun NameList(names: List&lt;String&gt;, modifier: Modifier = Modifier) {
     LazyColumn(modifier = modifier) {
         items(items = names) { name -&gt;
@@ -260,7 +260,7 @@ Column(modifier = Modifier.fillMaxHeight()) {
     })
 }
 </code></pre>
-<pre><code class="language-kotlin">@Composable
+<pre><code class="language-java">@Composable
 fun Greeting(name: String) {
     /*by委托：将set/get委托出去*/
     var isSelected by /*Boolean*/remember { mutableStateOf(false) }
