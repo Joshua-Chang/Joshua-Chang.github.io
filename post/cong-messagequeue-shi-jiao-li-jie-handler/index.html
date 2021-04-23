@@ -1,0 +1,531 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>从MessageQueue视角理解Handler | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1619180181420">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="从MessageQueue视角理解Handler | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="本文适合对Handler有过了解，~~即使又忘了。~~但对网上的&lt;&lt;loop轮询转圈图&gt;&gt;有点印象的玩家。
+前置概念
+
+同步屏障消息
+
+作用：系统使用的特殊的消息，可以看作优先处理异步消息的标识，当MessageQu..." />
+    <meta name="keywords" content="Handler" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1619180181420" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              从MessageQueue视角理解Handler
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-04-23
+              </span>
+              <span>
+                13 min read
+              </span>
+              
+                <a href="https://Joshua-Chang.github.io/tag/plXcE4E44/" class="post-tag">
+                  # Handler
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://images.pexels.com/photos/6431960/pexels-photo-6431960.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;fit=crop&amp;h=250&amp;w=360" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p><em>本文适合对Handler有过了解，~~即使又忘了。~~但对网上的&lt;&lt;loop轮询转圈图&gt;&gt;有点印象的玩家。</em></p>
+<p><strong>前置概念</strong></p>
+<hr>
+<p><strong>同步屏障消息</strong></p>
+<ol>
+<li>作用：系统使用的特殊的消息，可以看作优先处理异步消息的标识，当MessageQueue的队首是<strong>同步屏障消息时</strong>，忽略同步消息，一直执行最近的异步消息。通过<code>postSyncBarrier</code>/<code>removeSyncBarrier</code>增删同步屏障消息，非手动移除不会自动移除。</li>
+<li>特点：<code>target</code>属性为空的<code>Message</code>就是同步屏障消息</li>
+<li>事例：<code>ViewRootImpl.scheduleTraversals</code> 优先处理异步消息</li>
+</ol>
+<p><strong>IdleHandler</strong></p>
+<ol>
+<li>作用：闲时<code>Handler</code>，在没有消息或消息未到触发时机这样的闲时，执行的操作。</li>
+<li>特点：是<code>MessageQueue</code>的静态接口，使用时复写<code>boolean queueIdle()</code>的方法执行闲时操作，返回值表示执行后是否保持存活状态。<br>
+<strong>epoll</strong></li>
+</ol>
+<p><a href="https://segmentfault.com/a/1190000003063859">Linux IO模式及 select、poll、epoll详解</a></p>
+<p><strong>正文</strong></p>
+<hr>
+<p><em>废话一下基本原理先</em></p>
+<p>使用者通过<code>Handler</code>外部暴露的方法，向处于目标线程<code>TLS</code>的<code>Looper</code>内的消息队列输入消息；</p>
+<p>消息队列及时/延时地取出消息，并分发处理。以达到调度或延时地操作。</p>
+<p><code>Handler</code>通过<code>MessageQueue.enqueueMessage(msg,when)</code>入队消息</p>
+<p><code>Looper.loop</code>通过<code>MessageQueue.next()</code>出队消息</p>
+<h2 id="messagequeue">MessageQueue</h2>
+<p>MessageQueue的关键变量<code>mMessages</code>：</p>
+<p>消息队列实例，把消息根据触发时机早晚排列。具体代码表现为单链表的节点，代指队首（链表头）消息。</p>
+<pre><code class="language-mermaid">graph LR
+1[A 延迟:1s]--next--&gt;2[B 延迟:2s]--next--&gt;3[C 延迟:3s]--next--&gt;5[D 延迟:5s]
+</code></pre>
+<p><strong>入队出对</strong></p>
+<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9898b6b674c646eb9b9fa60b69be3714~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 上午2.10.15.png" style="zoom:50%;" />
+<ol>
+<li>入队方法<code>enqueueMessage()</code>，往队列存延迟触发的消息，并根据触发时间排好队。</li>
+<li>出队方法<code>next()</code>一直死循环遍历队列，有到达触发时机的消息就取出消息。</li>
+</ol>
+<p><strong>阻塞/休眠</strong>：</p>
+<p>怎么能让入队消息的延迟触发呢？</p>
+<pre><code>先阻塞住next()方法，让其无法取消息。时间到了，在把阻塞恢复，取出消息即可。
+</code></pre>
+<p>队列内根本没消息，出队方法还一直死循环取消息，怎么办？</p>
+<pre><code>没消息也阻塞住next()方法，让其无法取消息。有新消息插入时，再通知他去取。
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>队内的下条消息还有很久才到触发时机：先阻塞。</th>
+<th>队内的根本没有消息：一直休眠到有消息。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1a84eb0ae8f54979815597c85ec0db50~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 上午2.21.31.png" style="zoom: 33%;" /></td>
+<td><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/426a3ab271e54dcaa5c8a6df04dcdab5~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 上午2.22.27.png" style="zoom: 33%;" /></td>
+</tr>
+</tbody>
+</table>
+<p><strong>具体做法</strong></p>
+<p><code>next()</code>的取消息死循环中用<code>nativePollOnce(ptr, nextPollTimeoutMillis)</code>阻塞/休眠。</p>
+<ul>
+<li>消息的触发时机未到时，阻塞到触发时机到为止；</li>
+<li>队列内一直没消息时，休眠直到有新消息入队，再用<code>enqueueMessage()</code>内的<code>nativeWake(mPtr)</code>唤醒。</li>
+</ul>
+<blockquote>
+<p>本文中分别用<strong>阻塞</strong>和<strong>休眠</strong>只是做语义区分：是自己超时返回，还是被动触发唤醒。</p>
+<p><code>nativePollOnce</code>传入的参数<code>timeout</code>通过JNI到Native层<code>Looper::pollOnce</code>-&gt;<code>Looper::pollInner</code> -&gt;<code>epoll_wait</code>方法。</p>
+<p><code>epoll_wait</code>用 <code>epoll_create</code>创建的文件描述符A，去监听管道读取端文件描述符B的事件(使用<code>epoll_ctl</code>添加)。</p>
+<ul>
+<li>timeout&gt;0时，监听时长超过这个<code>timeout</code>仍没有事件就返回，中断阻塞。</li>
+<li>timeout=-1，<code>epoll_wait</code>一直等待，直到新消息入队<code>enqueueMessage()</code>内<code>nativeWake(mPtr)</code>在Native层向管道写入端写入“W”，触发监听中断阻塞。同时清空管道数据。</li>
+</ul>
+<p>上边两种情形，都会给返回一种result，而<code>pollOnce</code>收到任何一种result都会退出。</p>
+<p>epoll I/O复用机制是用一个文件描述符监听多个文件描述符的事件。</p>
+<p>Looper.prepare -&gt; new Looper -&gt; new MessageQueue-&gt;nativeInit-&gt;native层NativeMessageQueue构造方法中实例化Looper的构造方法中初始化管道和<code>epoll_create</code>    <code>nativeWake</code>最终也是<code>Looper.wake</code></p>
+</blockquote>
+<h2 id="出队">出队</h2>
+<p><code>nativePollOnce(ptr, nextPollTimeoutMillis)</code>方法参数<strong>nextPollTimeoutMillis</strong> (即下个消息的延迟时间的)取值情况。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">下个消息的延迟时间</th>
+<th>消息队列内</th>
+<th>阻塞情况</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">&gt;0</td>
+<td>延迟最近的消息，触发时机未到</td>
+<td>阻塞到触发时机</td>
+<td>释放cpu资源</td>
+</tr>
+<tr>
+<td style="text-align:left">=0</td>
+<td>延迟最近的消息，触发时机到了</td>
+<td>不阻塞</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">=-1</td>
+<td>根本没消息</td>
+<td>休眠到有消息</td>
+<td>释放cpu资源</td>
+</tr>
+</tbody>
+</table>
+<h3 id="流程解读">流程解读</h3>
+<p><code>next()</code>出队方法，需要一个<code>Message</code>返回值。当<code>nativePollOnce</code>不再阻塞时，因为队列是按触发时机早晚排序的：</p>
+<ol>
+<li>
+<p>通常应该取队首消息；</p>
+</li>
+<li>
+<p>但是队首是同步屏障消息时【Barrier1】，应该取触发时机最近的异步消息。</p>
+</li>
+</ol>
+<p>因此我们先取该msg，不管是队首还是最近异步，再判断是否应该将其返回和其他后续操作。</p>
+<ul>
+<li>
+<p>当msg非空时【2】</p>
+<ol>
+<li>如果msg触发时机到达【3`】，则返回msg。（当然返回前要整理一下队列）</li>
+<li>如果msg触发时机未到【3】，则重新计算触发时间，然后将 <strong>nextPollTimeoutMillis</strong> 设为新时间，然后像下文&quot;当msg为空时&quot;一样，进行是否有IdleHandler及对其处理的操作。【4】/【5，6】</li>
+</ol>
+</li>
+<li>
+<p>当msg为空时【2`】，先将 <strong>nextPollTimeoutMillis</strong> 设为-1</p>
+<ol>
+<li>如果也没有待处理的IdleHandler【4】：则跳出本次循环又回到<code>nativePollOnce</code>，此时<code>nextPollTimeoutMillis=-1</code>,阻塞至有新消息将其唤醒。</li>
+<li>如果有待处理的IdleHandler：则遍历执行这些IdleHandler【5】（每次最多四个，执行其<code>queueIdle</code>回调），然后重置IdleHandler计数和<code>nextPollTimeoutMillis=0</code>完成本次循环【6】（<code>nextPollTimeoutMillis=0</code>让下次循环不再阻塞，以检查处理IdleHandler时是否又有新消息入队）。</li>
+</ol>
+</li>
+</ul>
+<pre><code class="language-java">Message next() {
+    final long ptr = mPtr;/*MessageQueue 的native层地址*/
+    if (ptr == 0) {//当消息循环已经退出,则直接返回
+        return null;
+    }
+    int pendingIdleHandlerCount = -1; //待处理闲时handler数量
+    int nextPollTimeoutMillis = 0;
+    for (;;) {
+        nativePollOnce(ptr, nextPollTimeoutMillis);//【1】阻塞：作用类似Java的 object.wait()
+        synchronized (this) {
+            final long now = SystemClock.uptimeMillis();
+            Message prevMsg = null;
+            Message msg = mMessages;/*next()的返回值：此时为队头消息，即最近消息*/
+            if (msg != null &amp;&amp; msg.target == null) {//【Barrier1】如果队首是同步屏障消息，msg取最近的异步消息
+		do {
+                   prevMsg = msg;
+                   msg = msg.next;
+                } while (msg != null &amp;&amp; !msg.isAsynchronous());//msg不是异步消息时，从队头至队尾遍历每个消息，直到msg为异步消息才推出遍历
+            }            
+            if (msg != null) {//【2】取到待处理的msg
+                if (now &lt; msg.when) {/*【3】时机未到：更新延迟时间*/
+                    nextPollTimeoutMillis = (int) Math.min(msg.when - now, Integer.MAX_VALUE);
+                } else {/*【3`】处理msg的时机已到：取出msg，并整理队列*/
+                    mBlocked = false;/*是否被阻塞：设为false供存消息时用*/
+                    if (prevMsg != null) {/*【Barrier1`】若msg是因同步屏障循，而取出的最近的异步消息，改变指针指向跳过msg*/
+                        prevMsg.next = msg.next;
+                    } else {/* 取出msg，更新下一条消息为队首*/
+                        mMessages = msg.next;
+                    }
+                    msg.next = null;//即将作为返回值，next变得没意义，置空。
+                    return msg;/* 返回next消息*/
+                }
+            } else {/*【2`】消息为空，即没有消息了*/
+                nextPollTimeoutMillis = -1;/*没有消息了，nextPollTimeoutMillis设为-1。线程阻塞*/
+            }
+            
+            /*------------------------------空闲handler处理----------------------------------*/
+            /* Idlehandles仅在队列为空或队首消息时机未到时才运行*/
+            if (pendingIdleHandlerCount &lt; 0
+                    &amp;&amp; (mMessages == null || now &lt; mMessages.when)) {
+                pendingIdleHandlerCount = mIdleHandlers.size();/*计算闲时任务量*/
+            }
+            if (pendingIdleHandlerCount &lt;= 0) {
+                mBlocked = true;/*【4】若经过计算上个if计算，连闲时Handler都没有，跳出本次循环*/
+                continue;
+            }
+            if (mPendingIdleHandlers == null) {/*必有闲时任务待处理，否则上个if就continue出去了*/
+                mPendingIdleHandlers = new IdleHandler[Math.max(pendingIdleHandlerCount, 4)];
+            }
+            mPendingIdleHandlers = mIdleHandlers.toArray(mPendingIdleHandlers);
+        }
+        /*【5】必有闲时Handler需要遍历执行。连闲时Handler都没有的情况，在上文的if中continue出去。*/
+        for (int i = 0; i &lt; pendingIdleHandlerCount; i++) {
+            final IdleHandler idler = mPendingIdleHandlers[i];
+                //【5.1】执行IdleHandler的queueIdle方法，运行IdelHandler，例如处理日志上报 Gc等通过返回值由自己决定是否保持存活状态
+               idler.queueIdle();
+        }
+	/*【6】执行完闲时Handler重置闲时计数和下次延迟时间*/
+        pendingIdleHandlerCount = 0;
+        // 因为执行闲时Handler(步骤【5】不在synchronized中)过程中，可能有新消息enqueue，需要重新检查。
+        // 下次延迟时间置0，下次循环到步骤【1】时不阻塞。
+        nextPollTimeoutMillis = 0;
+    }
+}
+</code></pre>
+<h3 id="时序图">时序图</h3>
+<figure data-type="image" tabindex="1"><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d7364839512144d3aecb9f4cd54ea3d4~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 下午1.41.54.png" loading="lazy"></figure>
+<h2 id="入队">入队</h2>
+<p><strong>关键变量</strong><code>mBlocked</code>：源码上的注释翻译过来：出队方法<code>next()</code>是否被阻塞在<code>pollOnce()</code>处（<code>nextPollTimeoutMillis≠0</code>）。记录<code>pollonce</code>是否被阻塞的目的就是：<strong>是否需要唤醒</strong></p>
+<p>外部暴露操作方法的<code>Handler</code>类下，<code>send(empty)Message/post</code> +<code>atTime/delay/AtFrontOfQueue</code>等操作的最终归宿。<br>
+<code>enqueueMessage(Message msg, long when)</code>：插入<code>msg</code>入队，<code>when</code>是自系统启动以来的非休眠运行时间（毫秒）。</p>
+<blockquote>
+<p>拓展： 插入msg一个到队首。</p>
+<pre><code class="language-java">public final boolean sendMessageAtFrontOfQueue(Message msg) {//同理post也有类似方法
+ MessageQueue queue = mQueue;
+ return enqueueMessage(queue, msg, 0);
+}
+private boolean enqueueMessage(MessagdsieQueue queue, Message msg,
+     long uptimeMillis) {
+ return queue.enqueueMessage(msg, uptimeMillis);
+}
+</code></pre>
+</blockquote>
+<p><code>enqueueMessage(Message msg, long when)</code>：插入<code>msg</code>入队，<code>when</code>是自系统启动以来的非休眠运行时间（毫秒）。</p>
+<h3 id="流程解读-2">流程解读</h3>
+<p>入队一个消息，流程参考存消息的情况图，并对照下边的代码。</p>
+<h4 id="情况一">情况【一】</h4>
+<p>队列为空、新消息是即时消息、新消息是延时最短消息时</p>
+<p>入队的新消息插入到队头的情况：都需要<code>nativeWake</code>唤醒 出队的<code>pollonce</code></p>
+<table>
+<thead>
+<tr>
+<th><strong>a.队列内没消息</strong></th>
+<th><strong>b.新入队的消息延时为0</strong></th>
+<th>c.新入队的消息比队首的触发时机还早，与b类似</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b1d1b60d3dcd4231b7dc9f00bf54704d~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 上午4.42.24.png" style="zoom:33%;" /></td>
+<td><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5754fd2fe0ca4f1d88c26625ce245c27~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 上午4.43.42.png" style="zoom:33%;" /></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>通过改变队首消息和新消息的next指针指向，把消息插入。</li>
+<li>是否需要唤醒<code>needWake = mBlocked</code>, 这时候出队<code>pollonce</code>处<strong>队列还没消息</strong>或<strong>最近消息时机未到</strong>，还被<strong>阻塞</strong>，<strong>mBlocked=true</strong>是必然的。然后<code>nativeWake</code>去唤醒<code>pollonce</code>去取刚存入的消息。</li>
+</ol>
+<h4 id="情况二">情况【二】</h4>
+<p>新消息不是上述的情况，不插入到队首，而是插入到队列中部。先查找位置再插入。</p>
+<table>
+<thead>
+<tr>
+<th>队头是同步屏障消息</th>
+<th>且插入的消息是最近的异步消息</th>
+<th>插入的消息不是最近的异步消息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/751b07ecd9094d3192904c99ffdcada2~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 上午5.03.37.png" style="zoom:33%;" /></td>
+<td><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/15bbb1919f144d41a8082677781ded3d~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 上午5.04.16.png" style="zoom:33%;" /></td>
+</tr>
+<tr>
+<td>是否需要唤醒</td>
+<td>需要唤醒</td>
+<td>不需要唤醒</td>
+</tr>
+</tbody>
+</table>
+<p><strong>除非队头是同步屏障消息，插入的消息是最近的异步消息</strong>，其他多数插入到队列中部的情况都不需唤醒</p>
+<p>是否需要唤醒的条件<code>needWake = mBlocked &amp;&amp; p.target == null &amp;&amp; msg.isAsynchronous();</code></p>
+<ol>
+<li>出队<code>pollonce</code>处最近消息时机未到（经过上个if，队列现在非空），还被阻塞，<strong>mBlocked=true</strong>还是必然的。</li>
+<li><code>p.target == null</code>队首p的target为空符合同步屏障消息特点。</li>
+<li><code>msg.isAsynchronous()</code> 新插入队列中部的消息是异步消息。</li>
+</ol>
+<p>合起来<strong>唤醒条件</strong>就是：“<strong>队列内最近的消息触发时机未到，且队首消息是同步屏障消息时，新插入了一条异步消息</strong>”（还可能改变）。</p>
+<p>然后再通过改变<code>next</code>指针指向，从队首至队尾遍历，查找合适的插入位置：</p>
+<figure data-type="image" tabindex="2"><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ceb947d8d2954f5898eb54b66680b854~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 下午6.08.53.png" loading="lazy"></figure>
+<ol>
+<li><code>（when &lt; p.when）</code>即新消息触发时机早于该位置的触发时机，插入位置找到，跳出遍历。</li>
+<li><code>p == null</code>遍历到末尾，新消息的触发时机比队内的消息都晚，插入位置为队尾，跳出遍历。</li>
+<li>查找插入位置的过程中。如果发现异步消息，则新消息虽异步，但不是离触发最近的，无需唤醒。因此<strong>唤醒条件</strong>更新为：队首是同步屏障消息时，新插入的消息为<strong>离触发最近的异步消息</strong>。</li>
+</ol>
+<p>最后改变指针指向，把消息插入到对应位置。</p>
+<pre><code class="language-java">boolean enqueueMessage(Message msg, long when) {    
+    synchronized (this) {/*可能有多个不同线程发消息*/
+        msg.when = when;
+        Message p = mMessages;// p 赋值为队首。根据触发时机when 来排序
+        boolean needWake;
+        if (p == null || when == 0 || when &lt; p.when) {
+          //【一】插入头部并唤醒：1、队列为空时 2、新消息延时为0是即时消息 3、新消息延时比队首的更短
+            msg.next = p;
+            mMessages = msg;
+            needWake = mBlocked;/*出队方法next是否被阻塞在pollOnce()处（nextPollTimeoutMillis≠0）*/
+        } else {//【二】消息插入MessageQueue中间，一般不需唤醒线程。除非队首同步屏障，且msg为!最近的!异步消息
+            //【二a】队首是同步屏障消息，且插入的msg是异步消息。
+            needWake = mBlocked &amp;&amp; p.target == null &amp;&amp; msg.isAsynchronous();
+            Message prev;
+            for (;;) {
+                prev = p;
+                p = p.next;
+                /*prev、p 从队列的0、1 一直增至 last、null，来寻找msg合适的插入位置*/
+                if (p == null /*last.next=null 插入到末尾*/|| when &lt; p.when/*（队列的p.when越来越大1235，when=4）*/
+                    break;
+                }
+                if (needWake &amp;&amp; p.isAsynchronous()) {//【二b】插入的msg是异步消息是最近的
+                    //在寻找msg插入位置过程中发现异步消息。说明msg前还有更早的异步消息。msg虽异步、但非最近。不需唤醒
+                     needWake = false;
+                }
+            }
+            /*经过循环确定插入位置，将入队的msg插入到prev与p中间 （3-5之间）*/
+            msg.next = p; 
+            prev.next = msg;
+        }
+        if (needWake) {
+            nativeWake(mPtr);//【三】唤醒线程，nativePollOnce不在阻塞
+        }
+    }
+    return true;
+}
+</code></pre>
+<h3 id="流程图">流程图</h3>
+<figure data-type="image" tabindex="3"><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2adc6671993c4434b420e4f5d4e21811~tplv-k3u1fbpfcp-watermark.image" alt="截屏2021-04-23 下午8.15.15.png" loading="lazy"></figure>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#messagequeue">MessageQueue</a></li>
+<li><a href="#%E5%87%BA%E9%98%9F">出队</a>
+<ul>
+<li><a href="#%E6%B5%81%E7%A8%8B%E8%A7%A3%E8%AF%BB">流程解读</a></li>
+<li><a href="#%E6%97%B6%E5%BA%8F%E5%9B%BE">时序图</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%A5%E9%98%9F">入队</a>
+<ul>
+<li><a href="#%E6%B5%81%E7%A8%8B%E8%A7%A3%E8%AF%BB-2">流程解读</a>
+<ul>
+<li><a href="#%E6%83%85%E5%86%B5%E4%B8%80">情况【一】</a></li>
+<li><a href="#%E6%83%85%E5%86%B5%E4%BA%8C">情况【二】</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B5%81%E7%A8%8B%E5%9B%BE">流程图</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/shu-ju-jie-gou-yu-suan-fa-01-fu-za-du-fen-xi/">
+              <h3 class="post-title">
+                数据结构与算法01复杂度分析
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
