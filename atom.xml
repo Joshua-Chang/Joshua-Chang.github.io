@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-06-07T05:37:50.278Z</updated>
+    <updated>2021-06-20T10:26:17.550Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -10,6 +10,580 @@
     <logo>https://Joshua-Chang.github.io/images/avatar.png</logo>
     <icon>https://Joshua-Chang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Joshua-Chang`Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[计算机网路]]></title>
+        <id>https://Joshua-Chang.github.io/post/ji-suan-ji-wang-lu/</id>
+        <link href="https://Joshua-Chang.github.io/post/ji-suan-ji-wang-lu/">
+        </link>
+        <updated>2021-06-07T05:40:09.000Z</updated>
+        <content type="html"><![CDATA[<p>公司内网中每个路由器、交换机构成一级子网。最高级的路由器在公司网络的边缘，它可以将网络内部节点连接到其他的网络（网络外部）。本地网络提供商（ISP）提供的互联网先到达边缘的路由器，然后再渗透到内部的网络节点。公司内部的若干服务器可以通过交换机形成一个局域网络；公司内部的办公设备，比如电脑和笔记本，也可以通过无线路由器或者交换机形成局域网络。局域网络之间，可以通过路由器、交换机进行连接，从而构成一个更大的局域网。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image6/M01/38/64/Cgp9HWB5O5KAFGFAAAD-82hpYWc483.png" alt="Drawing 2.png" style="zoom: 50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image6/M00/38/6D/CioPOWB5O7uAUZ7qAAB_rmbTigw120.png" alt="Drawing 4.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>通信<strong>链路</strong>（Communication Link），用于传输网络信号。公司<strong>内网</strong>从<strong>本地网络服务提供商</strong> （Internet Service Provider） 接入，然后内部再分成一个个<strong>子网</strong>。路径分叉时需要进行<strong>交换</strong>（Switch），数据从一条链路进入交换设备，然后缓存下来，再转发（切换）到另一条路径，常见的交换设备是链路层交换机（Link-Layer Switch）和路由器（Router），交换机连接多台设备，路由器连接两个网络，但是路由器通常也具有交换机的功能。</p>
+<img src="https://s0.lgstatic.com/i/image6/M00/38/6D/Cgp9HWB5RAmAZRwzAACtAP-CPWs242.png" alt="Drawing 1.png" style="zoom: 25%;" />
+<p>TCP（Transport Control Protocol）是一个传输层协议：提供主机到主机的（Host-To-Host）数据的可靠传输，支持全双工，是一个连接导向的协议。</p>
+<p>TCP 上层应用层：不同应用要使用TCP的能力，通过端口号区分应用。</p>
+<p>TCP 下层网络层：提供地址到地址的通信（Address-To-Address），IP 协议解决地址到地址的通信。</p>
+<p>网络层只负责ip地址到地址的通讯，再往下层通过路由/交换的链路传输网络信号，再通过下层物理层的具体传输介质作为载体。</p>
+<table>
+<thead>
+<tr>
+<th>应用层http/ssh</th>
+<th>传输层tcp/udp</th>
+<th>网络层ip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Port-To-Port</td>
+<td>Host-To-Host</td>
+<td>Address-To-Address</td>
+</tr>
+<tr>
+<td>Session</td>
+<td>Connection</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>TCP 是一个连接导向的协议，设计有建立连接（握手）和断开连接（挥手）的过程。TCP 没有设计会话（Session），因为会话通常是一个应用的行为。</p>
+<img src="https://s0.lgstatic.com/i/image6/M00/3A/20/CioPOWB-RYSASfPkAAEen4ZR3gw297.png" alt="619.png" style="zoom:25%;" />
+<p>如果一个 Host 主动向另一个 Host 发起连接，称为 SYN（Synchronization），请求同步；</p>
+<p>如果一个 Host 主动断开请求，称为 FIN（Finish），请求完成；</p>
+<p>如果一个 Host 给另一个 Host 发送数据，称为 PSH（Push），数据推送。</p>
+<p>以上 3 种情况，接收方收到数据后，都需要给发送方一个 ACK（Acknowledgement）响应。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image6/M00/38/6D/Cgp9HWB5RCqAVfhiAADJmfGn2O0616.png" alt="Drawing 4.png" style="zoom:33%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image6/M00/3D/55/CioPOWCTwu-AD9PgAABp1yJqsPI439.png" alt="图片2.png" style="zoom:33%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>TCP 是一个双工协议，为了让双方都保证，建立连接的时候，连接双方都需要向对方发送 SYC（同步请求）和 ACK（响应）</p>
+<p>握手阶段双方都没有烦琐的工作，因此一方向另一方发起同步（SYN）之后，另一方可以将自己的 ACK 和 SYN 打包作为一条消息回复。</p>
+<p>到了挥手阶段，双方都可能有未完成的工作。收到挥手请求的一方，必须马上响应（ACK），等所有工作结束，再发送请求中断连接（FIN）。</p>
+<img src="https://s0.lgstatic.com/i/image6/M01/3A/3C/Cgp9HWB-mz2ALAO6AAFJNuQ9-SU088.png" alt="Drawing 5.png" style="zoom:50%;" />
+<p>TCP 拆包的作用是将任务拆分处理，减小底层网络处理的压力，降低整体任务出错的概率。</p>
+<p>在内存中开辟的一块缓冲区供TCP 段排队，将数据拆分成不超过缓冲区大小的部分，即 TCP 段（<strong>TCP Segment</strong>）进行发送。</p>
+<p>拆包：一个数据太大，经过拆分多个 TCP 段发送，然后在目的地重组。</p>
+<p>粘包：多个数据太小，合并成一个 TCP 段发送，在目的地再还原成多个数据。</p>
+<p>TCP 利用Seq、ACK（发送字节数、接收字节数）的唯一性来确定封包之间的顺序关系。</p>
+<p>MSS（Maximun Segment Size）是 TCP Header 中的可选项，双方协商控制TCP 段的大小。</p>
+<p>MSS 太小，每一份数据都要增加一个头部，那头部的数据占比会上升，吞吐量下降。</p>
+<p>MSS 太大，会降低性能，比如缓冲区变大造成的内存性能/服务器资源的占用等硬件和计算资源、支持 TCP 协议工作的 IP 协议（TCP 协议不肯拆包，IP 协议就需要拆出大量的包），工作效率会下降。</p>
+<blockquote>
+<p>TCP Header</p>
+<figure data-type="image" tabindex="1"><img src="/Users/joshuachang/Desktop/tcpsegment.png" alt="" loading="lazy"></figure>
+</blockquote>
+<p>TCP 中每个发送的请求都需要响应。如果一个请求没有收到响应，发送方就会认为这次发送出现了故障，会触发重发。</p>
+<p>但是每一个请求收到响应之后，再发送下一个请求，吞吐量会很低，浪费带宽。改进方式，就是让发送方有请求就发送出去，而不是等待响应。发送的数据连在了一起，响应的数据也连在了一起，吞吐量就提升了。</p>
+<p>为了提高传输速率，TCP 协议选择将多个段同时发送，为了让这些段不至于被接收方拒绝服务，在发送前，双方要协商好发送的速率。但是我们不可能完全确定网速，所以协商的方式，就变成确定窗口大小。</p>
+<p>有了窗口，发送方利用滑动窗口算法发送消息；接收方构造缓冲区接收消息，并给发送方 ACK。滑动窗口的实现只需要数组和少量的指针即可。（其他用途：求一个数组中最大的连续 k 项和）。</p>
+<table>
+<thead>
+<tr>
+<th>队列</th>
+<th>滑动窗口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://s0.lgstatic.com/i/image6/M00/3A/FA/CioPOWCCKwuAfBn5AABKdgtX54w997.png" alt="image (3).png" style="zoom:33%;" /></td>
+<td><img src="https://s0.lgstatic.com/i/image6/M00/3A/F2/Cgp9HWCCKxSAROSpAAA_zThgiBA669.png" alt="image (4).png" style="zoom:33%;" /></td>
+</tr>
+</tbody>
+</table>
+<p>实现这样的模型，用队列要用多个队列。用滑动窗口才是最合适的数据结构，将已发送的数据放到最左边，发送中的数据放到中间，未发送的数据放到右边。假设我们最多同时发送 5 个封包，也就是窗口大小 = 5。窗口中的数据被同时发送出去，然后等待 ACK（浅绿色）。如果一个封包 ACK 到达，我们就将它标记为已接收（深绿色）。</p>
+<p>RTT 表示 Round Trip Time，就是消息一去一回的时间。</p>
+<p><strong>确认与重发的机制</strong></p>
+<p>自适应重传算法**（<strong>Adaptive Retransmission Algorithm</strong>）**</p>
+<p>快速重传：接收方可以发送多次某段的 ACK，如果发送方收到多个该段ACK，就会重发该段。</p>
+<p><strong>Selective Acknowledgment</strong> （<strong>SACK</strong>）</p>
+<p>发送方将数据拆包，变成多个段。然后将数据放入一个拥有滑动窗口的数组，依次发出，仍然遵循先入先出（FIFO）的顺序，但是窗口中的段会一次性发送。窗口中序号最小的段如果收到 ACK，窗口就会发生滑动；如果最小序号的分组长时间没有收到 ACK，就会触发整个窗口的数据重新发送。在多次传输中，网络的平均延迟往往是相对固定的，这样 TCP 协议可以通过双方协商窗口大小控制流速。</p>
+<p>UDP（User Datagram Protocol），目标是在传输层提供直接发送报文（Datagram）的能力。UDP 协议不会拆分数据，Datagram 就是数据传输的最小单位。</p>
+<img src="https://s0.lgstatic.com/i/image6/M01/3B/0F/Cgp9HWCCfQeAGOF3AACK2Gf5t6I606.png" alt="图片1.png" style="zoom:50%;" />
+<p>Length 是Datagram长度。</p>
+<p>Data octets 就是一个字节一个字节的数据，Octet 是 8 位。</p>
+<p>IP（Internet Protocol）协议接收 IP 协议上方的 Host-To-Host 协议传来的数据，然后进行分片Fragmentation。然后 IP 协议为每个片段（Fragment）增加一个 IP 头（Header），组成一个IP 封包（Datagram）之后，通过寻址和路由目的地和路径确认，最后调用底层的数据链路层传送数据。</p>
+<img src="https://s0.lgstatic.com/i/image6/M00/3C/0B/CioPOWCH4u-AWVEAAAH_xR5D6lU716.png" alt="Drawing 1.png" style="zoom: 33%;" />
+<blockquote>
+<p>主机到主机（Host-to-Host）协议传递来的数据，比如一个 TCP 段（Segment），然后将 TCP 段再次切片做成一个个的 IPv4/v6 封包（Datagram or Packet），寻址路由，再调用数据链路层传输数据。</p>
+</blockquote>
+<p>可靠性保证数据无损地到达目的地。可靠性是 IP 协议上方的 Host-To-Host 协议保证的，比如 TCP 协议通过应答机制、窗口等保证数据的可靠性。 IP 协议自身不能保证可靠性。IP 协议可能会有如下问题：</p>
+<ol>
+<li>
+<p>封包损坏（数据传输过程中被损坏）；</p>
+</li>
+<li>
+<p>丢包（数据发送过程中丢失）；</p>
+</li>
+<li>
+<p>重发（数据被重发，比如中间设备通过 2 个路径传递数据）；</p>
+</li>
+<li>
+<p>乱序（到达目的地时数据和发送数据不一致）。</p>
+</li>
+</ol>
+<p>网络层主要有 3 个问题要解决：</p>
+<ol>
+<li>
+<p>延迟</p>
+</li>
+<li>
+<p>吞吐量</p>
+</li>
+<li>
+<p>丢包率</p>
+</li>
+</ol>
+<p>IP Header</p>
+<img src="https://s0.lgstatic.com/i/image6/M00/3C/7D/Cgp9HWCKhJaAKKEhAABhmC7udP0409.png" alt="image (1).png" style="zoom:50%;" />
+<p>IHL（Internet Header Length）用来描述 IP 协议头的大小。所以 IP 协议头的大小是可变的。IHL 只有 4 位，最大值 1111 = 15。最大是 15 个双字（15*4 字节 = 60 字节）。</p>
+<p>Type Of Service 服务的类型，三个波段（band）的优先级也不相同。被分配到三个波段（band）里面的，band 0 的优先级最高，band 2 的最低，用来平衡延迟、吞吐量和丢包率之间的关系。</p>
+<p>Total Length 定义报文（封包 Datagram）的长度。</p>
+<p>Identification（报文的 ID），发送方分配，代表顺序。</p>
+<p>Fragment offset 描述要不要分包（拆分），以及如何拆分。</p>
+<p>Time To Live 描述封包存活的时间。因此每个 IP 封包发送出去后，就开始销毁倒计时。</p>
+<p>Protocol 是描述上层的协议，比如 TCP = 6，UDP = 17。</p>
+<p>Header Checksum 用来检验封包的正确性，如果 Checksum 对不上，就需要选择丢弃这个封包。</p>
+<p>原地址和目标地址。IPv4 的地址是 4 组 8 位的数字，共是 32 位。</p>
+<p>Options 代表可选项。</p>
+<p>延迟（latency）</p>
+<p>延迟指的是 1 bit 的数据从网络的一个终端传送到另一个终端需要的时间。这个时间包括在发送端准备发送的时间、排队发送的时间、发送数据的时间、数据传输的时间等。</p>
+<p>吞吐量（Throughput）</p>
+<p>吞吐量指单位时间内可以传输的平均数据量。比如用 bit/s 作为单位，就是 bps。</p>
+<p>丢包率（Packet loss）</p>
+<p>丢表率指发送出去的封包没有到达目的地的比例。 在最大流速确定的网络中，丢包率会直接影响吞吐量。</p>
+<p>寻址Addressing：地址高位到低位和255.0.0.0（子网掩码）做位与运算依次得到子网地址。子网掩码的作用就是帮助根据 IP 地址找到对应子网。</p>
+<p>路由Routing：由于网络和网络间是网关在连接，因此如果目的地 IP 不在局域网中，就需要为 IP 封包选择通往下一个网络的路径，其实就是选择其中一个网关Gateway。</p>
+<p>IPv4 的地址是 4 个 8 位（octet），总共 32 位。 IPv6 的地址是 8 个 16 位（hextet），总共 128 位。</p>
+<img src="https://s0.lgstatic.com/i/image6/M01/3C/0B/CioPOWCH4wGAT3bUAALH_YQ0Q-U502.png" alt="Drawing 3.png" style="zoom:33%;" />
+<p>省略表示</p>
+<pre><code class="language-jade">0123:4567:0000:0000:0123:4567:0000:cdef
+0123:4567::0123:4567:0000:cdef //::省略了若干组0000
+123:4567::123:4567:0:cdef //省略开头的0
+3c4d::/16 //只有前16位有数据
+</code></pre>
+<p><strong>IPv6 地址太多，因此不再需要子网掩码，而是直接将 IPv6 的地址分区即可</strong>。</p>
+<p>IPv6 的寻址分成了几种类型：</p>
+<ul>
+<li>全局单播寻址（和 IPv4 地址作用差不多，在互联网中通过地址查找一个设备，简单来说，单播就是 1 对 1）；</li>
+<li>本地单播（类似 IPv4 里的一个内部网络，要求地址必须以<code>fe80</code>开头，类似我们 IPv4 中<code>127</code>开头的地址）；</li>
+<li>分组多播（Group Multicast），类似今天我们说的广播，将消息发送给多个接收者；</li>
+<li>任意播（Anycast），这个方式比较特殊，接下来我们会详细讲解。</li>
+</ul>
+<blockquote>
+<p>全局单播时，IPv6 地址通常分成 3 个部分</p>
+<ul>
+<li>站点前缀（Site Prefix）48bit，一般是由 ISP（Internet Service Providor，运营商）或者RIR（Regional Internet Registry， 地区性互联网注册机构），RIR 将 IP 地址分配给运营商；</li>
+<li>子网号（Subnet ID），16bit，用于站点内部区分子网；</li>
+<li>接口号（Interface ID）， 64bit，用于站点内部区分设备。</li>
+</ul>
+<p>IPv6 也是一个树状结构，站点前缀需要一定资质，子网号和接口号内部定义。IPv6 的寻址过程就是先通过站点前缀找到站点，然后追踪子网，再找到接口（即设备的网卡）。</p>
+</blockquote>
+<img src="https://s0.lgstatic.com/i/image6/M01/3C/03/Cgp9HWCH4w-AEinAAAHIfeF4_II848.png" alt="Drawing 5.png" style="zoom:25%;" />
+<blockquote>
+<p>本地单播 虽然理论上 IPv6 可以将所有的设备都连入一个网络。但实际中还是需要一个内部网络。在局域网络中，实现设备到设备的通信，就是本地单播。本地单播地址必须以<code>fe80</code>开头，后面 64 位的 0，然后接上 54 位的设备编号。类似于127.0.0.。上图中的 Interface 可以理解成网络接口，其实就是网卡。</p>
+<img src="https://s0.lgstatic.com/i/image6/M01/3C/03/Cgp9HWCH4x6AJJxNAAEMhuOKNmY768.png" alt="Drawing 7.png" style="zoom:25%;" />
+</blockquote>
+<blockquote>
+<p>IPv6 中设计了分组多播，来实现广播的能力。当 IP 地址以 8 个 1 开头，也就是<code>ff00</code>开头，后面会跟上一个分组的编号时，就是在进行分组多播。</p>
+</blockquote>
+<blockquote>
+<p>任意播，本质是将消息发送给多个接收方，并选择一条最优的路径。比如说在一个网络中有多个授时服务，这些授时服务都共享了一个任播地址。客户端想要获取时间，就将请求发送到这个任播地址。会找到授时服务中的一个或者多个，但是距离最近的往往会先被发现。</p>
+</blockquote>
+<p>IPv6 和 IPv4 的兼容</p>
+<p><strong>IPv4 网络和 IPv6 网络通信</strong>时通过DNS64 查询服务把 IPv4 地址和 IPv6 地址同时返回。再通过NAT64 路由器将 IPv6 地址转换为 IPv4 地址。</p>
+<p><strong>两个 IPv6 网络被 IPv4 隔离</strong>时通过Tunnel，<strong>隧道的本质就是在两个 IPv6 的网络出口网关处，实现一段地址转换的程序</strong>。</p>
+<p><strong>IPv6 解决的是地址耗尽的问题</strong>。因为解决了地址耗尽的问题，所以很多其他问题也得到了解决，比如说减少了子网，更小的封包头部体积，最终提升了性能等。</p>
+<p>链路层发送数据靠的是 MAC 地址，不同于IP地址（住址），MAC 地址就好像人的身份证一样。</p>
+<p>数据的发送方，将自己的 MAC 地址、目的地 MAC 地址，以及数据作为一个分组（Packet），也称作 <strong>Frame</strong> 或者封包，发送给交换机。交换机再根据目的地 MAC 地址，将数据转发到目的地的网络接口（网卡）。</p>
+<blockquote>
+<p>TCP 协议滑动窗口中的MSS（Maximun Segment Size）是 TCP 段最大值，是传输层概念。</p>
+<p>IP层 封包（Datagram）</p>
+<p>如果 IP 协议要传输数据，就要将数据转换成为链路层的Frame，然后才可以在链路层传输。IP 协议要根据 MTU 拆分封包。</p>
+<p><strong>MTU</strong>（Maximun Transmission Unit）链路层网络允许的最大传输数据分组的大小，是链路层概念。<strong>IP 协议要根据 MTU 拆分封包</strong></p>
+<p>交换机的作用更侧重局域网内各主机交换，路由器的作用更侧重从局域网内主机到另一个局域网内主机路经的路由。</p>
+<p>数据从一条链路进入交换设备，然后缓存下来，再转发（切换）到另一条路径叫做Switch，链路层交换机（Link-Layer Switch）和路由器（Router）都是能起这一作用设备。局域网边界与另一局域网边界即为网关，因为路由器也起到连结两个局域网的作用，因此网关一般理解为就是路由器的IP。</p>
+</blockquote>
+<p>已知 IP 地址，找到 MAC 地址的协议，叫作地址解析协议（ARP Address Resolution Protoco）。<strong>ARP</strong>和 <strong>DNS 非常相似，采用的是逐级缓存的设计减少 ARP 请求</strong>。发送接口先查询本地的 ARP 表，如果本地没有数据，然后广播 ARP 查询。这个时候如果交换机中有数据，那么查询交换机的 ARP 表；如果交换机中没有数据，才去广播消息给其他接口。</p>
+<p>局域网内主机数据交换根据MAC 地址，将自己的 MAC 地址、目的地 MAC 地址，以及数据作为一个 Frame 封包，发送给交换机。交换机再根据目的地 MAC 地址，将数据转发到目的地的网络接口（网卡）。当然13/26交叉网线连结两主机的特殊局域网另算。</p>
+<p>发到外网要先发到网关这一特殊主机Mac地址，在由网关往外发。</p>
+<p>网络地址解析协议（<strong>NAT</strong> Network Address Translation）解决的是内外网通信的问题。NAT 通常发生在内网和外网衔接的路由器中，NAT将内网中某个 IP 地址映射到外网 IP，然后再把数据发送给外网的服务器。</p>
+<p><strong>127.0.0.1, localhost, 0.0.0.0 有什么不同</strong></p>
+<p><code>127.0.0.1</code>是本地回环<strong>地址</strong>（loopback），发送到 loopback 的数据会被转发到本地应用。</p>
+<p>localhost 是<strong>主机</strong>名，指代的本地计算机，用于访问绑定在 loopback 上的服务。</p>
+<p><code>0.0.0.0</code>是不可路由 IP 地址，当把一个服务绑定到<code>0.0.0.0</code>，相当于把服务绑定到任意的 IP 地址。</p>
+<p>客户端将数据发送给在客户端侧的Socket 对象，然后客户端侧的 Socket 对象将数据发送给服务端侧的 Socket 对象。Socket 对象负责提供通信能力，并处理底层的 TCP 连接/UDP 连接。对服务端而言，每一个客户端接入，就会形成一个和客户端对应的 Socket 对象，如果服务器要读取客户端发送的信息，或者向客户端发送信息，就需要通过这个客户端 Socket 对象。</p>
+<p>对于一个服务端 Socket 文件，我们要设置它监听的端口。比如 Nginx 监听 80 端口、Node 监听 3000 端口、SSH 监听 22 端口、Tomcat 监听 8080 端口。端口监听不能冲突，不然客户端连接进来创建客户端 Socket 文件，文件描述符就不知道写入哪个服务端 Socket 文件了。</p>
+<p>服务端监听端口的本质，是将服务端 Socket 文件和端口绑定，这个操作也称为 bind。</p>
+<img src="https://s0.lgstatic.com/i/image6/M01/3E/7B/Cgp9HWCZ8deAY_UqAAFeGtcsKIg099.png" style="zoom:25%;" />
+<p>从另一个角度去分析，Socket 还是一种双向管道文件，也是文件描述符。</p>
+<p>在服务端有两种 Socket 文件，每个客户端接入之后会形成一个客户端的 Socket 文件，客户端 Socket 文件的文件描述符会存入服务端 Socket 文件。通过这种方式，一个线程可以通过读取服务端 Socket 文件中的内容拿到所有的客户端 Socket。这样一个线程就可以负责响应所有客户端的 I/O，这个技术称为 I/O 多路复用。</p>
+<p>主动式的 I/O 多路复用（select poll），对负责 I/O 的线程压力过大，因此通常会设计一个高效的中间数据结构作为 I/O 事件的观察者，线程通过订阅 I/O 事件被动响应，这就是响应式模型。在 Socket 编程中，最适合提供这种中间数据结构的就是操作系统的内核，事实上 epoll 模型也是在操作系统的内核中提供了红黑树结构。</p>
+<p>扫描和监听：对于一个服务端程序，可以定期扫描服务端 Socket 文件的变更，来了解有哪些客户端想要连接进来。如果在服务端 Socket 文件中读取到一个客户端的文件描述符，就可以将这个文件描述符实例化成一个 Socket 对象。</p>
+<p>之后，服务端可以将这个 Socket 对象加入一个容器（集合），通过定期遍历所有的客户端 Socket 对象，查看背后 Socket 文件的状态，从而确定是否有新的数据从客户端传输过来。</p>
+<p>上述的过程，我们通过一个线程就可以响应多个客户端的连接，也被称作I/O 多路复用技术</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image6/M01/3E/83/CioPOWCZ8fOAaVwEAAJ4CITeHSs003.png" alt="" loading="lazy"></th>
+<th><img src="https://s0.lgstatic.com/i/image6/M01/3E/7B/Cgp9HWCZ8fyAJIK7AAFzaGqyFsw603.png" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>如果接入的客户端 Socket 较多，每次轮询的开销都会很大。从程序设计的角度来看，像这样主动遍历，比如遍历一个 Socket 集合看看有没有发生写入（有数据从网卡传过来），称为命令式的程序。</p>
+<p>响应式（Reactive）epoll：响应式的角度去看 Socket 编程，应该是有某个观察者会观察到 Socket 文件状态的变化，从而通知处理线程响应。线程不再需要遍历 Socket 集合，而是等待观察程序的通知。 Socket 文件的读写都要经过操作系统，所以最合适的观察者其实是操作系统本身。</p>
+<ol>
+<li>线程需要告诉中间的观察者自己要观察什么：即注册</li>
+<li>中间的观察者服务于很多的线程，需要实现一个高效的数据结构：通常是基于红黑树的二叉搜索树</li>
+</ol>
+<blockquote>
+<p>响应式为什么用红黑树？</p>
+<p>中间观察者核心诉求：第一是让线程可以注册自己关心的消息类型。第二能够快速地判断是哪个线程需要知道这个消息。因此需要一个快速能插入（注册过程）、查询（通知过程）一个整数的数据结构，这个整数就是 Socket 的文件描述符。能够解决这个问题的数据结构中，跳表和二叉搜索树都是不错的选择。</p>
+<p>epoll 为什么用红黑树？</p>
+<p>【解析】在 Linux 的设计中有三种典型的 I/O 多路复用模型 select、poll、epoll。</p>
+<p>select 是一个主动模型，需要线程自己通过一个fdset集合存放所有的 Socket，然后发生 I/O 变化的时候遍历。在 select 模型下，操作系统不知道哪个线程应该响应哪个事件，而是由线程自己去操作系统看有没有发生网络 I/O 事件，然后再遍历自己管理的所有 Socket，看看这些 Socket 有没有发生变化。</p>
+<p>poll 提供了更优质的编程接口，但是本质和 select 模型相同。因此千级并发以下的 I/O，你可以考虑 select 和 poll，但是如果出现更大的并发量，就需要用 epoll 模型。</p>
+<p>epoll 模型在操作系统内核中提供了一个中间数据结构，这个中间数据结构会提供事件监听注册，以及快速判断消息关联到哪个线程的能力（红黑树实现）。因此在高并发 I/O 下，可以考虑 epoll 模型，它的速度更快，开销更小。</p>
+</blockquote>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210610220052461.png" alt="image-20210610220052461" style="zoom:67%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210610215833870.png" alt="image-20210610215833870" style="zoom:67%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210610220128299.png" alt="image-20210610220128299" style="zoom:67%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611113050387.png" alt="image-20210611113050387" style="zoom:50%;" />
+<p><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611113309558.png" alt="image-20210611113309558" style="zoom:50%;" /><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611113510282.png" alt="image-20210611113510282" style="zoom:50%;" /></p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611103433126.png" alt="image-20210611103433126" style="zoom:67%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611115050524.png" alt="image-20210611115050524" style="zoom:50%;" />
+<p>幂等方法：提交一次和多次效果一样。</p>
+<p>服务端相应码</p>
+<p>1XX 请求已接收到，还需进一步处理。</p>
+<p>2XX OK成功返回响应</p>
+<p>3xx 重定向 301永久 302临时</p>
+<p>4xx 客户端错误 401认证错误 407认证代理错误 403权限错误 404临时没找到资源 406语言/编码资源不存在</p>
+<p>408请求超时</p>
+<p>5XX服务器错误 501功能尚未实现 502代理服务器错误 504代理服务器超时</p>
+<p>Connection 头部 Keep-Alive:长连接</p>
+<p>客户端请求长连接Connection: Keep-Alive</p>
+<p>服务器表示支持长连接Connection: Keep-Alive</p>
+<p>客户端复用连接</p>
+<blockquote>
+<p>HTTP/1.1 默认支持长连接Connection: Keep-Alive 无意义， Connection：Close关闭</p>
+<p>Connection只对当前连接有效，层层代理服务器，每层单独处理。</p>
+</blockquote>
+<p>典型的REST（Representational state transfer表现状态转换） 讲的是一套前端无状态、服务端管理状态，中间设计转化途径（请求、函数等）的架构方法。按照HTTP 协议中方法的约定就是最好的使用。</p>
+<p>Restful 中的 State是服务端状态，可以理解为业务的状态。</p>
+<p>前端（浏览器、应用等）没有业务状态，却又要展示内容，因此前端拥有的是状态的表示，也就是 Representation。</p>
+<p>用户通过前端向服务端做状态的变化请求即为转换。</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611145334304.png" alt="image-20210611145334304" style="zoom:50%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611145251103.png" alt="image-20210611145251103" style="zoom:50%;" />
+<blockquote>
+<p>X-Real-Ip非RFC官方规定的头，nignix里的。</p>
+<p>Max-Forwards 代理服务器最大转发次数，Via指名经过的代理服务器名称及版本，Cache-Control：no-transform禁止代理服务器修改响应包体</p>
+</blockquote>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611151227487.png" alt="image-20210611151227487" style="zoom:50%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611152015637.png" alt="image-20210611152015637" style="zoom:50%;" />
+<p>请求的上下文</p>
+<p>User-Agent ：指名客户端类型</p>
+<p>Referer:来自某一页面的请求自动添加的头部，服务器端常用于统计分析、缓存优化、防盗链等功能</p>
+<p>From：告诉服务器如何通过邮件联系到爬虫的负责人</p>
+<p>响应上下文</p>
+<p>Server：指明服务器上所用软件的信息,用于帮助客户端定位问题或者统计数</p>
+<p>Allow:告诉客户端,服务器上该 URI 对应的资源允许哪些方法的执行 Allow: GET, HEAD, PUT</p>
+<p>Accept-Ranges:告诉客户端服务器上该资源是否允许 range 请求 Accept-Ranges = bytes接收range请求  none相反</p>
+<p>内容协商</p>
+<p>每个 URI 指向的资源可以是任何事物,可以有多种不同的表述,例如一份文档可以有不同语言的翻译、不同的媒体格式、可以针对不同的浏览器提供不同的压缩编码等。</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611153755910.png" alt="image-20210611153755910" style="zoom:50%;" />
+<p>协商要素</p>
+<p>质量因子 q:内容的质量、可接受类型的优先级</p>
+<p>媒体资源的 MIME 类型及质量因子（Accept: text/html,application/xhtml+xml）</p>
+<p>字符编码:由于 UTF-8 格式广为使用, Accept-Charset 已被废弃 （Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7）</p>
+<p>内容编码:主要指压缩算法（Accept-Encoding: gzip, deflate）</p>
+<p>表述语言（Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7）</p>
+<p>internationalization(i18n,i  和  n  间有  18  个字符) 指设计软件时,在不同的国家、地区可以不做逻辑实现层面的修改便能够以不同的语言显示</p>
+<p>localization(l10n,l  和  n  间有  10  个字符) 指内容协商时,根据请求中的语言及区域信息,选择特定的语言作为资源表述</p>
+<p>资源表述的元数据头部</p>
+<p>媒体类型、编码content-type: text/html; charset=utf-8</p>
+<p>内容编码• content-encoding: gzip</p>
+<p>语言Content-Language: de-DE, en-CA</p>
+<p>HTTP 包体:承载的消息内容• 请求或者响应都可以携带包体• HTTP-message = start-line *( header-field CRLF ) CRLF [ message-body ] • message-body = *OCTET:二进制字节流• 以下消息不能含有包体• HEAD 方法请求对应的响应• 1xx、204、304 对应的响应• CONNECT 方法对应的 2xx 响应</p>
+<p>发送 HTTP 消息时两种传输 HTTP 包体的方式</p>
+<p>已确定包体的全部长度，使用 Content-Length 头部明确指明包体长度（10进制），不能写错</p>
+<p>不能确定包体的全部长度，使用 Transfer-Encoding 头部指明使用 Chunk 传输方式。Content-Length 头部应被忽略</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611160524934.png" alt="image-20210611160524934" style="zoom:50%;" />
+<p>multipart(RFC1521):一个包体中多个资源表述</p>
+<p>Content-type 头部指明这是一个多表述包体，Content-type: multipart/form-data; boundary=----WebKitFormBoundaryRRJKeWfHPGrS4LKe</p>
+<p>Boundary 分隔符的格式boundary := 0*69<bchars> bcharsnospace • bchars := bcharsnospace / &quot; &quot; • bcharsnospace := DIGIT / ALPHA / &quot;'&quot; / &quot;(&quot; / &quot;)&quot; / &quot;+&quot; / &quot;_&quot; / &quot;,&quot; / &quot;-&quot; / &quot;.&quot; / &quot;/&quot; / &quot;:&quot; / &quot;=&quot; / &quot;?&quot;</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611205116993.png" alt="image-20210611205116993" style="zoom:50%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611211036459.png" alt="image-20210611211036459" style="zoom:50%;" />
+<p>拿之前的Etag做指纹去请求，未失效/修改则继续返回数据，否则返回412错误（服务端的数据发生变化）。</p>
+<p>服务器响应range请求：</p>
+<p>服务器不支持range请求时返回200 ok，支持时返回状态码 206 Partial Content   Content-Range：bytes 300-500/1000  Content-Range: bytes 500-600/* （a-b/完整大小 未知用*）</p>
+<p>范围错误时返回416 Range Not Satisfiable</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210611212825096.png" alt="image-20210611212825096" style="zoom:50%;" />
+<p>boundary 分隔符和表单提交一样，分割时 前-- ，结尾时 --前后--</p>
+<p>Cookie 是保存在客户端、由浏览器维护、表示应用状态的  HTTP 头部</p>
+<p>存放在内存或者磁盘中，服务器端生成 Cookie 在响应中通过Set-Cookie 头部告知客户端(允许多个 Set-Cookie 头部传递多个值) ，客户端得到 Cookie 后,后续请求都会自动将 Cookie 头部携带至请求中</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210619183506361.png" alt="image-20210619183506361" style="zoom:50%;" />
+<p>Cookie 头部中可以存放多个 name/value 名值对，Set-Cookie  头部一次只能传递  1  个  name/value  名值对,响应中可以含多个头部</p>
+<p>Cookie 在协议设计上的问题？</p>
+<ol>
+<li>Cookie 会被附加在每个 HTTP 请求中,所以无形中增加了流量</li>
+<li>由于在 HTTP 请求中的 Cookie 是明文传递的,所以安全性成问题(除非用 HTTPS)</li>
+<li>Cookie 的大小不应超过 4KB,故对于复杂的存储需求来说是不够用的</li>
+</ol>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210619184311413.png" alt="image-20210619184311413" style="zoom:50%;" />
+<p>支持双向通讯的 WebSocket</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210619184642156.png" alt="image-20210619184642156" style="zoom:50%;" />
+<p>长连接的心跳保持</p>
+<p>HTTP 长连接只能基于简单的超时(常见为 65 秒)</p>
+<p>WebSocket 连接基于 ping/pong 心跳机制维持</p>
+<p>兼容 HTTP 协议，默认使用 80 或者 443 端口，协议升级，代理服务器可以简单支持。基于帧:不是基于流(HTTP、TCP)  每一帧要么承载字符数据,要么承载二进制数据。</p>
+<p>URI格式：</p>
+<p>默认 port 端口 80 ws-URI = &quot;ws:&quot; &quot;//&quot; host [ &quot;:&quot; port ] path [ &quot;?&quot; query ]</p>
+<p>默认 port 端口 443 wss-URI = &quot;wss:&quot; &quot;//&quot; host [ &quot;:&quot; port ] path [ &quot;?&quot; query ]</p>
+<p>客户端提供信息：host 与 port:主机名与端口• shema:是否基于 SSL • 访问资源:URI • 握手随机数:Sec-WebSocket-Key • 选择子协议: Sec-WebSocket-Protocol • 扩展协议: Sec-WebSocket-Extensions • CORS 跨域:Origin</p>
+<p>1 条消息由 1 个或者多个帧组成,frame头有opcode =8关闭帧</p>
+<p>心跳帧：可以插在数据帧中传输：ping 帧 opcode=9  可以含有数据； pong 帧 opcode=A  必须与 ping 帧数据相同</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210619185513649.png" alt="image-20210619185513649" style="zoom:50%;" />
+<p>![image-20210610221234379](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210610221234379.png)</p>
+<p>每一层都可以添加头部，物理层是比特流，link链路层是frame，网络层packet加ip头，连接层sequence/datagram加tcp头，应用层http加头部</p>
+<p>隐藏data urls：隐藏（ css/base64图片等小文件嵌入到html中以减少http请求数的）data urls。</p>
+<p>domain: (*)按域名，is:running websocket资源 is:from-cache缓存的资源 larger-than:大于bit的资源</p>
+<p>method:http方法的资源 mine-type:mime类型的资源 多过滤条件加空格并列</p>
+<p>连接的上下游：按住shift红色下游，绿色上游</p>
+<p>DNS：把可读的域名与IP地址进行映射的数据库，递归查询先根域名服务器com 后权威域名服务器baidu</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210613144056200.png" alt="image-20210613144056200" style="zoom:50%;" />
+<p>DNS报文：查寻与响应 query查寻域名 response返回IP地址 DNS请求与响应用的是UDP</p>
+<p>HTTP1.1重复传输的体积巨大的 HTTP 头部</p>
+<p>HTTP/2 (借鉴了SPDY)主要特性</p>
+<ol>
+<li>传输数据量的大幅减少：以二进制方式传输、HPACK 头部压缩压缩算法:Huffman 编码</li>
+<li>多路复用：消息优先级</li>
+<li>服务器消息推送：并行推送</li>
+<li>应用层下的TLS层</li>
+</ol>
+<p>HTTP2.0的TCP+TLS 建链握手过多、多路复用与 TCP 的队头阻塞问题</p>
+<p>HTTP3/QUIC协议，UDP 报文:先天没有队列概念，解决了握手过多、队头阻塞问题</p>
+<p>HTTP3在1RTT 完全握手，在0RTT 恢复会话握手。</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210619191802310.png" alt="image-20210619191802310" style="zoom:50%;" />
+<p><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210619190739776.png" alt="image-20210619190739776" style="zoom:50%;" /><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210619190829293.png" alt="image-20210619190829293" style="zoom:50%;" /></p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210619190914482.png" alt="image-20210619190914482" style="zoom:50%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210613204537171.png" alt="image-20210613204537171" style="zoom:50%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210613222750330.png" alt="image-20210613222750330" style="zoom:50%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210613222840024.png" alt="image-20210613222840024" style="zoom:50%;" />
+<p>TLS设计目的：身份验证、保密性、完整性</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210613222623395.png" alt="image-20210613222623395" style="zoom:50%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210613225106463.png" alt="image-20210613225106463" style="zoom:50%;" />
+<p>拿到公钥有两种方式：通过PKI（Public Key Infrastrucure公钥基础设施）第三方、建立连结后先进行一次握手，把公钥给过来</p>
+<p>RSA算法早期用在tsl握手中传递对称密钥，先在常用做生成ca证书</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210613231139689.png" alt="image-20210613231139689" style="zoom:50%;" />
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210615153258583.png" alt="image-20210615153258583" style="zoom:50%;" />
+<p>IP 地址是一个网卡在网络世界的通讯地址，相当于我们现实世界的门牌号码。被点分隔为四个部分，每个部分 8 个 bit，共 32 位。</p>
+<img src="/Users/joshuachang/Downloads/IP分类.jpg" alt="IP分类" style="zoom:75%;" />
+<p><strong>无类型域间选路</strong>，简称<strong>CIDR</strong>将 32 位的 IP 地址一分为二，前面是<strong>网络号</strong>，后面是<strong>主机号</strong>。如10.100.122.2/24，这种地址表示形式，就是 CIDR。斜杠后面数字 24指：32 位中，前 24 位是网络号，后 8 位是主机号。</p>
+<p>伴随着 CIDR 存在的，一个是<strong>广播地址</strong>，10.100.122.255。如果发送这个地址，所有 10.100.122 网络里面的机器都可以收到。另一个是<strong>子网掩码</strong>，255.255.255.0。</p>
+<p><strong>子网掩码</strong></p>
+<p>IP地址与子网掩码通过二进制的与运算（AND：非同时为1皆为0）</p>
+<p>1.用来判断出IP地址的网络号和主机号位数</p>
+<p>2.用来判断两台机器是否在同一子网，不在同一个子网的两个机器需要通信必须借助路由器。</p>
+<ul>
+<li>A类IP的子网掩码默认为：255.0.0.0</li>
+<li>B类IP的子网掩码默认为：255.255.0.0</li>
+<li>C类IP的子网掩码默认为：255.255.255.0</li>
+</ul>
+<p>人为指定子网掩码为：225.225.255.240（11111111.11111111.11111111.11110000）时，00000000-00001111间的主机才在同一子网如200.67.83.3(0011)和200.67.83.14(1110) 分别与上225.225.255.240（11111111.11111111.11111111.11110000）在同一子网，200.67.83.13(00001101)和200.67.83.77(00101101)不在同一子网。</p>
+<p><strong>广播地址</strong></p>
+<p>广播的覆盖范围就是其所在网络号下的所有主机号，把主机号所在的二进制位全部变为1即可得到广播地址，如192.168.211.32/24的广播地址为：192.168.211.255</p>
+<figure data-type="image" tabindex="2"><img src="/Users/joshuachang/Downloads/%E7%A7%81%E6%9C%89%E5%9C%B0%E5%9D%80.jpg" alt="私有地址" loading="lazy"></figure>
+<p>IP 分公有的 IP 和私有的 IP。公有 IP 地址通过组织统一分配。 192.168.0.x 是最常用的私有 IP 地址，一般你家里地上网设备不会超过 256 个，所以 /24 的CIDR基本就够了，明显看出 192.168.0 是网络号，后面是主机号。而整个网络里面的第一个地址 192.168.0.1就是你这个私有网络的出口地址，私有网络路由器的地址就是 192.168.0.1，而 192.168.0.255 就是广播地址。</p>
+<p>当CIDR斜杠后不是 8 的整数倍时，如16.158.165.91/22</p>
+<p>变成二进制来看，22位网络号，16.158不变占16位，165转换二进制为&lt;10100101&gt;，取前6位和之前的16位凑齐22位网络号即16.158.&lt;101001&gt;，后边的&lt;01&gt;和 .91组成10位机器号。</p>
+<p>第一个地址是 16.158.&lt;101001&gt;&lt;00&gt;.1，即 16.158.164.1（网络号.1）</p>
+<p>子网掩码是 255.255.&lt;111111&gt;&lt;00&gt;.0，即 255.255.252.0。</p>
+<p>广播地址为 16.158.&lt;101001&gt;&lt;11&gt;.255，即 16.158.167.255。</p>
+<p>lo 全称是<strong>loopback</strong>，又称<strong>环回接口</strong>，往往会被分配到 127.0.0.1 这个地址。这个地址用于本机通信，经过内核处理后直接返回，不会在任何网络中出现。</p>
+<p>**一个网络包要从一个地方传到另一个地方，要有确定的地址（ip），还需要有定位功能。**MAC 地址更像是身份证，是一个唯一的标识，MAC 地址的通信范围比较小，局限在一个子网里面。如从 192.168.0.2/24 访问 192.168.0.3/24 是可以用 MAC 地址的。一旦跨子网，即从 192.168.0.2/24 到 192.168.1.2/24，MAC 地址就不行了，需要 IP 地址起作用。CIDR 可以用来判断是不是本地人。</p>
+<p>MTU  最大传输单元MAC 层的概念。MAC 层有 MAC 的头，以太网规定连 MAC 头带正文合起来，不允许超过 1500 个字节。正文里面有 IP 的头、TCP 的头、HTTP 的头。如果放不下，就需要分片来传输。</p>
+<p><strong>Linux 默认的逻辑是，如果这是一个跨网段的调用，它便不会直接将包发送到网络上，而是企图将包发送到网关。要去的这个地址和我是一个网段的，它才会发送 ARP 请求</strong>如果配置了网关的话，Linux 会获取网关的 MAC 地址，然后将包发出去。网关要和当前的网络至少一个网卡是同一个网段。</p>
+<p><strong>动态主机配置协议（Dynamic Host Configuration Protocol）</strong>，简称<strong>DHCP</strong>。**如果是数据中心里面的服务器，IP 一旦配置好，基本不会变，这就相当于买房自己装修。DHCP 的方式就相当于租房。你不用装修，都是帮你配置好的。你暂时用一下，用完退租就可以了。**DHCP 协议主要是用来给客户租用 IP 地址，要通过广播商谈、签约、续租。</p>
+<p><strong>Hub集线器</strong>采取的是广播的模式连结主机，临如下问题</p>
+<ol>
+<li>这个包是发给谁的？谁应该接收？Mac地址</li>
+<li>大家都在发，会不会产生混乱？有没有谁先发、谁后发的规则？Mac媒体访问控制</li>
+<li>如果发送的时候出现了错误，怎么办？crc</li>
+</ol>
+<p><strong>MAC</strong>的全称是<strong>Medium Access Control</strong>，即**媒体访问控制，<strong>其实就是控制在往媒体上发数据的时候，谁先发、谁后发的问题。防止发生混乱。即多路访问</strong></p>
+<ul>
+<li>分多个车道。作<strong>信道划分；</strong></li>
+<li>今天单号出行，明天双号出行，作<strong>轮流协议；</strong></li>
+<li>有事就出门，发现特堵，就回去。错过高峰再出。我们叫作**随机接入协议。**以太网，用的就是这个方式</li>
+</ul>
+<p><strong>链路层地址</strong>主要解决媒体接入控制的问题，所以称为<strong>MAC 地址</strong></p>
+<p>IP 数据包，开始就是目标的 MAC 地址和源的 MAC 地址。接下来是<strong>类型</strong>。然后IP 里面层层封装 TCP/UDP、HTTP 等。发送时IP数据包在链路上广播，然后目标 MAC 地址发现![IP 数据包](/Users/joshuachang/Downloads/IP 数据包.jpg)</p>
+<p>当不知道目标 MAC 地址时目标 MAC 地时，通过<strong>ARP 协议</strong>，即已知目标 IP 地址，求目标MAC 地址的协议，当知道了 目标IP 地址，不知道 MAC 地址，发出广播，谁是这个 IP 谁来应答。为了避免每次都用 ARP 请求，机器本地也会进行 ARP 缓存。</p>
+<p><strong>交换机switch</strong>是局域网内主机交换数据的设备，有 MAC 地址学习能力的，维持一个记录目的地址Mac地址的 <strong>转发表</strong> ，新的ARP 请求后，转发表有了记录，下次再去目标Mac地址，便不需APR广播。</p>
+<p><strong>CRC</strong>，也就是<strong>循环冗余检测</strong>。通过 XOR 异或的算法，来计算整个包是否在发送的过程中出现了错误。</p>
+<p>当交换机数目肯定越来越多，整个拓扑结构复杂，出现<strong>环路问题</strong> 。数据结构中，有一个方法叫作<strong>最小生成树</strong>。有环的我们常称为<strong>图</strong>。将图中的环破了，就生成了<strong>树</strong>。在计算机网络中，生成树的算法叫作<strong>STP</strong>，全称<strong>Spanning Tree Protocol</strong>。</p>
+<ul>
+<li>当交换机的数目越来越多的时候，会遭遇环路问题，让网络包迷路，这就需要使用 STP 协议，通过华山论剑比武的方式，将有环路的图变成没有环路的树，从而解决环路问题。</li>
+<li>交换机数目多会面临隔离问题，可以通过 VLAN 形成虚拟局域网，从而解决广播问题和安全问题。</li>
+</ul>
+<p>ping 是基于 ICMP 协议工作的。<strong>ICMP</strong>全称<strong>Internet Control Message Protocol</strong>，就是<strong>互联网控制报文协议</strong>,ping 命令执行的时候，源主机首先会构建一个 ICMP 请求数据包，ICMP 数据包内包含多个字段。<strong>类型字段</strong>，请求为8响应为0；<strong>顺序号</strong>，区分连续 ping 的时候发出的多个数据包；为了能够计算往返时间 RTT，它会在报文的数据部分插入发送时间。</p>
+<img src="/Users/joshuachang/Downloads/ping.jpg" alt="ping" style="zoom:50%;" />
+<p>ICMP 相当于网络世界的侦察兵。我讲了两种类型的 ICMP 报文，一种是主动探查的查询报文，一种异常报告的差错报文；ping 使用查询报文，Traceroute 使用差错报文。</p>
+<p><strong>Traceroute 的第一个作用就是故意设置特殊的 TTL（time to live），来追踪去往目的地时沿途经过的路由器</strong>，<strong>还有一个作用是故意设置不分片，从而确定路径的 MTU</strong></p>
+<img src="/Users/joshuachang/Downloads/MAC 头和 IP 头.jpg" alt="MAC 头和 IP 头" style="zoom:50%;" />
+<p>当要访问另一个 IP 地址的时候，先判断目标 IP 地址和当前机器的 IP 地址，是否在同一个网段（需要 CIDR 和子网掩码)。</p>
+<p><strong>如果是同一个网段</strong> ，那就没网关什么事情，直接将源地址和目标地址放入 IP 头中，然后通过 ARP 获得 MAC 地址，将源 MAC 和目的 MAC 放入 MAC 头中，发出去就可以了。</p>
+<p><strong>如果不是同一网段</strong>，就需要发往默认网关 Gateway(<strong>将源地址和目标 IP 地址放入 IP 头中，通过 ARP 获得网关的 MAC 地址，将源 MAC 和网关的 MAC 放入 MAC 头中，发送出去</strong>)。Gateway 的地址一定是和源 IP 地址是一个网段的。往往不是第一个，就是第二个(如 192.168.1.0/24 这个网段，Gateway 往往会是 192.168.1.1/24 或者 192.168.1.2/24)。</p>
+<p><strong>网关往往是一个路由器</strong> <strong>是一个转发的设备</strong>把 MAC 头和 IP 头都取下来，根据里面的内容，看看接下来把包往哪里转发。一个路由器往往有多个网口，如果是一台服务器做这个事情，则就有多个网卡，其中一个网卡是和源 IP 同网段的。网关也是一个处在跨局域网处的特殊主机（路由嵌入式系统软路由），也有IP和Mac地址。</p>
+<p>**路由器是一台设备，它有五个网口或者网卡，相当于有五只手，分别连着五个局域网。每只手的 IP 地址都和局域网的 IP 地址相同的网段，每只手都是它握住的那个局域网的网关。**任何一个想发往其他局域网的包，都会到达其中一只手，被拿进来，拿下 MAC 头和 IP 头，看看，根据自己的路由算法，选择另一只手，加上 IP 头和 MAC 头，然后扔出去。</p>
+<p>**静态路由，其实就是在路由器上，配置一条一条规则。**每当要选择从哪只手抛出去的时候，就一条一条的匹配规则，找到符合的规则，就按规则中设置的那样，从某个口抛出去，找下一跳 IPX。</p>
+<p><strong>MAC 地址是一个局域网内才有效的地址。<strong>MAC 地址只要过网关，就必定会改变，因为已经换了局域网。同时不改变 IP 地址的网关，我们称为</strong>转发网关；<strong>改变 IP 地址的网关，我们称为</strong>NAT 网关（Network Address Translation）</strong>。</p>
+<p>转发网关，嵌套header里的IP和目标IP不变，只有Mac和目标Mac随每次从一个网关ip到另一个网关IP而变化（目标Mac依次为下一个网关的Mac地址）</p>
+<p>每家都有家用路由器都是 192.168.1.x，当我们家里的包发出去的时候，都被家用路由器 NAT 成为了运营商的地址。一般就是整个办公室共用一个到两个出口 IP 地址。</p>
+<ul>
+<li>
+<p>如果离开本局域网，就需要经过网关，网关是路由器的一个网口；</p>
+</li>
+<li>
+<p>路由器是一个三层设备，里面有如何寻找下一跳的规则；</p>
+</li>
+<li>
+<p>经过路由器之后 MAC 头要变，如果 IP 不变，相当于不换护照的欧洲旅游，如果 IP 变，相当于换护照的玄奘西行。</p>
+</li>
+<li>
+<p>路由分静态路由和动态路由，静态路由可以配置复杂的策略路由，控制转发策略；</p>
+</li>
+</ul>
+<p>动态路由根据路由协议算法生成动态路由表，随网络运行状况的变化而变化。</p>
+<ul>
+<li>动态路由主流算法有两种，<strong>距离矢量路由</strong>（<strong>distance vector routing</strong>）算法基于 Bellman-Ford 算法产生外网路由协议**（<strong>Border Gateway Protocol</strong>，简称<strong>BGP</strong>）和链<strong>链路状态路由</strong>（<strong>link state routing</strong>）基于 Dijkstra 算法，产生OSPF （<strong>Open Shortest Path First</strong>，<strong>开放式最短路径优先</strong>）动态路由协议   即内部网关协议**（<strong>Interior Gateway Protocol</strong>，简称<strong>IGP</strong>）。</li>
+</ul>
+<p><strong>TCP 是面向字节流的</strong>。发送的时候发的是一个流，没头没尾。IP 包可不是一个流，而是一个个的 IP 包。之所以变成了流，这也是 TCP 自己的状态维护做的事情。而<strong>UDP 继承了 IP 的特性，基于数据报的，一个一个地发，一个一个地收</strong>不保证不丢失，不保证按顺序到达**</p>
+<img src="/Users/joshuachang/Downloads/udp.jpg" alt="udp" style="zoom:50%;" />
+<p>无论是 TCP 还是 UDP 包头里面应该有源端口号和目标端口号，根据端口号，将数据交给相应的应用程序。</p>
+<ul>
+<li>UDP 虽然简单，但它有简单的用法。它可以用在环境简单、需要多播、应用层自己控制传输的地方。例如 DHCP、VXLAN、QUIC 等。</li>
+</ul>
+<p>链路层Mac叫帧，网络层IP叫包，传输层tcp叫段。</p>
+<img src="/Users/joshuachang/Downloads/tcp.jpg" alt="tcp" style="zoom:50%;" />
+<p>TCP 双方都要维护各自的状态机。</p>
+<table>
+<thead>
+<tr>
+<th><img src="/Users/joshuachang/Downloads/tcp连结.jpg" alt="tcp连结" style="zoom:50%;" /></th>
+<th><img src="/Users/joshuachang/Downloads/tcp断开.jpg" alt="tcp断开" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<img src="/Users/joshuachang/Downloads/tcp状态机.jpg" alt="tcp状态机" style="zoom:50%;" />
+<p>TCP为了保证顺序性,按照 ID 一个个发送,采用<strong>累计确认</strong>或者<strong>累计应答</strong>（<strong>cumulative acknowledgment</strong>）。</p>
+<p>TCP 里，接收端会给发送端报一个窗口的大小，叫<strong>Advertised window</strong>，超过这个窗口的，接收端做不过来，发送端就不能发送了。</p>
+<p>Socket 编程进行的是端到端的通信</p>
+<p>在网络层，Socket函数需要指定到底是 IPv4 还是 IPv6，分别对应设置为 AF_INET 和 AF_INET6。<br>
+在传输层，还要指定到底是 TCP 还是 UDP。TCP 协议是基于数据流的，所以设置为 SOCK_STREAM，而 UDP 是基于数据报的，因而设置为 SOCK_DGRAM。</p>
+<p>TCP 的 Socket 就是一个文件流，在 Linux 中就是以文件的形式存在的，写读通过文件描述符。在内核中，Socket 是一个文件，那对应就有文件描述符。每一个进程都有一个数据结构 task_struct，里面指向一个文件描述符数组，来列出这个进程打开的所有文件的文件描述符。文件描述符是一个整数，是这个数组的下标。</p>
+<p>两端创建了 Socket 之后，接下来的过程中，TCP 和 UDP 稍有不同。</p>
+<table>
+<thead>
+<tr>
+<th><img src="/Users/joshuachang/Downloads/sockettcp.jpg" alt="sockettcp" style="zoom:50%;" /></th>
+<th><img src="/Users/joshuachang/Downloads/socketudp.jpg" alt="socketudp" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<ol>
+<li>
+<p>TCP 的服务端要先监听一个端口，一般是先调用 bind 函数，给这个 Socket 赋予一个 IP 地址和端口。</p>
+</li>
+<li>
+<p>当服务端有了 IP 和端口号，就可以调用 listen 函数进行监听，这个时候客户端就可以发起连接了。</p>
+<p>在内核中，为每个 Socket 维护两个队列。一个是已经建立了连接的队列，这时候连接三次握手已经完毕，处于 established 状态；一个是还没有完全建立连接的队列，这个时候三次握手还没完成，处于 syn_rcvd 的状态。</p>
+</li>
+<li>
+<p>接下来，服务端调用 accept 函数，拿出一个已经完成的连接进行处理。如果还没有完成，就要等着。</p>
+</li>
+<li>
+<p>在服务端等待的时候，客户端可以通过 connect 函数发起连接。先在参数中指明要连接的 IP 地址和端口号，然后开始发起三次握手。内核会给客户端分配一个临时的端口。一旦握手成功，服务端的 accept 就会返回另一个 Socket。</p>
+<p>监听的 Socket 和真正用来传数据的 Socket 是两个，一个叫作<strong>监听 Socket</strong>，一个叫作<strong>已连接 Socket</strong>。连接建立成功之后，双方开始通过 read 和 write 函数来读写数据。</p>
+</li>
+</ol>
+<p>UDP 是没有连接的，所以不需要三次握手，也就不需要调用 listen 和 connect，但是，UDP 的的交互仍然需要 IP 和端口号，因而也需要 bind。UDP 是没有维护连接状态的，因而不需要每对连接建立一组 Socket，而是只要有一个 Socket，就能够和多个客户端通信。也正是因为没有连接状态，每次通信的时候，都调用 sendto 和 recvfrom，都可以传入 IP 地址和端口。</p>
+<p><strong>socket最大连接数</strong>:系统会用一个四元组来标识一个 TCP 连接<code>{本机 IP, 本机端口, 对端 IP, 对端端口}</code>只有客户端的 IP 和客户端的端口是可变的。</p>
+<p>1.多进程方式：在 Linux 下，创建子进程使用 fork 函数。这是在父进程的基础上完全拷贝一个子进程（在 Linux 内核中，会复制文件描述符的列表，也会复制内存空间，还会复制一条记录当前执行到了哪一行程序的进程，根据 fork 的返回值来区分到底是父进程（其他整数即子进程id），还是子进程（0））</p>
+<p>2.多线程方式：在 Linux 下，通过 pthread_create 创建一个线程，也是调用 do_fork。不同的是，虽然新的线程在 task 列表会新创建一项，但是很多资源，例如文件描述符列表、进程空间，还是共享的，只不过多了一个引用而已。比多进程更轻量，但一直创建很多进程或者线程操作系统是无法承受的。</p>
+<p>3.IO 多路复用，一个线程维护多个 Socket：<strong>一个线程盯的所有的 Socket，都放在一个文件描述符集合 fd_set 中，调用 select 函数来监听文件描述符集合是否有变化</strong>。数量由 FD_SETSIZE 限制,一旦有变化，就会依次查看每个文件描述符。那些发生变化的文件描述符在 fd_set 对应的位都设为 1，表示 Socket 可读或者可写，从而可以进行读写操作，然后再调用 select，接着盯着下一轮的变化。每次 Socket 所在的fd_set中有 Socket 发生变化的时候，都需要通过轮询的方式。</p>
+<p>4.IO 多路复用,事件通知:epoll，它在内核中的实现不是通过轮询的方式，而是通过注册 callback 函数的方式，当某个文件描述符发送变化的时候，就会主动通知。 epoll_create 创建一个 epoll 对象，也是一个文件，也对应一个文件描述符，同样也对应着打开文件列表中的一项。在这项里面有一个红黑树，在红黑树里，要保存这个 epoll 要监听的所有 Socket。</p>
+<p>当 epoll_ctl 添加一个 Socket 的时候，其实是加入这个红黑树，同时红黑树里面的节点指向一个结构，将这个结构挂在被监听的 Socket 的事件列表中。当一个 Socket 来了一个事件的时候，可以从这个列表中得到 epoll 对象，并调用 call back 通知它。</p>
+<p>这种通知方式使得监听的 Socket 数据增加的时候，效率不会大幅度降低，能够同时监听的 Socket 的数目也非常的多了。上限就为系统定义的、进程打开的最大文件描述符个数。因而，<strong>epoll 被称为解决 C10K 问题(（即单机1万个并发连接问题）)的利器</strong>。</p>
+<p>目前使用的 HTTP 协议大部分都是 1.1。在 1.1 的协议里面，默认是开启了 Keep-Alive 的，这样建立的 TCP 连接，就可以在多次请求中复用。</p>
+<p>HTTP 协议是基于 TCP 协议的，所以它使用面向连接的方式发送请求，通过 stream 二进制流的方式传给对方。HTTP 1.1 在应用层以纯文本的形式进行通信。每次通信都要带完整的 HTTP 的头。HTTP 2.0 通过头压缩、分帧、二进制编码、多路复用等技术提升性能；QUIC 协议通过基于 UDP 自定义的类似 TCP 的连接、重试、多路复用、流量控制技术，进一步提升性能。</p>
+<p>对称加密：加密和解密使用的是同一个密钥。</p>
+<p>非对称加密：客户端给外卖网站发送的时候，用外卖网站的公钥加密。而外卖网站给客户端发送消息的时候，使用客户端的公钥。这样就算有黑客企图模拟客户端获取一些信息，或者半路截获回复信息，但是由于它没有私钥，这些信息它还是打不开。</p>
+<p>数字证书：如何将非对称加密的公钥给对方？由<strong>CA</strong>（ <strong>Certificate Authority</strong>）颁发的称为<strong>证书</strong>（<strong>Certificate</strong>）：里面有<strong>公钥</strong>，证书的**所有者、发布机构、证书有效期、签名算法，CA 用自己的私钥给外卖网站的公钥签名，就相当于给外卖网站背书，形成了外卖网站的证书。**root CA层层授信背书，CA 证书的作用，是保证服务器的公钥的来历。</p>
+<p>你不会从外卖网站上得到一个公钥，而是会得到一个证书，这个证书有个发布机构 CA，你只要得到这个发布机构 CA 的公钥，去解密外卖网站证书的签名，如果解密成功了，Hash 也对的上，就说明这个外卖网站的公钥没有啥问题。不是伪装钓鱼的公钥。</p>
+<p>无论是客户端还是服务器，都有了三个随机数，分别是：自己的、对端的，以及刚生成的 Pre-Master 随机数。通过这三个随机数，可以在客户端和服务器产生相同的对称密钥。</p>
+<img src="/Users/joshuachang/Downloads/https.jpg" alt="https" style="zoom:50%;" />
+<ul>
+<li>
+<p>加密分对称加密和非对称加密。对称加密效率高，但是解决不了密钥传输问题；非对称加密可以解决这个问题，但是效率不高。</p>
+</li>
+<li>
+<p>非对称加密需要通过证书和权威机构来验证公钥的合法性。</p>
+</li>
+<li>
+<p>HTTPS 是综合了对称加密和非对称加密算法的 HTTP 协议。既保证传输安全，也保证传输效率。</p>
+</li>
+<li>
+<p>视频名词比较多，编码两大流派达成了一致，都是通过时间、空间的各种算法来压缩数据；</p>
+</li>
+<li>
+<p>压缩好的数据，为了传输组成一系列 NALU<strong>网络提取层单元</strong>（<strong>NALU</strong>，<strong>Network Abstraction Layer Unit</strong>），按照帧和片依次排列；</p>
+</li>
+<li>
+<p>排列好的 NALU，在网络传输的时候，要按照 RTMP 包的格式进行包装，RTMP 的包会拆分成 Chunk 进行传输；</p>
+</li>
+<li>
+<p>推送到流媒体集群的视频流经过转码和分发，可以被客户端通过 RTMP 协议拉取，然后组合为 NALU，解码成视频格式进行播放。</p>
+</li>
+</ul>
+<p><code>www.example.com. IN A 139.18.28.5;</code>DNS记录：</p>
+<p>IN 代表记录用于互联网，是 Intenet 的缩写</p>
+<p>A 代表IPv4地址 AAAA IPv6地址</p>
+<p>CNAME用于定义域名的别名：将一个域名映射到另一个域名。</p>
+<ul>
+<li>DNS 是网络世界的地址簿，可以通过域名查地址，因为域名服务器是按照树状结构组织的，因而域名查找是使用递归的方法，并通过缓存的方式增强性能；</li>
+<li>在域名和 IP 的映射过程中，给了应用基于域名做负载均衡的机会，可以是简单的负载均衡，也可以根据地址和运营商做全局的负载均衡。</li>
+<li><strong>HTTPNDS 其实就是，不走传统的 DNS 解析，而是自己搭建基于 HTTP 协议的 DNS 服务器集群，分布在多个地点和多个运营商。当客户端需要 DNS 解析的时候，直接通过 HTTP 协议进行请求这个服务器集群，得到就近的地址。</strong></li>
+<li>传统的 DNS 有很多问题，例如解析慢、更新不及时。因为缓存、转发、NAT 问题导致客户端误会自己所在的位置和运营商，从而影响流量的调度。</li>
+<li>HTTPDNS 通过客户端 SDK 和服务端，通过 HTTP 直接调用解析 DNS 的方式，绕过了传统 DNS 的这些缺点，实现了智能的调度。</li>
+</ul>
+<p>内容分发网络（Content Dilivery Network，CDN）是一个专门用来分发内容的分布式应用，CDN 构建在现有的互联网之上，通过在各地部署数据中心，让不同地域的用户可以就近获取内容。内容通常指的是文件、图片、视频、声音、应用程序安装包等静态资源。很多大型的应用，会把 DNS 解析作为一种负载均衡的手段。</p>
+<p>能集中提供这些静态资源呢？这和域名系统的 DNS 记录不能集中提供是一个道理，需要考虑到流量、单点故障、延迟等因素。在离用户更近的地理位置提供资源，可以减少延迟。按照地理位置分散地提供资源，也可以降低中心化带来的服务压力。</p>
+<p>当用户请求一个静态资源的时候，首先会触发域名系统的解析。域名系统会将解析的责任交由 CDN 提供商来处理，CDN 的智能 DNS 服务会帮助用户选择离自己距离最近的节点，返回这个节点的 A（或 AAAA）记录。然后客户端会向 CDN 的资源节点发起请求，最终获得资源。</p>
+<ul>
+<li><strong>有了 CDN 之后，情况发生了变化</strong>。在 web.com 这个权威 DNS 服务器上，会设置一个 CNAME 别名，指向另外一个域名 <a href="http://www.web.cdn.com">www.web.cdn.com</a>，返回给本地 DNS 服务器。</li>
+</ul>
+<p>CDN 回源就是 CDN 节点到源站请求资源，重新设置缓存。通常服务提供方在使用 CDN 的时候，会在自己的某个域名发布静态资源，然后将这个域名交给 CDN。</p>
+<blockquote>
+<p>比如源站在 s.example.com 中发布静态资源，然后在 CDN 管理后台配置了这个源站。在使用 CDN 时，服务提供方会使用另一个域名，比如说 b.example.com。然后配置将 b.example.com 用 CNAME 记录指向 CDN 的智能 DNS。这个时候，如果用户下载b.example.com/a.jpg，CDN 的智能 DNS 会帮用户选择一个最优的 IP 地址（最优的 CDN 节点）响应这次资源的请求。如果这个 CDN 节点没有 a.jpg，CDN 就会到 s.example.com 源站去下载，缓存到 CDN 节点，然后再返回给用户。</p>
+<p>CDN 回源有 3 种情况，一种是 CDN 节点没有对应资源时主动到源站获取资源；另一种是缓存失效后，CDN 节点到源站获取资源；还有一种情况是在 CDN 管理后台或者使用开放接口主动刷新触发回源。</p>
+</blockquote>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Activity启动模式]]></title>
         <id>https://Joshua-Chang.github.io/post/activity-qi-dong-mo-shi/</id>
@@ -1319,332 +1893,6 @@ fun Greeting(name: String) {
     )
 }
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Navigator源码分析]]></title>
-        <id>https://Joshua-Chang.github.io/post/navigator-yuan-ma-fen-xi/</id>
-        <link href="https://Joshua-Chang.github.io/post/navigator-yuan-ma-fen-xi/">
-        </link>
-        <updated>2020-12-14T16:54:12.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="讨论案例">讨论案例</h3>
-<pre><code class="language-xml">activity_main.xml
-
-&lt;fragment
-    android:id=&quot;@+id/nav_host_fragment&quot;
-    android:name=&quot;androidx.navigation.fragment.NavHostFragment&quot;
-    android:layout_width=&quot;match_parent&quot;
-    android:layout_height=&quot;match_parent&quot;
-    app:defaultNavHost=&quot;true&quot;
-    app:navGraph=&quot;@navigation/mobile_navigation&quot; /&gt;
-
-mobile_navigation.xml
-
-&lt;navigation
-    android:id=&quot;@+id/mobile_navigation&quot;
-    app:startDestination=&quot;@id/navigation_home&quot;&gt;
-    &lt;fragment
-        android:id=&quot;@+id/navigation_home&quot;
-        android:name=&quot;org.devio.as.hi.hirouter.ui.home.HomeFragment&quot;
-        tools:layout=&quot;@layout/fragment_home&quot;&gt;
-        &lt;argument
-            android:name=&quot;name&quot;
-            app:argType=&quot;string&quot;
-            app:nullable=&quot;true&quot; /&gt;
-        &lt;action
-            android:id=&quot;@+id/action_navigation_home_to_navigation_notifications&quot;
-            app:destination=&quot;@id/navigation_notifications&quot;
-            app:launchSingleTop=&quot;true&quot;
-            app:popUpTo=&quot;@id/navigation_notifications&quot; /&gt;
-        &lt;deepLink
-            android:id=&quot;@+id/deepLink&quot;
-            app:uri=&quot;www.imooc.com&quot; /&gt;
-    &lt;/fragment&gt;
-&lt;/navigation&gt;
-</code></pre>
-<h3 id="navhostfragmentoninflate">NavHostFragment.onInflate:</h3>
-<p>去查找声明在NavHostFragment的xml布局文件中的，defaultNavHost、navGraph属性,得到mGraphId</p>
-<pre><code class="language-kotlin">onInflate：任何能在xml布局文件中声明的组建，当它们被从xml解析完成，被创建成功后都会调用此方法
-activity和dialog是不可以的，因为他们不能在xml布局文件中直接声明
-    @CallSuper
-    @Override
-    public void onInflate(@NonNull Context context, @NonNull AttributeSet attrs,
-            @Nullable Bundle savedInstanceState) {
-        super.onInflate(context, attrs, savedInstanceState);
-
-        final TypedArray navHost = context.obtainStyledAttributes(attrs, R.styleable.NavHost);
-        final int graphId = navHost.getResourceId(R.styleable.NavHost_navGraph, 0);
-        if (graphId != 0) {
-            mGraphId = graphId;
-        }
-        navHost.recycle();
-
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.NavHostFragment);
-        final boolean defaultHost = a.getBoolean(R.styleable.NavHostFragment_defaultNavHost, false);
-        if (defaultHost) {
-            mDefaultNavHost = true;
-        }
-        a.recycle();
-    }
-</code></pre>
-<h3 id="navhostfragmentoncreate">NavHostFragment.onCreate:</h3>
-<ul>
-<li>往NavigatorProvider内addNavigator：</li>
-</ul>
-<p>构造NavHostController方法内，先添加不可或缺的ActivityNavigator、和NavGraphNavigator （<navigation/>startDestination）</p>
-<p>onCreateNavController方法内，添加DialogFragmentNavigator，FragmentNavigator，以支持dialog、fragment类型的导航跳转</p>
-<ul>
-<li>配置回退栈</li>
-<li>NavController.setGraph(mGraphId)。把声明在NavHostFragment的app:navGraph的id，交给NavController处理（和fragmentController设计原因一样，隔离作用）</li>
-</ul>
-<pre><code class="language-kotlin">NavHostFragment:
-@CallSuper
-@Override
-public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    final Context context = requireContext();
-		//构建NavController对象 内部立即注册两个Navigator：start、activity的
-    mNavController = new NavHostController(context);//继承自NavController
-		//设置回退栈
-    mNavController.setOnBackPressedDispatcher(requireActivity().getOnBackPressedDispatcher());
-	  //...
-		//通过controller得到Provider，并对其注册DialogFragmentNavigator，FragmentNavigator。以支持dialog、fragment类型的导航跳转
-    onCreateNavController(mNavController);
-    //。。。
-
-        //把声明在NavHostFragment的xml布局文件中的资源id
-				//app:navGraph=&quot;@navigation/mobile_navigation&quot;（navGraph属性）
-				//交给NavController处理（和fragmentController设计原因一样，隔离作用）
-        mNavController.setGraph(mGraphId);
-}
-//通过controller得到Provider（存储一个个navigator对象），
-//并注册DialogFragmentNavigator，FragmentNavigator，以支持dialog、fragment类型的导航跳转
-protected void onCreateNavController(@NonNull NavController navController) {
-        navController.getNavigatorProvider().addNavigator(
-                new DialogFragmentNavigator(requireContext(), getChildFragmentManager()));
-        navController.getNavigatorProvider().addNavigator(createFragmentNavigator());
-    }
-
-//立即注册两个Navigator
-NavController：
-public NavController(@NonNull Context context) {
-//....路由首页和activity都是不可或缺的，但fragmentNavigator未必，所以这里注册了两个
-//mobile_navigation.xml资源文件加载完，用来启动其中的startDestination对应的页面的
-        mNavigatorProvider.addNavigator(new NavGraphNavigator(mNavigatorProvider));
-//能给activity提供路由服务的navigator
-        mNavigatorProvider.addNavigator(new ActivityNavigator(mContext));
-    }
-//设置dispatcher后将mOnBackPressedCallback加入callback
-void setOnBackPressedDispatcher(@NonNull OnBackPressedDispatcher dispatcher) {
-	      //...
-        dispatcher.addCallback(mLifecycleOwner, mOnBackPressedCallback);
-    }
-
-private final OnBackPressedCallback mOnBackPressedCallback =
-            new OnBackPressedCallback(false) {
-        @Override
-        public void handleOnBackPressed() {
-            popBackStack();//回退栈
-        }
-    };
-</code></pre>
-<h3 id="navinflaterinflate">NavInflater().inflate</h3>
-<p>解析路由资源文件返回NavGraph对象：由路由资源xml定义的节点名，得到相应类型的Navigator，在去创建相应类型的Destination节点。</p>
-<p><navigation/>特殊：会得到NavGraphNavigator类型的navigator，并创建出NavGraph类型的节点。</p>
-<p>NavGraph是特殊的Destination节点：</p>
-<ul>
-<li>成员：含app:startDestination的id，和SparseArrayCompat<NavDestination>的路由节点集合</li>
-<li>自己可以嵌套自己，即mobile_navigation.xml内的<navigation/>标签内还可以有<navigation/>形成一个个的路由组，且每组以各自的app:startDestination为起始点</li>
-<li>NavInflater().inflate时遇到NavGraph类型的节点，递归调用inflate，将自节点加入其路由节点集合</li>
-</ul>
-<p>onGraphCreated：路由文件解析/节点创建完毕，开始路由跳转流程NavController.navigate</p>
-<pre><code class="language-kotlin">NavController：
-		@CallSuper
-    public void setGraph(@NavigationRes int graphResId, @Nullable Bundle startDestinationArgs) {
-        setGraph(getNavInflater().inflate(graphResId)/*得到NavGraph*/, startDestinationArgs);
-    }
-
-		public void setGraph(@NonNull NavGraph graph, @Nullable Bundle startDestinationArgs) {
-        if (mGraph != null) {
-            // Pop everything from the old graph off the back stack
-            popBackStackInternal(mGraph.getId(), true);
-        }
-        mGraph = graph;//将得到的NavGraph保存起来
-				//第一阶段：路由文件解析节点创建流程完毕
-        onGraphCreated(startDestinationArgs);
-				//内部会调用navigate(mGraph, startDestinationArgs, null, null);启动第一个路由节点//第二阶段路由跳转流程开始					
-  }
-
-NavInflater：
-//layoutInflater专门解析布局资源文件，NavInflater专门解析路由资源文件，返回NavGraph对象
-public NavGraph inflate(@NavigationRes int graphResId) {
-      //。。。路由xml文件（app:navGraph=&quot;@navigation/mobile_navigation&quot;）的解析
-			//生产路由节点对象
-			NavDestination destination = inflate(res, parser, attrs, graphResId);
-			if (!(destination instanceof NavGraph)) {//如果返回结果不是NavGraph类型则会抛出异常。即mobile_navigation.xml根结点必须&lt;navigation/&gt;标签
-                throw new IllegalArgumentException(&quot;Root element &lt;&quot; + rootElement + &quot;&gt;&quot;
-                        + &quot; did not inflate into a NavGraph&quot;);
-            }
-            return (NavGraph) destination;
-    }
-
-private NavDestination inflate(@NonNull Resources res, @NonNull XmlResourceParser parser,
-            @NonNull AttributeSet attrs, int graphResId)
-            throws XmlPullParserException, IOException {
-//根据mobile_navigation.xml中的定义的节点类型，
-//特殊：mobile_navigation.xml中的第一个节点为navigation解析出NavGraphNavigator类型的navigator导航
-//正常：后边的节点为activity/fragment等，解析出fragmentnavigator/activitynavigator等类型的navigator
-        Navigator&lt;?&gt; navigator = mNavigatorProvider.getNavigator(parser.getName());
-//使用navigator创建Destination节点（ADestination/FDestination等），以activityNavigator为例
-//使用NavGraphNavigator创建出NavGraph
-        final NavDestination dest = navigator.createDestination();
-        dest.onInflate(mContext, attrs);//NavDestination节点（具体是子类activity或fragment）解析填充
-				//...
-        while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
-              // ....
-            } else if (dest instanceof NavGraph) {//如果节点是NavGraph则递归调用自己，继续解析并加入到NavGraph的节点集合中
-                ((NavGraph) dest).addDestination(inflate(res, parser, attrs, graphResId));
-            }
-        }
-        return dest;
-}
-
-ActivityNavigator：
-public Destination createDestination() {
-        return new Destination(this);//传入navigator自己
-    }
-ActivityNavigator$Destination
-public static class Destination extends NavDestination{
-	super(activityNavigator);//调父类NavDestination
-}
-
-NavDestination节点:的构造需要创建NavDestination的Navigator，或navigatorName
-//无论是activity还是fragment类型的节点，
-//创建时都需要把创建他的Navigator传递进来，以便正确的跳转
-//从而把Destination节点和创建他的Navigator导航 关联起来
-public NavDestination(@NonNull Navigator&lt;? extends NavDestination&gt; navigator) {}
-public NavDestination(@NonNull String navigatorName) {}
-
-NavGraphNavigator：特殊Navigator
-public NavGraph createDestination() {
-        return new NavGraph(this);
-    }
-NavGraph：特殊Destination节点，自己可以嵌套自己，
-即mobile_navigation.xml内的&lt;navigation/&gt;标签内还可以有&lt;navigation/&gt;
-形成一个个的路由组，且每组以各自的app:startDestination为起始点
-例子：电商交易支付完成后，将一组都关闭
-
-NavGraph extends NavDestination implements Iterable&lt;NavDestination&gt; {
-    final SparseArrayCompat&lt;NavDestination&gt; mNodes = new SparseArrayCompat&lt;&gt;();//路由节点的集合
-    private int mStartDestId;//该集合的启动ID app:startDestination=&quot;@id/navigation_home&quot;
-    private String mStartDestIdName;
-}
-</code></pre>
-<h3 id="navcontrollernavigate">NavController.navigate</h3>
-<p>第二阶段路由跳转流程开始</p>
-<p>根据NavGraph这一特殊节点的name，得到NavGraphNavigator对象</p>
-<pre><code class="language-kotlin">private void navigate(@NonNull NavDestination node, @Nullable Bundle args,
-        @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
-    //...
-    Navigator&lt;NavDestination&gt; navigator = mNavigatorProvider.getNavigator(
-            node.getNavigatorName());//根据NavGraph的name，找创建该节点的到navigator对象 即NavGraphNavigator对象
-    Bundle finalArgs = node.addInDefaultArgs(args);
-    NavDestination newDest = navigator.navigate(node, finalArgs,//然后发起真正的路由
-            navOptions, navigatorExtras);
-    mBackStack.add(entry);//把路由节点添加到回退栈
-}
-</code></pre>
-<h3 id="navgraphnavigatornavigate">NavGraphNavigator.navigate</h3>
-<p>找到<navigator/>内 的startDestination节点</p>
-<p>根据startDestination节点的name，在NavigatorProvider里找到创建他的具体的f/a/dialog等类型的Navigator</p>
-<p>再让具体f/a/dialog等类型的Navigator去处理路由</p>
-<pre><code class="language-kotlin">NavGraphNavigator：
-public NavDestination navigate(@NonNull NavGraph destination, @Nullable Bundle args,
-        @Nullable NavOptions navOptions, @Nullable Extras navigatorExtras) {
-    int startId = destination.getStartDestination();//app:startDestination的id
-
-		//根据app:startDestination的id找到相应的startDestination节点
-    NavDestination startDestination = destination.findNode(startId, false);
-	
-		//根据startDestination节点的name属性，找到创建他的具体navigator
-    Navigator&lt;NavDestination&gt; navigator = mNavigatorProvider.getNavigator(
-            startDestination.getNavigatorName());//此时的navigator可能是f/a/dialog等类型的Navigator
-		//再将路由操作委托给f/a/dialog等类型的Navigator
-    return navigator.navigate(startDestination, startDestination.addInDefaultArgs(args),
-            navOptions, navigatorExtras);
-}
-
-1、activityNavigator
-
-public NavDestination navigate(@NonNull Destination destination, @Nullable Bundle args,
-            @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
-				//构造intent
-        Intent intent = new Intent(destination.getIntent());
-        if (args != null) {
-            intent.putExtras(args);//添加args
-            //。。。
-        }
-				//配置启动模式
-        if (!(mContext instanceof Activity)) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        if (navOptions != null &amp;&amp; navOptions.shouldLaunchSingleTop()) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        }
-
-				//进出动画等。。。
-
-				mContext.startActivity(intent);//通过startActivity完成路由
-    }
-
-2、fragmentNavigator
-
-public NavDestination navigate(@NonNull Destination destination, @Nullable Bundle args,
-            @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
-        String className = destination.getClassName();//根据destination节点得到类名
-        if (className.charAt(0) == '.') {
-            className = mContext.getPackageName() + className;
-        }
-        final Fragment frag = instantiateFragment(mContext, mFragmentManager,
-                className, args);//根据类名反射得到fragment实例
-        frag.setArguments(args);//设置args
-        final FragmentTransaction ft = mFragmentManager.beginTransaction();//开启事务
-				
-        //进出动画等。。。
-
-        ft.replace(mContainerId, frag);
-				//此处使用的是replace，因此使用Navigator路由时切换fragment时，声明周期重新执行
-    }
-
-3、dialogFragmentNavigator
-public NavDestination navigate(@NonNull final Destination destination, @Nullable Bundle args,
-            @Nullable NavOptions navOptions, @Nullable Navigator.Extras navigatorExtras) {
-        String className = destination.getClassName();
-        if (className.charAt(0) == '.') {
-            className = mContext.getPackageName() + className;
-        }
-        final Fragment frag = mFragmentManager.getFragmentFactory().instantiate(
-                mContext.getClassLoader(), className);//反射
-        if (!DialogFragment.class.isAssignableFrom(frag.getClass())) {//类型判断：是否时dialogFragment类型的
-            throw new IllegalArgumentException(&quot;Dialog destination &quot; + destination.getClassName()
-                    + &quot; is not an instance of DialogFragment&quot;);
-        }
-        final DialogFragment dialogFragment = (DialogFragment) frag;//上文以确定为dialogFragment
-        dialogFragment.setArguments(args);//添加args
-        dialogFragment.getLifecycle().addObserver(mObserver);
-
-				//show出dialogFragment
-        dialogFragment.show(mFragmentManager, DIALOG_TAG + mDialogCount++);
-        return destination;
-    }
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1607965068319.png" alt="" loading="lazy"></figure>
-<h3 id="缺点">缺点：</h3>
-<ol>
-<li>节点必须在路由文件mobile_navigation.xml中定义</li>
-<li>fragment类型节点的路由操作，是使用replace，会导致fragment页面声明周期重启，数据的重新加载</li>
-<li>不支持路由过程的拦截监听</li>
-</ol>
 ]]></content>
     </entry>
 </feed>
