@@ -1,0 +1,958 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>重学操作系统 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1625200203712">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="重学操作系统 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="计算机组成原理
+希尔伯特问题中的公理化体系问题（这个世界可以建立一套完善的公理体系，由少数几个公理出发，推导出所有的定理和推论）和哥德尔不完备性定理（即便在完善的公理体系中仍然可以找到不能被证明也不能被证伪的命题。）哥德尔的不完备性定理，让..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1625200203712" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              重学操作系统
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-06-20
+              </span>
+              <span>
+                67 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://s0.lgstatic.com/i/image/M00/63/47/Ciqc1F-WOCiAWhg4AABAHysXMQE753.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="计算机组成原理">计算机组成原理</h1>
+<p><strong>希尔伯特问题</strong>中的<strong>公理化体系问题</strong>（这个世界可以建立一套完善的公理体系，由少数几个公理出发，推导出所有的定理和推论）和<strong>哥德尔不完备性定理</strong>（即便在完善的公理体系中仍然可以找到不能被证明也不能被证伪的命题。）哥德尔的不完备性定理，让大家看到了世界上还有大量不可计算的问题。哪些问题可以被计算，哪些不可以被计算，这就是图灵的可计算理论。比如不可计算的停机问题。</p>
+<p>我们今天有能力解决的问题，统称为多项式时间（ Polynomial time）问题记作P问题，反之问题如果不能在多项式时间内找到答案，我们记为 NP 问题，有一部分 NP 问题可以被转化为 P 问题。</p>
+<p><img src="https://s0.lgstatic.com/i/image/M00/4C/CB/Ciqc1F9YoMSAa9_WAADEZsnCSoU226.png" alt="4.png" style="zoom:50%;" /><img src="https://s0.lgstatic.com/i/image/M00/4E/A2/CgqCHl9e5VaANB2BAAEVncqxxwI213.png" alt="1.png" style="zoom:50%;" /></p>
+<p><strong>内存</strong></p>
+<p>在冯诺依曼模型中，程序和数据被存储在一个被称作内存的线性排列存储区域。存储的数据单位是一个二进制位即bit。最小的存储单位字节为8 位即 byte，每一个字节都对应一个内存地址。内存地址由 0 开始编号然后自增排列。</p>
+<p>我们通常说的内存都是随机存取器，也就是读取任何一个地址数据的速度是一样的，写入任何一个地址数据的速度也是一样的。</p>
+<p><strong>CPU</strong></p>
+<p>冯诺依曼模型中 CPU 负责控制和计算。</p>
+<p>32和64位指的是CPU的位宽，即一次可运算的位(bit)数。32位(4 byte)/64位(8 byte)</p>
+<p>线路位宽：一个 bit，低电压是 0，高电压是 1，1 条地址总线操作 2 个内存地址。32 位宽的 CPU最多只有 32 位的寄存器，对应32条总线，最多操作 23^2 个内存地址，也就是 4G 内存地址。</p>
+<p>计算层面的话，64位CPU在计算大数据的时候比32位更高效，但是这种场景不多。</p>
+<p>通信层面，64位可以操作更大的内存，以及和内存之间进行更高速的通信，因为支持的地址总线更大。</p>
+<p><strong>控制单元和逻辑运算单元</strong></p>
+<p>CPU 中有一个控制单元专门负责控制 CPU 工作；还有逻辑运算单元专门负责计算。</p>
+<p><strong>寄存器</strong></p>
+<p>CPU 要进行计算，比如最简单的加和两个数字时，因为 CPU 离内存太远，所以需要一种离自己近的存储来存储将要被计算的数字。这种存储就是寄存器。寄存器就在 CPU 里，控制单元和逻辑运算单元非常近，因此速度很快。</p>
+<ol>
+<li>
+<p>寄存器中有一部分是可供用户编程用的，比如用来存加和指令的两个参数，是<strong>通用寄存器。</strong></p>
+</li>
+<li>
+<p>还有一部分寄存器有特殊的用途，叫作<strong>特殊寄存器</strong>。比如程序指针，就是一个特殊寄存器。它存储了 CPU 要执行的下一条指令所在的内存地址。注意，程序指针不是存储了下一条要执行的指令，此时指令还在内存中，程序指针只是存储了下一条指令的地址。</p>
+</li>
+<li>
+<p>下一条要执行的指令，会从内存读入到另一个特殊的寄存器中，这个寄存器叫作<strong>指令寄存器</strong>。指令被执行完成之前，指令都存储在这里。</p>
+</li>
+</ol>
+<p><strong>总线</strong></p>
+<p>CPU 和内存以及其他设备之间，也需要通信，因此我们用一种特殊的设备进行控制，就是总线。</p>
+<p><strong>地址总线</strong>，专门用来指定 CPU 将要操作的内存地址。</p>
+<p>**数据总线，**用来读写内存中的数据。</p>
+<p>当 CPU 需要读写内存的时候，先要通过地址总线来指定内存地址，再通过数据总线来传输数据。</p>
+<p><strong>控制总线</strong>，用来发送和接收关键信号，比如后面我们会学到的中断信号，还有设备复位、就绪等信号，都是通过控制总线传输。同样的，CPU 需要对这些信号进行响应，这也需要控制总线。</p>
+<p><strong>程序的执行过程</strong></p>
+<p>所有的计算机程序，也都可以抽象为从<strong>输入设备</strong>读取输入信息，通过<strong>运算器</strong>和<strong>控制器</strong>来执行存储在<strong>存储器</strong>里的程序，最终把结果输出到<strong>输出设备</strong>中。</p>
+<img src="https://s0.lgstatic.com/i/image/M00/4E/C8/Ciqc1F9fGs2AEfeRAADnPPOm_gU294.png" alt="图片1 (1).png" style="zoom:50%;" />
+<p>冯诺依曼模型中：</p>
+<p><strong>处理器单元</strong>（Processing Unit）。用来完成各种算术和逻辑运算。由<strong>算术逻辑单元</strong>（Arithmetic Logic Unit，ALU）和<strong>处理器寄存器</strong>（Processor Register）组成。</p>
+<p><strong>控制器单元</strong>（Control Unit/CU）用来控制程序的流程，通常就是不同条件下的分支和跳转。由<strong>指令寄存器（Instruction Reigster）<strong>和</strong>程序计数器</strong>（Program Counter PC）组成。</p>
+<ol>
+<li>
+<p>CPU 读取 PC 指针指向的指令，将它从存储器导入指令寄存器。<br>
+CPU 的控制单元操作地址总线指定需要访问的内存地址（简单理解，就是把 PC 指针中的值拷贝到地址总线中）。</p>
+<p>CPU 通知内存设备准备数据（内存设备准备好了，就通过数据总线将数据传送给 CPU）。</p>
+<p>CPU 收到内存传来的数据后，将这个数据存入指令寄存器。</p>
+</li>
+<li>
+<p>CPU 分析指令寄存器中的指令，确定指令的类型和参数。计算类型的指令，交给逻辑运算单元计算；存储类型的指令，由控制单元执行。</p>
+</li>
+<li>
+<p>PC 指针自增，并准备获取下一条指令。比如在 32 位的机器上，指令是 32 位 4 个字节，需要 4 个内存地址存储，因此 PC 指针会自增 4。</p>
+</li>
+</ol>
+<p>构造指令的过程，叫作指令的编码，通常由编译器完成；解析指令的过程，叫作指令的解码，由 CPU 完成。 CPU 内部有一个循环也叫CPU 的指令周期</p>
+<img src="https://s0.lgstatic.com/i/image/M00/4E/DF/Ciqc1F9fMKiAZhMVAABIVEePzcA916.png" alt="image (1).png" style="zoom:33%;" />
+<ol>
+<li>
+<p>首先 CPU 通过 PC 指针读取对应内存地址的指令，我们将这个步骤叫作 Fetch，就是获取的意思。</p>
+</li>
+<li>
+<p>CPU 对指令进行解码，我们将这个部分叫作 Decode。</p>
+</li>
+<li>
+<p>CPU 执行指令，我们将这个部分叫作 Execution。</p>
+</li>
+<li>
+<p>CPU 将结果存回寄存器或者将寄存器存入内存，我们将这个步骤叫作 Store。</p>
+</li>
+</ol>
+<p>不同 CPU 的指令和寄存器名称都不一样，但比如 PC 指针、指令寄存器等通用。指令的执行速度为时钟周期，在 CPU 内部，和我们平时戴的电子石英表类似，有一个叫晶体振荡器（Oscillator Crystal）的东西，简称为晶振。我们把晶振当成 CPU 内部的电子表来使用。晶振带来的每一次“滴答”，就是时钟周期时间。在2.8GHz 的 CPU 上，这个时钟周期时间，就是 1/2.8G。</p>
+<p>不同的机器助记符也不一样，汇编语言的指令也不同</p>
+<p>for循环是通过标记,判断和跳转完成指令操作。if-else 是通过判断和跳转完成，需要最多n-1次判断。相对于if-else的自上而下的判断，switch 则更多是数学计算。</p>
+<p><strong>函数</strong>的执行过程，调用前先把返回值(占位)和返回地址(调用前 PC 指针位置)提前压栈，然后载压入参数。</p>
+<blockquote>
+<p>调用函数其实就是跳转到函数体对应的指令所在的位置，因此函数名可以用一个标签，调用时，就用 <code>jump</code> 指令跟这个标签。</p>
+</blockquote>
+<p><strong>class</strong>分为两个部分属性和函数。构造函数是为class内的属性和方法分配内存地址，构造函数执行时扫描类型定义中所有的属性和方法，是属性则分配内存地址;（ 遇到方法时根据不同语言基于虚函数表、基于闭包、基于哈希表等的实现可能并不像成员变量一样占用class堆或栈的内存空间，而是直接放在代码区。）</p>
+<p>this是构造函数创建的一个指向 class 实例的地址，一旦调用构造函数初始化，this关键字则最先压入栈，这样任何函数都可以访问实例中的属性和函数。</p>
+<p>联想到：</p>
+<p>1：函数调用，需要分配栈空间，如果递归调用太深，不停的压栈，很可能出现栈内存溢出</p>
+<p>2.java中，每个方法被执行的时候，Java虚拟机都会为方法调用所在线程同步创建一个栈帧用于存储局部变量表、操作数栈、方法出口信息。每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。</p>
+<p><strong>存储器分级策略</strong></p>
+<p>在时钟信号是 1GHz 的 CPU里，1G 代表 10 个亿，因此时钟信号的一个周期是 1/10 亿秒。而信号又是以光速传输的，光的速度是 3×10 的 8 次方米每秒，就是 3 亿米每秒。所以在一个周期内，光只能前进 30 厘米。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/51/2D/Ciqc1F9kgVGAD_IMAACXR1QKcDo779.png" alt="Lark20200918-174334.png"/></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/51/2C/Ciqc1F9kgMWAAU1JAABxd6qpCo0763.png" alt="Lark20200918-173926.png" style="zoom75%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>寄存器紧挨着 CPU 的控制单元和逻辑计算单元，每个寄存器存储4/8个byte（32/64位），一条要在 4 个周期内完成的指令，除了读写寄存器，还需要解码指令、控制指令执行和计算。通常寄存机的访问速度一般要求在半个 CPU 时钟周期内完成读写。</p>
+<ol>
+<li>L1-Cache 大小在几十 Kb 到几百 Kb 不等，读写速度在 2~4 个 CPU 时钟周期。</li>
+<li>L2- 缓存也在 CPU 中，位置比 L1- 缓存距离 CPU 核心更远。也比 L1-Cache 更大，速度在 10~20 个 CPU 周期。</li>
+<li>L3- 缓存也在 CPU 中，位置比 L2- 缓存距离 CPU 核心更远。也比 L2-Cache 更大，速度在 20~60 个 CPU 周期。（如 i9 CPU 有 512KB L1 Cache；有 2MB L2 Cache； 有16MB L3 Cache。）</li>
+<li>内存的主要材料是半导体硅，是插在主板上工作的。因为它的位置距离 CPU 有一段距离，所以需要用总线和 CPU 连接。</li>
+<li>SSD 也叫固态硬盘，结构和内存类似，但是它的优点在于断电后数据还在。内存、寄存器、缓存断电后数据就消失了。内存的读写速度比 SSD 大概快 10~1000 倍。以前还有一种物理读写的磁盘，我们也叫作硬盘，它的速度比内存慢 100W 倍左右。</li>
+</ol>
+<p>l1 cache，l2 cache, l3 cache ，内存，SSD/磁盘。从云到右，距离CPU逐渐变远，读取速度逐渐减低，空间逐渐增大。</p>
+<p>缓存条目: 缓存可比内存小多了。 因此只能存内存中一小部分。 因此需要设计算法。缓存可以看作是双列结构，分别存储着内存地址和对应的值。想要快速的定位缓存条目可以通过取余(类似hash算法)快速定位缓存条目位置。</p>
+<p>指令预读: 通过对于指令的预读，使得读取指令的速度跟的上指令的执行速度。减少指令从内存中的读取次数(更耗时)。</p>
+<p>缓存的命中: l1的缓存命中率约为80%，l1 l2 l3缓存加在一块命中率高达95%。</p>
+<p>缓存置换: 当缓存满了之后，再读取数据到缓存将置换掉之前的缓存。</p>
+<h2 id="linux">Linux</h2>
+<p>文件类型</p>
+<ol>
+<li>
+<p>普通文件（比如一个文本文件）；</p>
+</li>
+<li>
+<p>目录文件（目录也是一个特殊的文件，它用来存储文件清单，比如/也是一个文件）；/ 结尾</p>
+</li>
+<li>
+<p>可执行文件；* 结尾</p>
+</li>
+<li>
+<p>管道文件；| 结尾</p>
+</li>
+<li>
+<p>Socket 文件（我们会在模块七网络部分讨论 Socket 文件）；= 结尾</p>
+</li>
+<li>
+<p>软链接文件（相当于指向另一个文件所在路径的符号）；@ 结尾</p>
+</li>
+<li>
+<p>硬链接文件（相当于指向另一个文件的指针）。</p>
+</li>
+</ol>
+<p>echo是一个在命令行打印字符串的指令。</p>
+<p>which指令查找一个执行文件所在的路径。</p>
+<p>find指令全局查找文件。</p>
+<p>touch修改一个文件的时间戳，如果文件不存在会触发创建文件。</p>
+<p>cat查看完成的文件适合小型文件。more``less查看一个文件但是只读取用户看到的内容到内存，因此消耗资源较少，适合在服务器上看日志。</p>
+<p>head``tail可以用来看文件的头和尾。tail -n 1000 最后的 1000 行日志。tail -f 文件名（follow）实时日志</p>
+<p>grep指令搜索文件内容 g 就是 global，全局；re 就是 regular expression，正则表达式；p 就是 pattern，模式。</p>
+<p>进程是应用的执行副本；而不要回答进程是操作系统分配资源的最小单位。前者是定义，后者是作用</p>
+<p>ps指令。p 代表 processes，也就是进程；s 代表 snapshot，</p>
+<p>ps -ef/ps aux（ BSD 风格）进程详情</p>
+<p>top 进程实时</p>
+<p><strong><code>bash</code>和终端的命令一般都是进程。</strong></p>
+<p>每个进程拥有自己的标准输入流、标准输出流、标准错误流，这几个标准流其实都是文件。</p>
+<p>标准输入流（用 0 表示）可以作为进程执行的上下文（进程执行可以从输入流中获取数据）。</p>
+<p>标准输出流（用 1 表示）中写入的结果会被打印到屏幕上。</p>
+<p>如果进程在执行过程中发生异常，那么异常信息会被记录到标准错误流（用 2 表示）中。</p>
+<p>重定向：<code>ls -l &gt; out</code> 说&gt;符号叫作覆盖重定向，每次都会把目标文件覆盖；&gt;&gt;叫作追加重定向，会在目标文件中追加。<code>ls1 &gt; out</code> ls1指令是不存在，结果会输出到标准错误流中，即仍在屏幕上并不会存入out文件，<code>ls1 &amp;&gt; out</code>引用关系错误也到out中。&amp;符号用在命令结尾：也代表指令在后台执行，不会阻塞用户继续输入。</p>
+<p>管道（Pipeline）在进程间传递数据，将一个进程的输出流定向到另一个进程的输入流。管道是一个连接一个进行计算，重定向是将一个文件的内容定向到另一个文件，这二者经常会结合使用。管道也是文件，有匿名管道（在文件系统中但没有路径）、命名管道（有自己的路径的文件），管道具有 FIFO（First In First Out）。</p>
+<ol>
+<li>排序<code>ls | sort -r</code>：把ls进程的输出给sort进程做输入。</li>
+<li>去重<code>sort a.txt uniq</code>:uniq指令能够找到文件中相邻的重复行，然后去重。</li>
+<li>筛选<code>find ./ | grep Spring|grep -v MyBatis</code>：递归列出当前目录下所有目录中的文件;匹配出包含Spring关键字的;在匹配出同时不包含MyBatis的（grep -v是匹配不包含）。</li>
+<li>行数<code>wc -l</code>文件行数，<code>ls | wc -l</code>目录下文件数（ls输出的文件行数）</li>
+<li>中间结果<code>find ./ -i &quot;*.java&quot; | tee JavaList | grep Spring</code> <code>tee</code> 本身不影响指令的执行，但是 tee 会把 find 指令的结果保存到 JavaList 文件中。</li>
+<li><strong>xargs</strong>从标准数据流中构造并执行一行行的指令。xargs从输入流获取字符串，然后利用空白、换行符等切割字符串，在这些字符串的基础上构造指令，最后一行行执行这些指令。<code>ls | xargs -I GG echo &quot;mv GG to prefix_GG&quot;</code>先把最终命令echo输出检验一下，没问题然后执行<code>ls | xargs -I GG mv GG to prefix_GG</code>。<code>-I</code>为查找替换符用<code>GG</code>替代<code>ls</code>找到的结果。</li>
+<li>以上都是匿名管道（拥有一个自己的inode，但不属于任何一个文件夹）。命名管道要用<code>mkfifo</code>指令创建。</li>
+</ol>
+<p><strong>编译安装/包管理器安装</strong></p>
+<p>自动依赖管理器,解决了很多依赖,一次性的装好。</p>
+<p>tar：t代表tape（磁带）；ar是 archive（档案）</p>
+<p>-x代表 extract（提取）。-z代表gzip</p>
+<p>-v代表 verbose（显示细节）</p>
+<p>-f代表 file，这里指的是要操作文件，而不是磁带。 tar解压通常带有x和f，打包通常是c就是 create 的意思。</p>
+<p>autoconf是bash（Bourne Shell）下的安装程序，支持对configure可执行文件的很多配置（<code>./configure --help</code>如prefix是安装目录），执行./configure进行安装。存在交叉编译因此要编译安装。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Debian (ubuntu)</th>
+<th>Redhat(Redhat/Fedora/Centos)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>包管理器</td>
+<td>dpkg（debian package）</td>
+<td>rpm（redhatpackage manager）</td>
+</tr>
+<tr>
+<td>自动依赖管理器</td>
+<td>apt（Advanced Packaging Tools）</td>
+<td>yum（Yellodog Updator，Modified）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="操作系统">操作系统</h2>
+<p><strong>内核</strong>是操作系统中应用连接硬件设备的桥梁，对于一个现代的操作系统来说，它的内核至少应该提供以下 4 种基本能力：</p>
+<ol>
+<li>
+<p>管理进程、线程（决定哪个进程、线程使用 CPU）；</p>
+</li>
+<li>
+<p>管理内存（决定内存用来做什么）；</p>
+</li>
+<li>
+<p>连接硬件设备（为进程、和设备间提供通信能力）；</p>
+</li>
+<li>
+<p>提供系统调用（接收进程发送来的系统调用）。</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/61/89/CgqCHl-P5meAd3VdAAB1f7DWz-I273.png" alt="Lark20201021-153830.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/61/8A/CgqCHl-P5naAc5fsAABuTlhIQkw555.png" alt="Lark20201021-153825.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>内核权限非常高，它可以管理进程、可以直接访问所有的内存，因此确实需要和进程之间有一定的隔离。这个隔离用类似请求/响应的模型，非常符合常理。</p>
+<h3 id="linux-的设计">Linux 的设计</h3>
+<ol>
+<li><strong>Multitask and SMP</strong>（Symmetric multiprocessing）<br>
+MultiTask 指多任务，Linux 是一个多任务的操作系统。多任务就是多个任务可以同时执行，这里的“同时”并不是要求并发，而是在一段时间内可以执行多个任务。当然 Linux 支持并发。<br>
+SMP 指对称多处理。其实是说 Linux 下每个处理器的地位是相等的，内存对多个处理器来说是共享的，每个处理器都可以访问完整的内存和硬件资源。 这个特点决定了在 Linux 上不会存在一个特定的处理器处理用户程序或者内核程序，它们可以被分配到任何一个处理器上执行。</li>
+<li><strong>ELF</strong>（Executable and Linkable Format）可执行文件链接格式： ELF 可执行文件的存储格式把文件分成了一个个分段（Segment），每个段都有自己的作用。</li>
+<li>Linux 是<strong>宏内核</strong>架构，即Linux 的内核是一个完整的可执行程序，且内核用最高权限来运行。宏内核的特点就是有很多程序会打包在内核中，比如，文件系统、驱动、内存管理等。（并不是每次安装驱动都需要重新编译内核，现在 Linux 也可以动态加载内核模块。）</li>
+</ol>
+<blockquote>
+<p>Monolithic Kernel宏内核/Microkernel微内核</p>
+<img src="https://s0.lgstatic.com/i/image/M00/61/AA/CgqCHl-QEKSAYD22AAFXRfj1rsA581.png" alt="Lark20201021-183457.png" style="zoom:50%;" />
+<p>微内核，内核只保留最基本的能力。比如进程调度、虚拟内存、中断。多数应用，甚至包括驱动程序、文件系统，是在用户空间管理的。微内核体积更小、可移植性更强。</p>
+<p>混合类型内核：架构像微内核，但是用宏内核的方式实现，就是在宏内核之内有抽象出了一个微内核。</p>
+</blockquote>
+<h3 id="window-设计">Window 设计</h3>
+<p>目前主流的 Windows 产品都是 NT 内核。NT 内核和 Linux 内核非常相似，没有太大的结构化差异。Windows 同样支持 Multitask 和 SMP（对称多处理）。Windows 下可执行文件格式叫作 Portable Executable（PE），也就是可移植执行文件，扩展名通常是.exe、.dll、.sys等。Windows 的NT（New Technology）内核设计属于混合类型。 Windows 有很多独特的能力如Hyper-V 虚拟化技术。</p>
+<p>比较：Linux 内核是一个开源的内核、它们支持的可执行文件格式不同、它们用到的虚拟化技术不同</p>
+<p>Kernel 运行在超级权限模式（Supervisor Mode）下，所以拥有很高的权限。按照权限管理的原则，多数应用程序应该运行在最小权限下。因此，很多操作系统，将内存分成了两个区域：</p>
+<p>内核空间（Kernal Space），这个空间只有内核程序可以访问；内核空间中的代码可以访问所有内存，我们称这些程序在内核态（Kernal Mode） 执行。</p>
+<p>用户空间（User Space），这部分内存专门给应用程序使用。用户空间中的代码被限制了只能使用一个局部的内存空间，我们说这些程序在用户态（User Mode） 执行。</p>
+<p>系统调用过程：</p>
+<img src="https://s0.lgstatic.com/i/image/M00/62/97/CgqCHl-Sm3mAG_x-AAC5MxhOcCc621.png" alt="Lark20201023-165439.png" style="zoom:50%;" />
+<p>内核程序执行在内核态（Kernal Mode），用户程序执行在用户态（User Mode）。</p>
+<ol>
+<li>当发生系统调用时，用户态的程序发起系统调用。因为系统调用中牵扯特权指令，用户态程序权限不足，因此会中断执行，也就是 Trap（Trap 是一种中断）。</li>
+<li>发生中断后，当前 CPU 执行的程序会中断，跳转到中断处理程序。内核程序开始执行，也就是开始处理系统调用。</li>
+<li>内核处理完成后，主动触发 Trap，这样会再次发生中断，切换回用户态工作。</li>
+</ol>
+<p><strong>一个应用程序启动后会在内存中创建一个执行副本，这就是进程</strong>。Linux 的内核（是一个 Monolithic Kernel宏内核）可以看作一个进程。开机的时磁盘的内核镜像被导入内存作为一个执行副本，成为内核进程。用户态进程通常是应用程序的副本，内核态进程就是内核本身的进程。如果用户态进程需要申请资源，比如内存，可以通过系统调用向内核申请。</p>
+<p>程序在现代操作系统中并不是以进程为单位在执行，而是以一种轻量级进程（Light Weighted Process），也称作线程（Thread）的形式执行。一个进程可以拥有多个线程。进程创建的时候，一般会有一个主线程随着进程创建而创建。进程可以通过 API 创建用户态的线程，也可以通过系统调用创建内核态的线程</p>
+<p>用户态线程：操作系统内核并不知道它的存在，它完全是在用户空间中创建。</p>
+<p>优点：</p>
+<ol>
+<li>管理开销小：创建、销毁不需要系统调用。</li>
+<li>切换成本低：用户空间程序可以自己维护，不需要走操作系统调度。</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>
+<p>与内核协作成本高：比如这种线程完全是用户空间程序在管理，当它进行 I/O 的时候，需要频繁进行用户态到内核态的切换。</p>
+</li>
+<li>
+<p>线程间协作成本高：设想两个线程需要通信，通信需要 I/O，I/O 需要系统调用，因此用户态线程需要支付额外的系统调用成本。</p>
+</li>
+<li>
+<p>无法充分利用多核优势：比如操作系统调度的仍然是这个线程所属的进程，所以无论每次一个进程有多少用户态的线程，都只能并发执行一个线程，因此一个进程的多个线程无法利用多核的优势。</p>
+</li>
+<li>
+<p>操作系统无法针对线程调度进行优化：当一个进程的一个用户态线程阻塞（Block）了，操作系统无法及时发现和处理阻塞问题，它不会更换执行其他线程，从而造成资源浪费。</p>
+</li>
+</ol>
+<p>内核态线程：执行在内核态，可以通过系统调用创造一个内核级线程。</p>
+<p>优点：</p>
+<ol>
+<li>
+<p>可以利用多核 CPU 优势：内核拥有较高权限，因此可以在多个 CPU 核心上执行内核线程。</p>
+</li>
+<li>
+<p>操作系统级优化：内核中的线程操作 I/O 不需要进行系统调用；一个内核线程阻塞了，可以立即让另一个执行。</p>
+</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>
+<p>创建成本高：创建的时候需要系统调用，也就是切换到内核态。</p>
+</li>
+<li>
+<p>扩展性差：由一个内核程序管理，不可能数量太多。</p>
+</li>
+<li>
+<p>切换成本较高：切换的时候，也同样存在需要内核操作，需要切换内核态。</p>
+</li>
+</ol>
+<p>**用户态线程创建成本低，问题明显，不可以利用多核。内核态线程，创建成本高，可以利用多核，切换速度慢。**因此通常我们会在内核中预先创建一些线程，并反复利用这些线程。用户态线程和内核态线程之间的映射关系：</p>
+<p>多对一（Many to One）：用户态进程中的多线程复用一个内核态线程。线程不可以并发。</p>
+<p>一对一（One to One）：每个用户态都需要通过系统调用创建一个绑定的内核线程，并附加在上面执行。允许所有线程并发执行，充分利用多核优势，（Windows NT 内核采取的就是这种模型）。但是因为线程较多，对内核调度的压力会明显增加。</p>
+<p>多对多（Many To Many）：n 个用户态线程分配 m 个内核态线程，m 通常可以小于 n。一种可行的策略是将 m 设置为核数。这种多对多的关系，减少了内核线程，同时也保证了多核心并发。Linux 目前采用的就是该模型。</p>
+<p>两层设计（Two Level）：多数用户态线程和内核线程是 n 对 m 的关系，少量用户线程可以指定成 1 对 1 的关系。</p>
+<p>内核线程是真正的线程，它会分配到 CPU 的执行资源。用户态线程工作在用户空间，内核态线程工作在内核空间。用户态线程调度完全由进程负责，通常就是由进程的主线程负责。相当于进程主线程的延展，使用的是操作系统分配给进程主线程的时间片段。内核线程由内核维护，由操作系统调度。</p>
+<p>用户态线程无法跨核心，一个进程的多个用户态线程不能并发，阻塞一个用户态线程会导致进程的主线程阻塞，直接交出执行权限。这些都是用户态线程的劣势。内核线程可以独立执行，操作系统会分配时间片段。因此内核态线程更完整，也称作轻量级进程。内核态线程创建成本高，切换成本高，创建太多还会给调度算法增加压力，因此不会太多。</p>
+<p>操作系统分成 3 层：应用层、内核层、硬件层。内核是连接应用和硬件的桥梁。内核需要公平的对待每个 CPU，于是有了用户态和内核态的切换；为了实现切换，需要中断；为了保护内存资源，需要划分用户态和内核态；为了更好地使用计算资源，需要划分线程——而线程需要操作系统内核调度。</p>
+<p>分时（Time Sharing）</p>
+<h2 id="进程和线程">进程和线程</h2>
+<p>进程（Process）：正在进行执行的应用程序，是软件的执行副本。而线程是轻量级的进程。设计进程和线程，操作系统需要思考分配资源。最重要的 3 种资源是：计算资源（CPU）、内存资源和文件资源。进程下面，需要一种程序的执行单位，仅仅被分配计算资源（CPU），这就是线程。被分配的方式，就是由操作系统调度线程。操作系统创建一个进程后，进程的入口程序被分配到了一个主线程执行，这样看上去操作系统是在调度进程，其实是调度进程中的线程。这种被操作系统直接调度的线程，我们也成为内核级线程。</p>
+<p>分时和调度</p>
+<p>通常机器中 CPU 核心数量少（从几个到几十个）、进程&amp;线程数量很多（从几十到几百甚至更多），因此进程们在操作系统中只能排着队一个个执行，每个进程在执行时都会获得操作系统分配的一个时间片段，如果超出这个时间，就会轮到下一个进程（内的线程）执行。</p>
+<blockquote>
+<p>分配时间片段：各个进程（线程）一次都只执行一个时间片段。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/67/CE/CgqCHl-iUNWARGseAACvXwFzOgM513.png" alt="Lark20201104-145535.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/67/C2/Ciqc1F-iUOOAH_pCAAAxJPD4vZk085.png" alt="Lark20201104-145538.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</blockquote>
+<p>进程和线程的状态：我这里一直用进程(线程）是因为旧的操作系统调度进程，没有线程；现代操作系统调度线程。</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/67/CE/CgqCHl-iUO-AUnnuAACQlYvu6B4917.png" alt="Lark20201104-145543.png" style="zoom:33%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/67/C2/Ciqc1F-iUPuAcCoPAABsXQQRmUA149.png" alt="Lark20201104-145546.png" style="zoom:33%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/67/C3/Ciqc1F-iURaABVqnAADDuMgPbV8806.png" alt="Lark20201104-145541.png" style="zoom:33%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/67/CE/CgqCHl-iUSGAcoiLAAC6OKgt1vo694.png" alt="Lark20201104-145548.png" style="zoom:33%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>一旦一个进程（线程）进入阻塞状态，这个进程（线程）此时就没有事情做了，但又不能让它重新排队（因为需要等待中断），所以进程（线程）中需要增加一个“阻塞”（Block）状态。</p>
+<p>处于“就绪”（Ready）的进程（线程）还在排队，所以进程（线程）内的程序无法执行，也就是不会触发读取磁盘数据的操作，“就绪”（Ready）状态无法直接变成阻塞的状态；处于“阻塞”（Block）状态的进程（线程）如果收到磁盘读取完的数据，它又需要重新排队，所以它也不能直接回到“运行”（Running）状态。</p>
+</blockquote>
+<p>进程（线程）创建后，开始排队即**“就绪”（Ready）**状态；</p>
+<p>当轮到该进程（线程）执行时，变成**“运行”（Running）**状态；进程（线程）将操作系统分配的时间片段用完后，再回到“就绪”（Ready）状态。</p>
+<p>当一个进程（线程）会等待磁盘读取数据/等待打印机响应，此时进程自己会进入**“阻塞”（Block）**状态。等待磁盘、打印机处理完成后，通过中断通知 CPU，然后 CPU 再执行一小段中断控制程序，将控制权转给操作系统，操作系统再将原来阻塞的进程（线程）置为“就绪”（Ready）状态重新排队。</p>
+<p>1、进程和线程在内存中如何表示？需要哪些字段？</p>
+<p>内存中设计两张表，一张是进程表、一张是线程表。</p>
+<p>进程表需要这几类信息：</p>
+<p>描述信息：这部分是描述进程的唯一识别号PID、进程的名称、所属的用户等。</p>
+<p>资源信息：这部分用于记录进程拥有的资源，比如进程和虚拟内存如何映射、拥有哪些文件、在使用哪些 I/O 设备等，当然 I/O 设备也是文件。</p>
+<p>内存布局：操作系统也约定了进程如何使用内存。通常一个进程大致内存分成堆、栈、数据段(全局变量/常数)、正文段(程序指令)等几个段。</p>
+<p>线程表：ThreadID、执行状态（阻塞、运行、就绪）、优先级、程序计数器以及所有寄存器的值等等。（线程需要记录程序计数器和寄存器的值，是因为多个线程需要共用一个 CPU，线程经常会来回切换，因此需要在内存中保存寄存器和 PC 指针的值。)</p>
+<p>用户级线程和内核级线程存在映射关系，因此可以考虑在内核中维护一张内核级线程的表，如果考虑到这种映射关系，比如 n-m 的多对多映射，可以将线程信息还是存在进程中，每次执行的时候才使用内核级线程。相当于内核中有个线程池，等待用户空间去使用。每次用户级线程把程序计数器等传递过去，执行结束后，内核线程不销毁，等待下一个任务。这里其实有很多灵活的实现，总体来说，创建进程开销大、成本高；创建线程开销小，成本低。</p>
+<p>2、进程代表的是一个个应用，需要彼此隔离，这个隔离方案如何设计？</p>
+<p>操作系统中运行了大量进程，为了不让它们互相干扰，可以考虑为它们分配彼此完全隔离的内存区域，即便进程内部程序读取了相同地址，而实际的物理地址也不会相同。对于一个进程的多个线程来说，可以考虑共享进程分配到的内存资源，这样线程就只需要被分配执行资源。</p>
+<p>3、操作系统调度线程，线程间不断切换，这种情况如何实现？</p>
+<p>进程（线程）在操作系统中是不断切换的，现代操作系统中只有线程的切换。 每次切换需要先保存当前寄存器的值的内存，注意 PC 指针也是一种寄存器。当恢复执行的时候，就需要从内存中读出所有的寄存器，恢复之前的状态，然后执行。</p>
+<img src="https://s0.lgstatic.com/i/image/M00/67/CE/CgqCHl-iUY-AEqrUAAKnDhPzBcQ340.png" alt="Lark20201104-145523.png" style="zoom:25%;" />
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/67/C3/Ciqc1F-iUZ-Af-t9AAC3WjDjEM4772.png" alt="Lark20201104-145556.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/67/C3/Ciqc1F-iUa-AdqG9AACMOQKJe2Q431.png" alt="Lark20201104-145530.png" style="zoom:100%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<ol>
+<li>
+<p>当操作系统发现一个进程（线程）需要被切换的时候，直接控制 PC 指针跳转是非常危险的事情，所以操作系统需要发送一个“中断”信号给 CPU，停下正在执行的进程（线程）。</p>
+</li>
+<li>
+<p>当 CPU 收到中断信号后，正在执行的进程（线程）会立即停止。注意，因为进程（线程）马上被停止，它还来不及保存自己的状态，所以后续操作系统必须完成这件事情。</p>
+</li>
+<li>
+<p>操作系统接管中断后，趁寄存器数据还没有被破坏，必须马上执行一小段非常底层的程序（通常是汇编编写），帮助寄存器保存之前进程（线程）的状态。</p>
+</li>
+<li>
+<p>操作系统保存好进程状态后，执行调度程序，决定下一个要被执行的进程（线程）。</p>
+</li>
+<li>
+<p>最后，操作系统执行下一个进程（线程）。</p>
+</li>
+</ol>
+<p>一个进程（线程）被选择执行后，它会继续完成之前被中断时的任务，这需要操作系统来执行一小段底层的程序帮助进程（线程）恢复状态。通过类似栈这种数据结构。进程（线程）中断后，操作系统负责压栈关键数据（比如寄存器）。恢复执行时，操作系统负责出栈和恢复寄存器的值。</p>
+<p>4、需要支持多 CPU 核心的环境，针对这种情况如何设计？</p>
+<p>通常情况下，CPU 有几个核，就可以并行执行几个进程（线程）。并发(concurrent)指的在一段时间内几个任务看上去在同时执行（不要求多核）；并行(parallel)任务必须绝对的同时执行（要求多核）。操作系统提供了保存、恢复进程状态的能力，使得进程（线程）也可以在多个核心之间切换。</p>
+<p>5、创建进程（线程）的 API？</p>
+<img src="https://s0.lgstatic.com/i/image/M00/67/C3/Ciqc1F-iUcyAKsUkAADXFCtukIY084.png" alt="Lark20201104-145559.png" style="zoom:25%;" />
+<p>每次 fork 会多创造一个克隆的进程，这个克隆的进程，所有状态都和原来的进程一样，但是会有自己的地址空间。如果要创造 2 个克隆进程，就要 fork 两次。</p>
+<p>6、进程的开销比线程大在了哪里？</p>
+<p>Linux 中创建一个进程自然会创建一个线程，也就是主线程。创建进程需要为进程划分出一块完整的内存空间，有大量的初始化操作，比如要把内存分段（堆栈、正文区等）。创建线程则简单得多，只需要确定 PC 指针和寄存器的值，并且给线程分配一个栈用于执行程序，同一个进程的多个线程间可以复用堆栈。因此，创建进程比创建线程慢，而且进程的内存开销更大。</p>
+<p>线程也被称作轻量级进程，由操作系统直接调度的，是内核级线程。我们还学习了线程切换保存、恢复状态的过程。进程和线程是操作系统为了分配资源设计的两个概念，进程承接存储资源，线程承接计算资源。而进程包含线程，这样就可以做到进程间内存隔离。</p>
+<p><strong>原子操作</strong>就是操作不可分，多线程环境，一个原子操作的执行过程无法被中断。</p>
+<p><strong>竞争条件</strong>即多个线程对一个资源（内存地址）的读写存在竞争。这种条件下资源的值不可预测，取决于竞争时具体的执行顺序。</p>
+<blockquote>
+<p>i++就不是一个原子操作，由 3 个原子操作组合成的：读取 i 的值；计算 i+1；写入新的值。</p>
+<p>假如两个线程并发执行i++，程序片访问共享资源时会造成竞争条件，共享资源的值最终取决于<strong>程序执行的时序</strong>，结果不确定。这种<strong>访问共享资源的程序片段称为临界区</strong>。</p>
+</blockquote>
+<p>解决竞争条件的方案：</p>
+<ul>
+<li>不要让程序同时进入临界区即<strong>互斥</strong></li>
+<li>避免竞争条件</li>
+</ul>
+<p>1.利用 ThreadLocal，每个线程独有变量，线程间就不存在竞争关系。</p>
+<p>2.利用 CPU 提供的 Compare And Swap 原子操作，让非原子操作(i++)成为一个原子操作。cas是更新一个内存地址的值，但前提必须明确知道该内存地址当前的值。</p>
+<blockquote>
+<p><code>cas(&amp;i, i,i+1)</code>在这个过程中，若有其他线程把i更新为i+1，这次调用会返回 false，否则返回 true。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/68/E8/CgqCHl-lBrSAKBmrAADNiS8bkAY490.png" alt="Lark20201106-161714.png" style="zoom:33%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/68/DD/Ciqc1F-lBr2ATIabAADce4zrAOw887.png" alt="Lark20201106-161708.png" style="zoom:33%;" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>普通：读取 i 的值；计算 i+1；写入新的值</td>
+<td>cas：读取i ；计算i+1；cas操作</td>
+</tr>
+</tbody>
+</table>
+<p>少数CPU 没有提供 cas，提供一种 类似的Test-And-Set 指令（tas）。</p>
+</blockquote>
+<p>3.锁（lock）的目标是实现抢占（preempt）。即只让给定数量的线程进入临界区。锁可以用tas或者cas来实现。</p>
+<pre><code class="language-c">enter();
+i++;
+leave();
+
+//-----------用cas实现enter和leave函数----
+
+int lock = 0;
+enter(){//自旋锁:代码不断在 CPU 中执行指令，直到锁被其他线程释放
+  while( !cas(&amp;lock, 0, 1) ) {
+    // 什么也不做
+  }
+}
+leave(){
+  lock = 0;
+}
+</code></pre>
+<p>多个线程竞争一个整数的 lock 变量，0 代表目前没有线程进入临界区，1 代表目前有线程进入临界区。利用cas原子指令我们可以对临界区进行管理。如果一个线程利用 cas 将 lock 设置为 1，那么另一个线程就会一直执行cas操作，直到锁被释放。</p>
+<p>自旋锁优点不会主动 Context Switch（线程切换），因为线程切换比较消耗时。自旋锁缺点比较消耗 CPU 资源，如果自旋锁一直拿不到锁，会一直执行，比较消耗 CPU 资源。</p>
+<pre><code class="language-java">enter(){
+  while( !cas(&amp;lock, 0, 1) ) {
+    // sleep(1000ms);休眠的时间不好控制
+    wait();
+  }
+}
+</code></pre>
+<p>可以实现一个 wait 操作，主动触发线程切换，减轻cpu消耗问题。但线程切换也是消耗cpu资源的。wait方法，等待一个信号，直到另一个线程调用notify方法，通知这个线程结束休眠。</p>
+<p>解决竞争条件时使用锁，进入临界区之前 lock，出去就 unlock定义锁，需要一个整型，语言级锁的实现如下：</p>
+<pre><code class="language-java">enter(&amp;lock);
+//临界区代码
+leave(&amp;lock);
+</code></pre>
+<p>wait 和 notify 生产者消费者模型： wait 是一个生产者，将当前线程挂到一个等待队列上，并休眠。notify 是一个消费者，从等待队列中取出一个线程，并重新排队。</p>
+<p>把<code>enter</code> <code>leave</code> <code>wait</code> <code>notify</code>的逻辑都封装起来，不让用户感知到它们的存在。Java 中每个对象增加了一个 Object Header 区域，里面一个锁的位（bit），锁并不需要一个 32 位整数，一个 bit 足够。</p>
+<pre><code class="language-java">synchronized(obj){// enter
+  // 临界区代码
+} // leave
+</code></pre>
+<p>synchronized 关键字的内部实现，使用封装好的底层代码Monitor 对象。每个 Java 对象都关联了一个 Monitor 对象。Monitor 封装了对锁的操作，比如 enter、leave 的调用，这样简化了 Java 程序员的心智负担，你只需要调用 synchronized 关键字。</p>
+<p>另外，Monitor 实现了生产者、消费者模型。</p>
+<p>如果一个线程拿到锁，那么这个线程继续执行；</p>
+<p>如果一个线程竞争锁失败，Montior 就调用 wait 方法触发生产者的逻辑，把线程加入等待集合；</p>
+<p>如果一个线程执行完成，Monitor 就调用一次 notify 方法恢复一个等待的线程。</p>
+<p>这样，Monitor 除了提供了互斥，还提供了线程间的通信，避免了使用自旋锁，还简化了程序设计。</p>
+<p>互斥的广义版为<strong>信号量</strong>，同时允许 N 个线程进入临界区。当lock初始值为 1 的时候，这个模型就是实现互斥（mutex）。如果 lock 大于 1，那么就是同时允许多个线程进入临界区。这种方法，我们称为信号量（semaphore）。</p>
+<p>信号量实现生产者消费者模型： wait 是生产者，notify 是消费者。 每次wait操作减少一个空位置数量，empty-1；增加一个等待的线程，full+1。每次notify操作增加一个空位置，empty+1，减少一个等待线程，full-1。</p>
+<p>insert和remove方法是互斥的操作，需要用另一个 mutex 锁来保证。insert方法将当前线程加入等待队列，并且调用 yield 方法，交出当前线程的控制权，当前线程休眠。remove方法从等待队列中取出一个线程，并且调用resume进行恢复。以上， 就构成了一个简单的生产者消费者模型。</p>
+<p>如果两个线程互相等待对方获得的锁，就会发生死锁。可以把死锁理解成一个环状的依赖关系。</p>
+<p>分布式环境的锁：当用户并发的访问接口，是会发生竞争条件的。 因为程序已经不是在同一台机器上执行了，解决方案就是分布式锁。实现锁，我们需要原子操作。单机多线程并发的场景下，原子操作由 CPU 指令提供，比如 cas 和 tas 指令。分布式环境下很多工具都可以提供分布式的原子操作，比如 Redis 的 setnx 指令，Zookeeper 的节点操作等等。</p>
+<p>并发场景，设计系统的目的往往是达到同步（Synchronized）的状态，同步就是大家最终对数据的理解达成了一致。同步的一种方式，就是让<strong>临界区互斥</strong>（对临界区上锁），具有强烈的排他性，对修改持保守态度，我们称为<strong>悲观锁</strong>（Pressimistic Lock）。像git同时写，先更新的人被采纳，后更新的人负责解决冲突。是一种典型的**乐观锁（Optimistic Lock）**的场景。</p>
+<p>除了上锁还有哪些并发控制方法？</p>
+<p>之所以害怕并发，是因为中心化。用分级缓存的策略（dns）、分布式处理（分布式锁）优化，不如更彻底的用去中心化的方案，双方不用通过中心系统，直接达到同步（Synchronized）的状态。处理并发还可以考虑 Lock-Free 数据结构。比如 Lock-Free 队列，是基于 cas 指令实现的，允许多个线程使用这个队列。再比如 ThreadLocal，让每个线程访问不同的资源，旨在用空间换时间，也是避免锁的一种方案。</p>
+<p>双方签订<strong>电子合同</strong>，解决最基本的信用问题。</p>
+<p>区块链构成了一个基于历史版本的事实链，前一个版本是后一个版本的历史，把双方的货币和库存记录在Block中，解决<strong>货币和库存</strong>的问题。</p>
+<p><strong>发生购买转账的交易</strong>，在末端节点上再增加一个区块。（若有很多人同时在这个末端节点上写新的 Block。可以由一个可信任的中心服务帮助合并新增的区块数据）</p>
+<p><strong>解决欺诈问题</strong>，正常情况下自己的余额/库存交易按顺序记录在区块中无法超额。擅自修改自己的余额/库存等欺诈问题：要新增一个假的末端的block，就和之前 Block 中记录的冲突了；想要修改之前的某个block的数据，这个节点的摘要签名就会发生变化了， 那么后面所有的节点就失效了。相当于修改了完整的一个链条，且修改了所有的签名，就会被其他参与者知道并抵制。区块链一旦写入就不能修改，这样可以防止很多欺诈行为。</p>
+<img src="https://s0.lgstatic.com/i/image/M00/6C/E0/Ciqc1F-ryUiAQ5JUAAEC6zaXAKM772.png" alt="4.png" style="zoom:50%;" />
+<p>区块链：每个 Block 下面可以存一些数据，每个 Block 知道上一个节点是谁。且每个 Block 有上一个节点的摘要签名，可以证明上一个block的数据 的数据没有被篡改过。（如果 Block 10 是 Block 11 的上一个节点，那么 Block 11 会知道 Block 10 的存在，且用 Block 11 中 Block 10 的摘要签名，可以证明 Block 10 的数据没有被篡改过。）</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/6C/E0/Ciqc1F-ryVaAO-KFAADCyXfna24816.png" alt="2.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/6C/E0/Ciqc1F-ryV-ATtpAAACJ4ZgkVtU059.png" alt="1.png" style="zoom:43%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>同时下单时，会导致最后面的 Block，开很多分支。</p>
+<p><strong>解决并发问题</strong>：不用集中式的锁解决。维护自己的 Block-Chain，等待合适的时机，再去合并到主分支上，而不是每次都创建block。</p>
+<p>线程调度都有哪些方法？</p>
+<p>非抢占的<strong>先到先服务（First Come First Service，FCFS）<strong>模型(使用队列FIFO)是最朴素的，公平性和吞吐量可以保证。但是因为希望减少用户的</strong>平均等待时间（总等待时间/任务数）</strong>，操作系统往往需要实现<strong>抢占（Preemption）<strong>和</strong>优先级队列（PriorityQueue）</strong>，同时还要<strong>短作业优先（Shortest Job First，SJF）。<strong>操作系统无法预判每个任务的预估执行时间，还需要采用</strong>分级队列</strong>。最高优先级的任务可以考虑非抢占的优先级队列（每个任务执行完才执行下一个）。 其他任务放到分级队列模型中执行，从最高优先级时间片段最小向最低优先级时间片段最大逐渐沉淀。这样就同时保证了小任务先行和高优任务最先执行。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/6D/A7/CgqCHl-uUx2AZFakAACjU3Bi2eE649.png" alt="Lark20201113-173328.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/6D/9C/Ciqc1F-uUyaAUVSDAAB3mZmSb3A937.png" alt="Lark20201113-173330.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p><strong>抢占（Preemption）<strong>就是把</strong>执行能力分时</strong>，分成时间片段。 让每个任务都执行一个时间片段。如果在时间片段内，任务完成，那么就调度下一个任务。如果任务没有执行完成，则中断任务，让任务重新排队，调度下一个任务。</p>
+<ol>
+<li>线程相对于操作系统是排队到来的，操作系统为每个到来的线程分配一个优先级，然后把它们放入一个优先级队列中，优先级最高的线程下一个执行。</li>
+<li>每个线程执行一个时间片段，每次线程执行满一个时间片，就执行一段调度程序(红色)。调度程序可以考虑实现为一个单线程模型，这样不需要考虑竞争条件。</li>
+</ol>
+<p><strong>多级队列模型</strong>:上层队列调度紧急任务，下层队列调度普通任务。只要上层队列有任务，下层队列就会让出执行权限。</p>
+<ol>
+<li>
+<p>低优先级队列可以考虑抢占 + 优先级队列的方式实现，这样每次执行一个时间片段就可以判断一下高优先级的队列中是否有任务。</p>
+</li>
+<li>
+<p>高优先级队列可以考虑用非抢占（每个任务执行完才执行下一个）+ 优先级队列实现，这样紧急任务优先级有个区分。如果遇到十万火急的情况，就可以优先处理这个任务。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/6D/A7/CgqCHl-uUzCAVhhzAAFSttJfDs4355.png" alt="Lark20201113-173333.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/6D/9C/Ciqc1F-uUzqAMYY-AADMHX-2Dso456.png" alt="Lark20201113-173318.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</li>
+</ol>
+<p>优化：高优先级队列、普通优先级队列（实际操作中，可以有 n 层，一层层把大任务筛选出来。 最长的任务，放到最闲的时间去执行。）短任务会在更高优先级的队列中执行完成，长任务优先级会下调，也就类似实现了最短作业优先的问题。</p>
+<ol>
+<li>紧急任务仍然走高优队列，非抢占执行。</li>
+<li>普通任务先放到优先级仅次于高优任务的队列中，并且只分配很小的时间片；如果没有执行完成，说明任务不是很短，就将任务下调一层。</li>
+<li>最低优先级的队列中时间片很大，长任务就有更大的时间片可以用。</li>
+</ol>
+<p>什么情况下会触发饥饿和死锁？</p>
+<p>线程需要资源没有拿到，无法进行下一步，就是饥饿。死锁（Deadlock）和活锁（Livelock）都是饥饿的一种形式。 非抢占的系统中，互斥的资源获取，线程间互相等待资源，形成循环依赖就会产生死锁。死锁发生后，如果利用抢占解决，导致资源频繁被转让，有一定概率触发活锁。死锁、活锁，都可以通过设计并发控制算法解决，比如哲学家就餐问题。</p>
+<p>（要解决死锁的问题，可以考虑哲学家拿起 1 个叉子后，如果迟迟没有等到下一个叉子，就放弃这次操作。比如 Java 的 Lock Interface 中，提供的tryLock方法，就可以实现定时获取，拿不到锁，就报异常，并释放已获得资源。</p>
+<p>按以上方案解决死锁：可能在某个时刻，所有哲学及都拿起了左手的叉子，然后发现右手的叉子拿不到，就放下了左手的叉子。如此周而复始，这就是一种活锁。所有线程都在工作，但是没有线程能够进一步解决问题）</p>
+<p>我的服务应该开多少个进程、多少个线程？</p>
+<p>【解析】 计算密集型一般接近核数，如果负载很高，建议留一个内核专门给操作系统。I/O 密集型一般都会开大于核数的线程和进程。 但是无论哪种模型，都需要实地压测，以压测结果分析为准；另一方面，还需要做好监控，观察服务在不同并发场景的情况，避免资源耗尽。</p>
+<h2 id="内存管理">内存管理</h2>
+<p>内存一致性：在同一时刻，多线程之间，对内存中某个地址的数据认知是否一致（简单理解，就是多个线程读取同一个内存地址能不能读到一致的值）。</p>
+<p>对某个地址，和任意时刻，如果所有线程读取值，得到的结果都一样，就是强一致性，或称为线性一致性（Sequencial Consistency）。 如果只有部分时刻所有线程的理解是一致的，那么称为弱一致性（Weak Consistency）。为什么会有内存不一致问题呢? 这就是因为 CPU 缓存的存在。</p>
+<img src="https://s0.lgstatic.com/i/image/M00/72/28/CgqCHl_A0uOACUBUAACRcLSCqUw476.png" alt="Lark20201127-181946.png" style="zoom:25%;" />
+<p>假如在 CPU 架构中，Thread1,Thread2 在不同核心，因此它们的 L1\L2 缓存不共用， L3 缓存共享。</p>
+<p>如果 Thread1 发生了写入 A=1，这个时候会按照 L1,L2,L3 的顺序写入缓存，最后写内存。结果会导致 print 出来的 A 和 B 结果不确定，取决于具体线程执行的时机。Java 提供了一个 volatile 关键字，避免从读取不到lock的写入内存的问题（还在 Thread 所在 CPU 的 L1、L2 中）。</p>
+<p>虚拟化技术是为了解决内存不够用的问题。</p>
+<p>**内存交换（Swap）**技术允许一部分进程使用内存，不使用内存的进程数据先保存在磁盘上。（此处的数据是指完整的进程数据，包括正文段（程序指令）、数据段、堆栈段等）轮到某个进程执行的时候，尝试为这个进程在内存中找到一块空闲的区域。如果空间不足，就考虑把没有在执行的进程交换（Swap）到磁盘上，把空间腾挪出来给需要的进程。</p>
+<img src="https://s0.lgstatic.com/i/image/M00/75/44/Ciqc1F_Hb-GAermKAACje6hFwj4571.png" alt="Lark20201202-184240.png" style="zoom:50%;" />
+<p>内存被拆分成多个区域。 内核作为一个程序也需要自己的内存。每个进程独立得到一个空间即地址空间（Address Space）。地址空间是一块连续分配的内存块。每个进程在不同地址空间中工作，这种原始的虚拟化技术存在：碎片问题、频繁切换问题。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/75/44/Ciqc1F_Hb_aALLF_AABvGKciFvQ002.png" alt="Lark20201202-184243.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/75/4F/CgqCHl_HcAOAERr3AACsFab3D0g908.png" alt="Lark20201202-184247.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/75/44/Ciqc1F_HcBGANfB6AABfKTW4B2g866.png" alt="Lark20201202-184250.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>操作系统设计了虚拟内存，操作系统管理<strong>虚拟内存和真实内存之间的映射</strong>。操作系统将<strong>虚拟内存分成整齐的页（Page）</strong>。减轻内存碎片问题，而且操作系统不必关系哪些进程被高频/低频使用，只关心哪些页被高/低频使用，将高频实用的页保留在真实内存，低频使用的页保留在硬盘上。</p>
+<p><strong>真实内存也需要分块为一个个Frame</strong>。Page 到 Frame 通过<strong>页表</strong>的结构映射。页表维护了虚拟地址到真实地址的映射。</p>
+<p>上面的过程发生在 CPU 中一个小型的设备：内存管理单元（Memory Management Unit， MMU）中。当 CPU 需要执行一条指令时，如果指令中涉及内存读写操作，CPU 会把虚拟地址给 MMU，MMU 自动完成虚拟地址到真实地址的计算；然后MMU 连接了地址总线，帮助 CPU 操作真实地址。</p>
+<p>表中的每一项（页表条目）如下图所示</p>
+<blockquote>
+<img src="https://s0.lgstatic.com/i/image/M00/75/4F/CgqCHl_HcCiAXdDRAACAza-oxwo742.png" alt="Lark20201202-184252.png" style="zoom:50%;" />
+<p>页表条目本身的编号page number可以不存在页表中，而是通过偏移量计算。 比如地址 100,000 的编号，可以用 100,000 除以页大小确定。</p>
+<p>Absent（“在”）位，是一个 bit。0 表示页的数据在磁盘中（不再内存中），1 表示在内存中。如果读取页表发现 Absent = 0，那么会触发缺页中断，去磁盘读取数据。</p>
+<p>Protection（保护）字段可以实现成 3 个 bit，它决定页表用于读、写、执行。比如 000 代表什么都不能做，100 代表只读等。</p>
+<p>Reference（访问）位，代表这个页被读写过，这个记录对回收内存有帮助。</p>
+<p>Dirty（“脏”）位，代表页的内容被修改过，如果 Dirty =1，那么意味着页面必须回写到磁盘上才能置换（Swap)。如果 Dirty = 0，如果需要回收这个页，可以考虑直接丢弃它（什么也不做，其他程序可以直接覆盖）。</p>
+<p>Caching（缓存位），描述页可不可以被 CPU 缓存。CPU 缓存会造成内存不一致问题，在上个模块的加餐中我们讨论了内存一致性问题，具体你可以参考“模块四”的加餐内容。</p>
+<p>Frame Number（Frame 编号），这个是真实内存的位置。用 Frame 编号乘以页大小，就可以得到 Frame 的基地址。</p>
+</blockquote>
+<img src="https://s0.lgstatic.com/i/image/M00/8C/20/CgqCHl_lnEqAGPEZAAC-Dsux5E8250.png" alt="1.png" style="zoom:50%;" />
+<img src="https://s0.lgstatic.com/i/image/M00/75/50/CgqCHl_HcK2AGh63AABHzfHvTfg888.png" alt="Lark20201202-184238.png" style="zoom:50%;" />
+<p>占据大空间的应用，大页面时页表时，为了减少条目的创建，可以考虑进程内部用一个更大的页表，操作系统继续用原来小的页表。按照这样的思想还有多级页表（40m、4m、4k）</p>
+<p>MMU 根据 1 级编号找到 1 级页表条目，1 级页表条目中记录了对应 2 级页表的位置。依次递归查到末尾级别的页表，然后 MMU 再查询该页表找到 Frame。最后通过地址偏移量和 Frame 编号计算最终的物理地址。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image/M00/78/84/Ciqc1F_KEYiAGIk6AABN2sQtqqo988.png" alt="Lark20201204-183520.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/78/90/CgqCHl_KEZGAB4tfAAA_7O1Ajlg766.png" alt="Lark20201204-183533.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>虚拟地址由页号和偏移量组成，物理地址由 Frame Number 和偏移量组成。在 CPU 中有一个虚拟地址到物理地址转换的小型设备，叫作内存管理单元（Memory Management Unit(MMU）。</p>
+<p>程序执行时，指令中的地址都是虚拟地址，虚拟地址会通过 MMU，MMU 会查询页表，计算出对应的 Frame Number，然后偏移量不变，组装成真实地址。然后 MMU 通过地址总线直接去访问内存。所以 MMU 承担了<strong>虚拟地址到物理地址的转换</strong>以及 <strong>CPU 对内存的操作</strong>这两件事情。MMU 在 CPU 内部，并且直接和地址总线连接。因此 MMU 承担了 CPU 和内存之间的代理。</p>
+<p>CPU 的指令周期中，fetch、execute 和 store 这 3 个环节中都有可能发生内存操作，地址换算增加le指令的 CPU 周期。因此在 MMU 中往往还有一个微型的设备，叫作**转置检测缓冲区（Translation Lookaside Buffer，TLB）**来提高转换速度。TLB 是一个二维表格，每一行是一个 Page Number 对应一个 Frame Number。我们把这样的每一行称为一个缓存行（Cache Line），或者缓存条目（Entry）。<strong>TLB 的作用就是根据输入的 Page Number，找到 Frame Number</strong>。TLB 是硬件实现的速度快。现代多核 CPU，每个核心有单独的 TLB，且采用类似 CPU 缓存的分级策略。通过这样的设计，绝大多数的页表查询就可以用 TLB 实现了。</p>
+<p>TLB 失效（Miss）： Page Number 在 TLB 总没有找到。</p>
+<ol>
+<li>软失效（Soft Miss）：Frame 还在内存中，只不过 TLB 缓存中没有。刷新 TLB 缓存，如果 TLB 缓存已经满了，就需要选择一个已经存在的缓存条目进行覆盖。具体选择哪个条目进行覆盖，我们称为<strong>缓存置换</strong>（缓存不够用了，需要置换）。缓存置换时，通常希望高频使用的数据保留，低频使用的数据被替换。</li>
+<li>硬失效（Hard Miss)：对应的 Frame 没有在内存中，需要从磁盘加载。首先操作系统要触发一个缺页中断（原有需要读取内存的线程被休眠），然后中断响应程序开始从磁盘读取对应的 Frame 到内存中，读取完成后，再次触发中断通知更新 TLB，并且唤醒被休眠的线程去排队。线程不可能从休眠态不排队就进入执行态，因此 Hard Miss 是相对耗时的。</li>
+</ol>
+<p>基于缓存行（Cache Line）的缓存有 3 种映射方案：</p>
+<p>相联（Associative）即缓存条目和缓存数据之间的映射范围。如果是全相联，则数据可能在任何条目。如果是组相联（Set-Associative），则数据只能在一部分缓存条目中出现（比如前 4 个条目为一组）。</p>
+<ol>
+<li>
+<p>全相联映射（Fully Associative Mapping）：条目过多，硬件查询速度下降。</p>
+</li>
+<li>
+<p>直接映射（Direct Mapping）：通过类似哈希函数的计算映射</p>
+</li>
+<li>
+<p>n 路组相联映射（n-way Set-Associative Mapping）：允许一个虚拟页号（Page Number）映射到固定数量的 n 个位置，每次新地址需要置换进来的时候，可以从 n 个位置中选择更新时间最早的条目置换出去。</p>
+</li>
+</ol>
+<p>前两种方案被缓存的值都在固定位置，而n 路组相联映射可以被缓存于多个位置，才能在后续实现根据时间或频率而淘汰的置换算法。</p>
+<p>大内存分页时采用多级页表也会给MMU 带来一定的负担。可以采用大内存分页（Large Page 或 Huge Page），让系统能够提供大小为 4M 的页而非4k，以减少页数，也提高了 TLB 的查询性能。</p>
+<p><strong>缓存设计中有一个重要的环节：当缓存满了，新的缓存条目要写入时，哪个旧条目被置换出去呢？</strong></p>
+<p>这就需要用到缓存置换算法（Cache Replacement Algorithm）。设计缓存置换算法的期望是：每次将未来使用<strong>频率最低</strong>的数据置换出去。但实际中不可能预知哪些内存地址在未来指令中使用频率高低。在缓存中找到数据叫作一次命中（Hit），没有找到叫作穿透（Miss）。</p>
+<blockquote>
+<p>缓存置换应用场景非常广如：发生缺页中断后，操作系统需要将磁盘的页导入内存，那么已经在内存中的页就需要置换出去。CDN 服务器为了提高访问速度，需要决定哪些 Web 资源在内存中，哪些在磁盘上。CPU 缓存每次写入一个条目，也就相当于一个旧的条目被覆盖。数据库要决定哪些数据在内存中，应用开发要决定哪些数据在 Redis 中，而空间是有限的，这些都关联着缓存的置换。</p>
+</blockquote>
+<p>缓存置换算法：</p>
+<p>随机/FIFO(链表)/FILO(栈)具有非常朴素的公平，但穿透概率高。</p>
+<p>最近未使用（NRU Not Recently Used)：一条页表条目中的访问位Reference，代表页表有被读取过。脏位Dirty，代表页表被写入过。每次置换的时候，操作系统尽量最近未使用的即选择读、写位都是 0 的页面置换。</p>
+<p>（NRU与FIFO结合成第二次机会算法：每次 把FIFO 队列尾部条目置换出去前，检查条目的都位若为1，则设为0同时不置换出去而移到队首[循环链表改变头指针即可]）</p>
+<p>最近使用最少（LRU Least Recently Used）：比 NRU 多出最少使用即频率这个条件。最近一段时间最少使用到的数据应该被淘汰，把空间让给最近频繁使用的数据。这样的设计，即便数据都被使用过，还是会根据使用频次多少进行淘汰。</p>
+<p>LRU 的一种常见实现是双向链表维护缓存条目。如果链表中某个缓存条目被使用到，那么就将这个条目重新移动到表头。如果要置换缓存条目出去，就直接从双线链表尾部删除一个条目。</p>
+<p>通常 LRU 缓存还要提供查询能力，这里我们可以考虑用类似 Java 中 LinkedHashMap 的数据结构，同时具备双向链表和根据 Key 查找值的能力。</p>
+<p>设计 LRU 缓存第一个困难是描述<strong>最近使用次数</strong> “最近”是一个模糊概念，没有具体指出是多长时间？按照 CPU 周期计算还是按照时间计算？</p>
+<p>页面置换算法中，<strong>累加计数页表的读位（访问位Reference）</strong>。这种单纯基于使用次数最少判断置换，我们称为<strong>最少使用（Least Frequently Used,，LFU）算法</strong>。</p>
+<blockquote>
+<p>例如：现在某个页表条目的累计值是 0， 接下来在多次计数中看到的读位是：1,0,0,1,1，那么累计值就会变成 3。这代表在某段时间内（5 个计数器 Tick 中）有 3 次访问操作。</p>
+<p>LFU 的劣势在于它不会忘记数据，累计值不会减少。如果有内存数据过去常常被用到，但是现在已经有很长一段时间没有被用到了，在这种情况下它并不会置换出去。</p>
+</blockquote>
+<p>**”老化”（Aging）**的算法：解决累加计数只增不减的问题。</p>
+<blockquote>
+<p>比如用 8 位来描述累计数（A），那么每次当读位的值（R）到来的时候，我们都考虑将 A 的值右移，然后将 R 放到 A 的最高位。</p>
+<p>例如 A 目前的值是00000000，在接下来的 5 个 Tick 中 R 来临的序列是11100，那么 A 的值变更顺序为：</p>
+<p>10000000</p>
+<p>11000000</p>
+<p>11100000</p>
+<p>01110000</p>
+<p>00111000</p>
+<p>随着 Aging 算法的执行，有访问操作的时候 A 的值上升，没有访问操作的时候，A的值逐渐减少。如果一直没有访问操作，A 的值会回到 0。</p>
+</blockquote>
+<p>巧妙地用数学描述了“最近”。操作系统每次页面置换的时候，都从 A 值最小的集合中取出一个页面放入磁盘。这个算法是对 LRU 的一种模拟，也被称作 LFUDA（动态老化最少使用，其中 D 是 Dynamic,，A 是 Aging）。</p>
+<p>LRU 用什么数据结构实现更合理？</p>
+<p>【解析】 最原始的方式是用数组，数组的每一项中有数据最近的使用频次。数据的使用频次可以用计时器计算。每次置换的时候查询整个数组实现。</p>
+<p>另一种更好的做法是利用双向链表实现。将使用到的数据移动到链表头部，每次置换时从链表尾部拿走数据。链表头部是最近使用的，链表尾部是最近没有被使用到的数据。</p>
+<p>但是在应对实际的场景的时候，有时候不允许我们建立专门用于维护缓存的数据结构（内存大小限制、CPU 使用限制等），往往需要模拟 LRU。比如在内存置换场景有用“老化”技术模拟 LRU 计算的方式。</p>
+<p>通常意义上我们说的垃圾回收器（Garbage Collector，GC），不只是内存回收用的模块，而事实上程序语言提供的 GC 往往是应用的实际内存管理者。</p>
+<p>GC 的“工作”有 4 种：</p>
+<ol>
+<li>
+<p>GC 要和操作系统进行交互，负责申请内存；并把不用的内存还给操作系统（释放内存）。</p>
+</li>
+<li>
+<p>应用会向 GC 申请内存。</p>
+</li>
+<li>
+<p>GC 要承担我们通常意义上说的垃圾回收能力，标记不用的对象，并回收他们。</p>
+</li>
+<li>
+<p>GC 还需要针对应用特性进行动态的优化。</p>
+</li>
+</ol>
+<p>在程序语言实现 GC 内存管理的时候，会关注下面这几个指标：</p>
+<p>吞吐量（Throughput）：执行程序（不包括 GC 执行的时间）和总是间的占比。只要不在 GC，就认为是吞吐量的一部分。</p>
+<p>足迹（FootPrint）： 一个程序使用了多少硬件的资源，也称作程序在硬件上的足迹。GC 里面说的足迹，通常就是应用对内存的占用情况。比如说应用运行需要 2G 内存，但是好的 GC 算法能够帮助我们减少 500MB 的内存使用，满足足迹这个指标。</p>
+<p>暂停时间（Pause Time）： GC 执行的时候，通常需要停下应用（避免同步问题），这称为 Stop The World，或者暂停。（不同应用对某次内存回收可以暂停的时间需求是不同的，比如说一个游戏应用，暂停了几毫秒用户都可能有很大意见；而看网页的用户，稍微慢了几毫秒是没有感觉的。GC 往往不能拥有太长的暂停时间（Pause Time），因为 <strong>GC 和应用是并发的执行</strong>。如果 GC 导致应用暂停（Stop The World，STL）太久，那么对有的应用来说是灾难性的。但如果暂停时间只允许很短，那么 GC 和应用的交替就需要非常频繁。）</p>
+<p>吞吐量高，不代表暂停时间少，也不代表空间使用（FootPrint）小。 同样的，使用空间小的 GC 算法，吞吐量反而也会下降。三者之间存在类似相同成本代价下不可兼得的关系，往往编程语言会提供参数让你选择根据自己的应用特性决定 GC 行为。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image2/M01/03/6E/CgpVE1_cGkiAQg5eAACZco3DsVw877.png" alt="图片1.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image/M00/84/6B/Ciqc1F_TUQ6AGct7AACd_pMg8rA373.png" alt="图片3.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>实现 GC 最简单的方案叫作<strong>引用计数</strong>：如果一个节点的引用计数是 0，就意味着没有任何一个节点引用它，理论上这个节点应该被回收。GC 不断扫描引用计数为 0 的节点进行回收，就构成了最简单的一个内存回收算法。</p>
+<p>缺点：</p>
+<p>循环引用：如图三者互相引用，虽然引用计数是 1。但即使这 3 个对象不会再使用了，GC 不会回收它们。</p>
+<p>引用计数法容错能力差，多线程环境下引用计数的算法一旦算错 1 次，就会导致内存永久无法被回收。</p>
+<img src="https://s0.lgstatic.com/i/image/M00/8B/9A/CgqCHl_cGjOAErigAAE9Hos_mIo707.png" alt="图片2.png" style="zoom:50%;" />
+<p>Root Tracing 类算法：标记-清除算法和 3 色标记-清除算法都属于这一类。</p>
+<p>从引用路径上，如果一个对象的引用链中包括一个根对象（Root Object），那么这个对象就是活动的。如果一个对象从根对象不可达，那么这个对象就应该被回收(即便这个对象存在循环引用。)</p>
+<p>（根对象是所有引用关系的源头，比如用户在栈中创建的对象指针；程序启动之初导入数据区的全局对象等。在 Java 中根对象就包括在栈上创建指向堆的对象；JVM 的一些元数据，包括 Method Area 中的对象等。)</p>
+<p>标记-清除（Mark Sweep）算法:用白色代表一种不确定的状态：可能被回收。 黑色代表一种确定的状态：不会被回收。算法的实现，就是为所有的对象染色。算法执行结束后，所有是白色的对象就需要被回收。</p>
+<p>假设有两个全局变量是已知的：</p>
+<ul>
+<li>
+<p>heapSet 中拥有所有对象</p>
+</li>
+<li>
+<p>rootSet 中拥有所有 Root Object</p>
+</li>
+<li>
+<p>标记函数mark：它会递归地将一个对象的所有子对象染成黑色(DFS深度优先搜索)</p>
+</li>
+</ul>
+<ol>
+<li>将所有的对象染成白色</li>
+<li>mark：从所有Root Object开始执行标记函数mark</li>
+<li>Sweep：上一步程序执行结束后，所有和 Root Object 连通的对象都已经被染成了黑色。然后我们遍历整个 heapSet 找到白色的对象进行回收清除（Sweep）</li>
+</ol>
+<p>如果上面的 GC 程序在某个时刻暂停了下来，然后开始执行用户程序。如果用户程序删除了对某个已经标记为黑色对象的所有引用，用户程序没办法通知 GC 程序。这个节点就会变成<strong>浮动垃圾（Floating Garbage）</strong>，需要等待下一个 GC 程序执行。假设用户程序和 GC 交替执行，用户程序不断进行<strong>修改（Mutation）</strong>，而 GC 不断执行标记-清除算法。那么这中间会产生大量浮动垃圾影响 GC 的效果。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image2/M01/02/27/Cip5yF_Z2CCAZ4MFAABZx6AzarA983.png" alt="Drawing 0.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image2/M01/02/27/Cip5yF_Z2CiASF0QAACL55G2CDE848.png" alt="Drawing 1.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>GC 的过程是标记、清除及程序不断对内存进行修改的过程。标记（Mark）就是找到不用的内存，清除（Sweep）就是回收不用的资源，而修改（Muation）则是指用户程序对内存进行了修改。</p>
+<blockquote>
+<p>对于 Mark、Sweep、Mutation 来说内存是共享的。如果并行执行相当于需要同时处理大量竞争条件的手段，这会增加非常多的开销。因此在 GC 的设计中，上述 3 种程序不允许并行执行（Simultaneously）。当然你可以开多个线程去 Mark、Mutation 或者 Sweep，但前提是每个过程都是独立的。</p>
+</blockquote>
+<p>对于双色标记-清除算法，如果 Mark 和 Sweep 之间存在 Mutation，那么 Mutation 的伤害是比较大的。</p>
+<p>三色标记-清除算法（Tri-Color Mark Sweep）：</p>
+<ul>
+<li>
+<p>白色代表需要 GC 的对象；</p>
+</li>
+<li>
+<p>黑色代表确定不需要 GC 的对象；</p>
+</li>
+<li>
+<p>灰色代表可能不需要 GC 的对象，但是还未完成标记的任务，也可以认为是增量任务。</p>
+</li>
+</ul>
+<p>一开始所有对象都染成白色。初始化完成后，会启动标记程序。在标记的过程中，是可以暂停标记程序执行 Mutation。算法需要维护 3 个集合，白色集合、黑色集合、灰色集合。3 个集合是互斥的，对象只能在一个集合中。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image2/M01/02/2C/Cip5yF_Z4eWAc6oqAAFWo21QkuY797.png" alt="图片36.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image2/M01/02/2D/CgpVE1_Z4h2AKNQnAAFJ-m6TgJw012.png" alt="图片33.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>类似双色标记-清除算法的<strong>全量 GC 程序</strong>，我们从 Root 集合开始遍历，完成了对所有元素的标记（将它们放入对应的集合）。</p>
+<p>执行之初，所有对象都放入白色集合。</p>
+<p>第一次执行，算法将 Root 集合能直接引用的对象加入灰色集合。</p>
+<p>不断从灰色集合中取出元素进行标记：这是DFS的过程，保证 3 个集合都是线程安全的，可以考虑利用 ConcurrentSet（这样性能更好）</p>
+<ol>
+<li>
+<p>如果对象在白色集合中，那么先将对象放入灰色集合；</p>
+</li>
+<li>
+<p>然后遍历节点的所有的引用对象，并递归所有引用对象；</p>
+</li>
+<li>
+<p>当一个对象的所有引用对象都在灰色集合中，就把这个节点放入为黑色集合。</p>
+</li>
+</ol>
+<p>标记算法完成后，白色集合内就是需要回收的对象。</p>
+<p>**增量 GC（Incremental GC）**的实现。</p>
+<p>首先对用户的修改（Mutation）分 3 类：创建新对象、删除已有对象、调整已有引用</p>
+<p>如果用户程序创建了新对象，可以考虑把新对象直接标记为灰色。（虽然也可以考虑标记为黑色，但是标记为灰色可以让 GC 意识到新增了未完成的任务）</p>
+<p>如果用户删除了已有的对象，通常做法是等待下一次全量 Mark 算法处理。但实际中暂时不处理。</p>
+<p>在调整已有的引用关系时，调整过的都加入灰色集合</p>
+<p>内存回收就好比有人在随手扔垃圾，清洁工需要不停打扫。如果清洁工能够跟上人们扔垃圾的速度，那么就不需要太多的 STL（Stop The World）。如果清洁工跟不上扔垃圾的速度，最终环境就会被全部弄乱，这个时候清洁工就会要求“Stop The World”。<strong>三色算法通过对用户修改（Mutation）（创建新对象、删除已有对象、调整已有引用）的增量灰色标记，提高“垃圾”被并发回收的概率。</strong></p>
+<p>目前的 <strong>GC 主要都是基于三色标记算法。 至于清除算法，有原地回收算法，也有把存活下来的对象（黑色对象）全部拷贝到一个新的区域的算法。</strong></p>
+<table>
+<thead>
+<tr>
+<th><img src="https://s0.lgstatic.com/i/image2/M01/02/28/CgpVE1_Z2OuAXxFjAABfInodsKw867.png" alt="Drawing 15.png" style="zoom:50%;" /></th>
+<th><img src="https://s0.lgstatic.com/i/image2/M01/02/28/Cip5yF_Z2POASXuMAACh7n5TBi8380.png" alt="Drawing 17.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>三色标记-清除算法，还没有解决内存回收产生碎片的问题。通常，我们会在三色标记-清除算法之上，再构建一个<strong>整理内存（Compact）的算法。</strong></p>
+<p>根据新创建出来的对象，死亡（被回收）概率会更高，而那些已经存在了一段时间的对象，往往更不容易死亡：</p>
+<p>把新创建的对象，都先放到一个统一的区域，在 Java 中称为伊甸园（Eden）。这个区域因为频繁有新对象死亡，因此需要经常 GC。将存活下来的对象拷贝到另一个区域，Java 中称为存活区（Survior）。存活区生存下来的对象再进入下一个区域，Java 中称为老生代。Eden、Survior 及老生代之间的关系是对象的死亡概率逐级递减，对象的存活周期逐级增加。三个区域都采用三色标记-清除算法。</p>
+<p>Eden 可以考虑和 Survivor 用 1:1 的空间，老生代则可以用更大的空间。Eden 中全量 GC 可以频繁执行，也可以增量 GC 混合全量 GC 执行。老生代中的 GC 频率可以更低，偶尔执行一次全量的 GC。</p>
+<p>通常选择 GC 会有实时性要求（最大容忍的暂停时间），需要从是否为高并发场景、内存实际需求等维度去思考。在选择 GC 的时候，复杂的算法并不一定更有效。<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210702114136599.png" alt="image-20210702114136599" style="zoom:50%;" /></p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86">计算机组成原理</a>
+<ul>
+<li><a href="#linux">Linux</a></li>
+<li><a href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">操作系统</a>
+<ul>
+<li><a href="#linux-%E7%9A%84%E8%AE%BE%E8%AE%A1">Linux 的设计</a></li>
+<li><a href="#window-%E8%AE%BE%E8%AE%A1">Window 设计</a></li>
+</ul>
+</li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B">进程和线程</a></li>
+<li><a href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86">内存管理</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/ji-suan-ji-wang-lu/">
+              <h3 class="post-title">
+                计算机网路
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
