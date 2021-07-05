@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-07-02T04:30:08.884Z</updated>
+    <updated>2021-07-05T17:51:38.156Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -10,6 +10,531 @@
     <logo>https://Joshua-Chang.github.io/images/avatar.png</logo>
     <icon>https://Joshua-Chang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Joshua-Chang`Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[JVM]]></title>
+        <id>https://Joshua-Chang.github.io/post/jvm/</id>
+        <link href="https://Joshua-Chang.github.io/post/jvm/">
+        </link>
+        <updated>2021-07-03T04:54:11.000Z</updated>
+        <content type="html"><![CDATA[<table>
+<thead>
+<tr>
+<th>![image-20210703132213706](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703132213706.png)</th>
+<th><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703131238763.png" alt="image-20210703131238763" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长而且容易出错的事务，例如内存管理。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/ab/77/ab5c3523af08e0bf2f689c1d6033ef77.png" style="zoom:50%;" /></th>
+<th><img src="https://static001.geekbang.org/resource/image/5e/3b/5ee351091464de78eed75438b6f9183b.png" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>Java 虚拟机将运行时内存区域划分为五个部分，分别为方法区、堆、PC 寄存器、Java 方法栈和本地方法栈。Java 程序编译而成的 class 文件，需要先加载至方法区中，方能在 Java 虚拟机中运行。<br>
+为了提高运行效率，标准 JDK 中的 HotSpot 虚拟机采用的是一种混合执行的策略。它会解释执行 Java 字节码，然后会将其中反复执行的热点代码，以方法为单位进行即时编译，翻译成机器码后直接运行在底层硬件之上。<br>
+HotSpot 装载了多个不同的即时编译器，以便在编译时间和生成代码的执行效率之间做取舍。</p>
+<figure data-type="image" tabindex="1"><img src="https://static001.geekbang.org/resource/image/77/45/77dfb788a8ad5877e77fc28ed2d51745.png" alt="1" loading="lazy"></figure>
+<p>boolean 类型在 Java 虚拟机中被映射为整数类型：“true”被映射为 1，而“false”被映射为 0。Java 代码中的逻辑运算以及条件跳转，都是用整数相关的字节码来实现的。</p>
+<p>除 boolean 类型之外，Java 还有另外 7 个基本类型。它们拥有不同的值域，但默认值在内存中均为 0。这些基本类型之中，浮点类型比较特殊。基于它的运算或比较，需要考虑 +0.0F、-0.0F 以及 NaN 的情况。</p>
+<p>在局部变量中除 long 和 double 外，boolean、byte、char、short 这四种类型，在栈上占用的空间和 int 是一样的，和引用类型也是一样的在 32/64位的 HotSpot 中，这些类型在栈上将占用 4 /8个字节。</p>
+<p>但在存储于堆中的字段或者数组元素上。对于 byte、char 以及 short 这三种类型的字段或者数组单元，它们在堆上占用的空间分别为一字节、两字节，以及两字节，跟这些类型的值域相吻合。</p>
+<p>在将 boolean、byte、char 以及 short 的值存入字段或者数组单元时，Java 虚拟机会进行掩码操作。在读取时，Java 虚拟机则会将其扩展为 int 类型。</p>
+<p>Java 虚拟机将字节流转化为 Java 类的过程分为加载、链接以及初始化三大步骤。</p>
+<p>加载是指查找字节流，并且据此创建类的过程。加载需要借助类加载器，在 Java 虚拟机中，类加载器使用了双亲委派模型，即接收到加载请求时，会先将请求转发给父类加载器。</p>
+<p>链接，是指将创建成的类合并至 Java 虚拟机中，使之能够执行的过程。链接还分验证、准备和解析三个阶段。其中，解析阶段为非必须的。</p>
+<p>初始化，则是为标记为常量值的字段赋值，以及执行 &lt; clinit &gt; 方法的过程。Java 虚拟机会通过加锁来确保类的 &lt; clinit &gt; 方法仅被执行一次，这个特性被用来实现单例的延迟初始化。</p>
+<p>在 Java 中，方法存在重载以及重写的概念，重载指的是方法名相同而参数类型不相同的方法之间的关系，重写指的是方法名相同并且参数类型也相同的方法之间的关系。</p>
+<p>Java 虚拟机识别方法的方式略有不同，除了方法名和参数类型之外，它还会考虑返回类型。</p>
+<p>在 Java 虚拟机中，静态绑定指的是在解析时便能够直接识别目标方法的情况，而动态绑定则指的是需要在运行过程中根据调用者的动态类型来识别目标方法的情况。由于 Java 编译器已经区分了重载的方法，因此可以认为 Java 虚拟机中不存在重载。</p>
+<p>在 class 文件中，Java 编译器会用符号引用指代目标方法。在执行调用指令前，它所附带的符号引用需要被解析成实际引用。对于可以静态绑定的方法调用而言，实际引用为目标方法的指针。对于需要动态绑定的方法调用而言，实际引用为辅助动态绑定的信息。</p>
+<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703193948926.png" alt="image-20210703193948926" style="zoom:50%;" />
+<table>
+<thead>
+<tr>
+<th><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703194854583.png" alt="image-20210703194854583" style="zoom:50%;" /></th>
+<th><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703195002837.png" alt="image-20210703195002837" style="zoom:50%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>jdk9模块化</th>
+<th>Jdk8没模块化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>![image-20210703215452248](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703215452248.png)</td>
+<td>![image-20210703215551942](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703215551942.png)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>![image-20210703222834382](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703222834382.png)</th>
+<th>![image-20210703224610137](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703224610137.png)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>Java 类的过程分为加载、链接(验证、准备和解析)以及初始化。然后才能使用，用完既可卸载。</p>
+<table>
+<thead>
+<tr>
+<th>![image-20210703235422140](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703235422140.png)<br />![image-20210703235546550](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703235546550.png)</th>
+<th>类连结中的准备：为类的静态变量分配内存并赋缺省值如0，赋真正的初始值（=?）实在初始化阶段![image-20210703235014519](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703235014519.png)</th>
+<th>![image-20210703235942762](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703235942762.png)<br/>初始化语句=静态属性/方法/代码块![image-20210704000507286](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704000507286.png)<br />![image-20210704000811687](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704000811687.png)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>![image-20210704101912989](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704101912989.png)<br />8）初次调用 MethodHandle 时</td>
+<td>![image-20210704102210346](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704102210346.png)<br />主类=main方法类</td>
+<td>![image-20210704115557956](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704115557956.png)</td>
+</tr>
+</tbody>
+</table>
+<p>不会触发类的初始化的特殊情况即<strong>被动引用</strong>：</p>
+<ol>
+<li>通过子类去引用父类的静态字段时，不会导致子类的初始化。<code>System.out.println(ChildClazz.parentStr);</code></li>
+<li>数组引用类时，不会触发类的初始化 <code>MyClazz clz=new MyClazz[2]</code></li>
+<li>引用类的常量(static final)不会导致类的初始化。</li>
+</ol>
+<pre><code class="language-java">public class MyClassIS {
+    private static MyClassIS myClassIS = new MyClassIS();
+    private static int a = 0;
+    private static int b;//b=0时结果b也为0
+//  private static MyClassIS myClassIS = new MyClassIS();顺序调换时，都为1
+    private MyClassIS(){
+        a++;
+        b++;
+    }
+    public static MyClassIS getInstance() {
+        return myClassIS;
+    }
+    public int getA() {
+        return a;
+    }
+    public int getB() {
+        return b;
+    }
+}
+-------------------类的初始化顺序问题--------------------
+public class App {
+    public static void main(String[] args) throws Exception {
+        MyClassIS myClassIS=MyClassIS.getInstance();
+        System.out.println(myClassIS.getA()+&quot; : &quot;+myClassIS.getB());
+    }
+}
+</code></pre>
+<ol>
+<li>连结-准备阶段：对静态变量ab赋缺省值0</li>
+<li>初始化阶段：初始化(静态)语句依次执行，第一行，构造方法时0++ ab=1</li>
+<li>初始化阶段：初始化(静态)语句依次执行，二三行，a=0 b=1。即对静态变量赋初始值a=0，b没初始值还=1</li>
+</ol>
+<p>类加载<strong>初始化</strong>时除常量之外的初始化语句(静态字段/方法/代码块)会被 Java 编译器置于&lt; clinit &gt;方法中。基本类型或字符串类型的静态字段被 final 所修饰时，会被 Java 编译器标记成常量值（ConstantValue），其初始化直接由 Java 虚拟机完成。</p>
+<p>类加载的初始化，便是为标记为常量值的字段赋值，以及执行 &lt; clinit &gt; 方法的过程。Java 虚拟机会通过加锁来确保类的 &lt; clinit &gt; 方法仅被执行一次。</p>
+<table>
+<thead>
+<tr>
+<th>![image-20210704124551809](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704124551809.png)<br />![image-20210704124613379](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704124613379.png)</th>
+<th>![image-20210704124952132](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704124952132.png)<br />![image-20210704125231430](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704125231430.png)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>![image-20210704130004781](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704130004781.png)</td>
+<td>![image-20210704130028605](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704130028605.png)<br />jdk8以后永久区改为元空间</td>
+</tr>
+<tr>
+<td>![image-20210704130646995](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704130646995.png)</td>
+<td>![image-20210704131016908](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704131016908.png)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>栈内存线程私有，堆内存线程共享。但堆内存的分配是通常被很少讨论，但实际却很复杂的。</p>
+<p>堆内存的分配通常用指针碰撞法、空闲列表法。但是堆是全局共享的，在同一时间可能会有多个线程并发地在堆上分配空间。解决并发问题用CAS、TLAB(hotspot用：给每个线程在堆里预分配一块区域，分配完成后便不再线程独享。因此hotspot中的TLAB可以在堆里”线程私有“)</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>![image-20210704141903971](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704141903971.png)</th>
+<th>![image-20210704141934898](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704141934898.png)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>![image-20210704142122235](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142122235.png)<br />![image-20210704142206299](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142206299.png)</th>
+<th>![image-20210704142318308](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142318308.png)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>引用类型(reference)访问对象实例的方式：</p>
+<table>
+<thead>
+<tr>
+<th>![image-20210704142407666](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142407666.png)</th>
+<th>![image-20210704142429226](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142429226.png)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>![image-20210704142515397](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142515397.png)</td>
+<td>![image-20210704142627592](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142627592.png)</td>
+</tr>
+<tr>
+<td>对象实例发生变化只影响句柄指向不影响reference</td>
+<td></td>
+</tr>
+<tr>
+<td>间接引用，两次指针定位速度慢</td>
+<td>速度快</td>
+</tr>
+</tbody>
+</table>
+<p>Trace跟踪参数</p>
+<table>
+<thead>
+<tr>
+<th>-Xlog:gc/-Xlog:gc*</th>
+<th>打印GC简要/详细信息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-Xlog:gc:filename</td>
+<td>GC文件输出</td>
+</tr>
+<tr>
+<td>-Xlog:gc+heap=debug</td>
+<td>每次GC后都打印堆信息</td>
+</tr>
+</tbody>
+</table>
+<p>GC日志格式：GC发生时间(jvm启动以来的秒数)、日志级别/类型、GC识别号(第几次GC)、GC类型/原因、GC容量:GC前-&gt;GC后(该区总容量)、GC持续时间秒：user/sys/real 应用/系统内核/真正耗时</p>
+<p>Java栈的参数</p>
+<table>
+<thead>
+<tr>
+<th>-Xss</th>
+<th>通常几百k，决定了函数的调用深度</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>Java堆的参数</p>
+<table>
+<thead>
+<tr>
+<th>-Xms</th>
+<th>初始堆大小</th>
+<th>默认：物理内存的1/64</th>
+<th>XX:InitialHeapSize</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-Xmx</td>
+<td>最大堆大小</td>
+<td>默认：物理内存的1/4</td>
+<td>XX:MaxHeapSize</td>
+</tr>
+<tr>
+<td>-Xmn</td>
+<td>新生代大小</td>
+<td>默认：物理内存的3/8</td>
+<td></td>
+</tr>
+<tr>
+<td>XX:MinHeapSize</td>
+<td>最小堆大小</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>-XX:+UseConcMarkSweepGC</td>
+<td></td>
+<td></td>
+<td>CMS收集器</td>
+</tr>
+<tr>
+<td>-XX:+HeapDumpOnOutOfMemoryError</td>
+<td></td>
+<td>不指定路径则运行路径</td>
+<td>OOM时导出堆内存快照到文件</td>
+</tr>
+<tr>
+<td>-XX:+HeapDumpPath</td>
+<td></td>
+<td></td>
+<td>导出OOM的路经</td>
+</tr>
+<tr>
+<td>-XX:NewRatio</td>
+<td>老/新</td>
+<td>默认2</td>
+<td>老年代/新生代的比率</td>
+</tr>
+<tr>
+<td>-XX:ServivorRatio</td>
+<td>Eden/Survivor</td>
+<td>Survivor:from/to</td>
+<td>1个Eden/1个Survivor的比率</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Survivor分成两份，From区和To区（两个区不同时存在，只做拷贝算法时区分）。-XX:ServivorRatio=8时，1eden/1Survivor=8/1 实际Survivor存在两份因此eden/2Survivor=8/2。每个Survivor占新生代的1/10</p>
+</blockquote>
+<p>在JDK新版本默认G1收集器之前，默认使用的是CMS收集器。</p>
+<table>
+<thead>
+<tr>
+<th>![image-20210704221125426](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704221125426.png)</th>
+<th>![image-20210704221153895](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704221153895.png)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>![image-20210704221248193](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704221248193.png)<br />静态方法就没有this![image-20210704221355962](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704221355962.png)</td>
+<td>![image-20210705012342931](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705012342931.png)<br />![image-20210705012436995](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705012436995.png)<br />![image-20210705012846529](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705012846529.png)</td>
+</tr>
+</tbody>
+</table>
+<p>实例方法：是区别与静态方法的叫法，即要初始化一个实例才能调用的方法。不同于静态方法[类名.方法名]的调用，多数都是实例方法。因此类外的才叫函数。</p>
+<p>方法分派：</p>
+<p>静态分派：根据方法名称、参数不同再编译器就决定的<strong>重载方法</strong>。</p>
+<p>动态分派：多态下运行时才能决定到底是哪个实例调用的<strong>重写方法</strong>。</p>
+<pre><code class="language-java">//局部变量表5:只有把bs包裹住，再用方案覆盖slot槽位/置空bs，剩余的内存才会变多
+public static void main(String[] args) {
+    {//用方法块包裹住局部变量
+        byte[] bs = new byte[2 * 1024 * 1024];//局部变量bs的作用域为其所在方法块
+    //  bs=null;//方案二：bs指向堆的空间置空
+    }//bs出了作用域就可以被回收
+    //  int a = 5;//方案一：覆盖bs槽位
+    System.gc();//并不一定保证GC
+    //slot槽位情况
+    //0--args
+    //1--bs-----指向堆空间放着2M数据   gc时本地变量表还在用bs
+    //1--a将槽位1给局部变量a复用
+    System.out.println(&quot;free:&quot; + Runtime.getRuntime().freeMemory() / 1024.0 / 1024.0);
+}
+</code></pre>
+<pre><code class="language-java">public class Test3 {
+    public void m1(Object a) {
+        System.out.println(&quot;Object &quot; + a);
+    }
+    public void m1(Integer a) {
+        System.out.println(&quot;Integer &quot; + a);
+    }
+    public void m1(int a) {
+        System.out.println(&quot;int &quot; + a);
+    }
+    public void m1(String a) {//静态分派：重载
+        System.out.println(&quot;string &quot; + a);
+    }
+    public static class Child extends Test3 {
+//        public void m1(int a) {
+//            System.out.println(&quot;child int &quot;+a);
+//        }
+        public void m1(int a,int b) {
+            System.out.println(&quot;child a+b int &quot;+a+b);
+        }
+    }
+
+    public static void main(String[] args) {
+//        Test3 t = new Test3();
+        Test3 t = new Child();//动态分派：重写。看实例是child还是parent
+//        t.m1(&quot;str&quot;);
+        t.m1(5);//当前实例有这个方法就调，没有就调父类的。父类方法可以重载，重载方法存在范围覆盖时：int方法没有则调用Integer再没有则Obj。从小范围到大范围。
+//        t.m1(Integer.valueOf(5));
+//        t.m1(new Object());重载方法存在参数范围覆盖时，优先调用精准的小范围。object是最大的范围，因此只能调用object这一个方法。
+        //第一个维度先看动态分派是子类还是父类实例的方法
+        //第二个维度再看静态分派匹配同名不同参数的方法
+    }
+}
+</code></pre>
+<pre><code class="language-java">public int add(int a, int b) {//栈帧-操作数栈
+    int c = a + b;
+    return a + b + c;
+}
+ 0: iload_1     导入int 参数1 对应局部变量表的a
+ 1: iload_2
+ 2: iadd
+ 3: istore_3    存入int 参数3 对应c
+ 4: iload_1
+ 5: iload_2
+ 6: iadd        int相加 a+b
+ 7: iload_3
+ 8: iadd        a+b+c
+ 9: ireturn     返回int
+ LineNumberTable:
+ line 5: 0
+ line 6: 4
+ LocalVariableTable:
+ Start  Length  Slot  Name   Signature
+ 0      10     0  this   Lcom/data/execute/Test2;
+ 0      10     1     a   I
+ 0      10     2     b   I
+ 4       6     3     c   I
+</code></pre>
+<p>可做为GC Roots对象包括：</p>
+<ol>
+<li>虚拟机栈中所引用到的对象（局部变量表引用的）</li>
+<li>方法区中类的静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中jni引用的对象</li>
+<li>所有被synchronized同步锁持有的对象</li>
+</ol>
+<p>SoftReference：GC后内存还不够就回收，WeakReference：GC时回收掉，PhantomReference发生GC就会被回收掉。</p>
+<p>判断是否为垃圾的步骤：</p>
+<p>首先根搜索算法判断，若对象没有引用链，然后看是否要执行finalize方法自救一次。最后又没引用链又不需要自救即为垃圾。</p>
+<p>MinorGC/YoungGC：发生在新生代的GC</p>
+<p>Major/OldGC：发生在老年代的GC。目前只有CMS收集器存在单独收集老年代垃圾的行为。</p>
+<p>MixedGC：收集整个新生代和部分老年代的GC。目前只有G1收集器有这种行为。</p>
+<p>FullGC：收集整个Java堆和方法区的GC。</p>
+<p><strong>STW</strong>：stop-the-world 多半由GC引起的全局暂停。</p>
+<p><strong>safe-point</strong>：HotSpot使用OopMap（描述对象之间引用关系的数据结构）达到准确的GC，而不必从root查找。JVM并不是为所有的指令都生成一个OopMap，线程只有执行到记录OopMap的特定位置，才允许暂停下来进行GC。这些&quot;特定位置&quot;即Safe-Point。</p>
+<table>
+<thead>
+<tr>
+<th>![image-20210705132501413](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705132501413.png)</th>
+<th>![image-20210705132550761](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705132550761.png)<br />4无法再任何地方通过反射访问这个类<br /><br />没有用的类JVM就可以把它从内存卸载</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>![image-20210705184127924](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184127924.png)</th>
+<th>![image-20210705184301530](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184301530.png)</th>
+<th>![image-20210705184228618](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184228618.png)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>![image-20210705184407694](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184407694.png)</td>
+<td>![image-20210705184344602](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184344602.png)</td>
+<td>![image-20210705184445983](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184445983.png)</td>
+</tr>
+<tr>
+<td>![image-20210705190413920](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705190413920.png)</td>
+<td>![image-20210705190518042](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705190518042.png)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>HotSpot默认Eden和Survivor是8：1，即新生代90%空间可用。若新生代垃圾回收后，存活区放不下了，要依赖老年代(元空间)进行<strong>分配担保</strong>，来把放不下的对象直接进入老年代，流程如下：</p>
+<ul>
+<li>在新生代GC(MinorGC)前，JVM检查老年代的最大可用连续空间，看其是否大于新生代所有对象的总空间，</li>
+<li>若大于则取保新生代GC是安全的；</li>
+<li>若小于则检查是否设置了[允许担保失败]，若设置了则检查老年代的最大可用空间，看其是否大于历次晋升到老年代对象的平均值：大于则进行新生代GC(MinorGC);不大于则该做一次Full GC。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>![image-20210705190637047](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705190637047.png)</th>
+<th>![image-20210705194007855](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705194007855.png)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<blockquote>
+<p>HotSpot中：新生代使用ParNew收集器时。老年代使用CMS收集器，同时把SerialOld作为备用。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>![image-20210705191207939](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191207939.png)</th>
+<th>![image-20210705191131988](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191131988.png)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>![image-20210705191420093](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191420093.png)</td>
+<td>![image-20210705191756628](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191756628.png)<br />![image-20210705191844011](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191844011.png)<br />-XX:ParallelGCThreads指定线程数最好和cpu核数一致</td>
+</tr>
+<tr>
+<td>![image-20210705191510815](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191510815.png)</td>
+<td>![image-20210705192110314](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192110314.png)<br />![image-20210705192425140](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192425140.png)<br />-XX:+UseParallelGC/-XX:+UseParallelOldGC开启<br /></td>
+</tr>
+<tr>
+<td>![image-20210705191602749](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191602749.png)</td>
+<td>![image-20210705192626044](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192626044.png)<br />![image-20210705192803209](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192803209.png)<br />![image-20210705192849309](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192849309.png)</td>
+</tr>
+<tr>
+<td>![image-20210705191641957](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191641957.png)</td>
+<td>![image-20210705193041560](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193041560.png)<br />![image-20210705193128793](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193128793.png)<br />![image-20210705193225337](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193225337.png)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>![image-20210705191602749](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191602749.png)</th>
+<th>![image-20210705192626044](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192626044.png)<br />![image-20210705192803209](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192803209.png)</th>
+<th>![image-20210705192849309](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192849309.png)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>![image-20210705191641957](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191641957.png)<br />![image-20210705193823497](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193823497.png)</td>
+<td>![image-20210705193041560](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193041560.png)<br />![image-20210705193128793](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193128793.png)<br />![image-20210705193225337](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193225337.png)</td>
+<td>![image-20210705193649657](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193649657.png)<br />![image-20210705193717877](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193717877.png)<br /></td>
+</tr>
+</tbody>
+</table>
+<p>GC性能指标：</p>
+<ul>
+<li>吞吐量：非GC执行的时间/运行总时间</li>
+<li>GC负荷，与吞吐量相反 ：GC时间/运行总时间</li>
+<li>暂停时间：STW的总时间</li>
+<li>GC频率：一个时间段发生GC的次数</li>
+<li>反应速度：对象成为垃圾到被回收的时间</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>![image-20210706004744232](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706004744232.png)</th>
+<th>![image-20210706005149482](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005149482.png)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>![image-20210706005641447](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005641447.png)<br />![image-20210706005728965](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005728965.png)<br />![image-20210706005819841](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005819841.png)</td>
+<td><img src="file:///Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004821761.png?lastModify=1625503879" alt="image-20210706004821761" loading="lazy"><br /><img src="file:///Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004920244.png?lastModify=1625503879" alt="image-20210706004920244" loading="lazy"><br />![image-20210706005012823](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005012823.png)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>![image-20210706005935649](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005935649.png)<br />![image-20210706010008067](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010008067.png)<br />![image-20210706010111759](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010111759.png)</th>
+<th>![image-20210706010136210](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010136210.png)<br />![image-20210706010212690](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010212690.png)<br />![image-20210706010245048](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010245048.png)</th>
+<th>![image-20210706004158281](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706004158281.png)<br />上文的锁优化JVM内自动进行![image-20210706010319025](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010319025.png)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<pre><code class="language-java">Integer a=1;//字节码指令是invokeStatic Integer.valueOf()即把基本类型封装成Integer对象
+if (x==2){}//字节码指令是invokeStatic Integer.intValue()即从Integer解封出基本类型
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[重学操作系统]]></title>
         <id>https://Joshua-Chang.github.io/post/chong-xue-cao-zuo-xi-tong/</id>
@@ -2422,70 +2947,6 @@ $ gcc -o show_me_poor show_me_poor.c ./lib.so
 <blockquote>
 <p>在进行虚拟内存和物理内存的页之间的映射之后，并不真的把页加载到物理内存里，而是只在程序运行中，需要用到对应虚拟内存页里面的指令和数据时，再加载到物理内存里面去。当要读取特定的页，却发现数据并没有加载到物理内存里的时候，就会触发一个来自于 CPU 的<strong>缺页错误</strong>（Page Fault）。我们的操作系统会捕捉到这个错误，然后将对应的页，从存放在硬盘上的虚拟内存里读取出来，加载到物理内存里。可以运行那些远大于我们实际物理内存的程序</p>
 </blockquote>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[计算机组成原理01计算机的基本组成]]></title>
-        <id>https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-01/</id>
-        <link href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-01/">
-        </link>
-        <updated>2021-03-11T06:46:55.000Z</updated>
-        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615446914479.jpg" alt="" loading="lazy"></figure>
-<h1 id="冯诺依曼体系结构">冯·诺依曼体系结构</h1>
-<p>也叫<strong>存储程序计算机</strong> : 即“<strong>可编程</strong>” 、“<strong>可存储</strong>”计算机</p>
-<p><strong>First Draft</strong>里面说了一台计算机应该有哪些部分组成。</p>
-<p>首先是一个包含算术逻辑单元（Arithmetic Logic Unit，ALU）和处理器寄存器（Processor Register）的<strong>处理器单元</strong>（Processing Unit），用来完成各种算术和逻辑运算。因为它能够完成各种数据的处理或者计算工作，因此也有人把这个叫作数据通路（Datapath）或者运算器。</p>
-<p>然后是一个包含指令寄存器（Instruction Reigster）和程序计数器（Program Counter）的<strong>控制器单元</strong>（Control Unit/CU），用来控制程序的流程，通常就是不同条件下的分支和跳转。在现在的计算机里，上面的算术逻辑单元和这里的控制器单元，共同组成了我们说的 CPU。</p>
-<p>接着是用来存储数据（Data）和指令（Instruction）的<strong>内存</strong>。以及更大容量的<strong>外部存储</strong>，在过去，可能是磁带、磁鼓这样的设备，现在通常就是硬盘。</p>
-<p>最后就是各种<strong>输入和输出设备</strong>，以及对应的输入和输出机制。</p>
-<p>所有的计算机程序，也都可以抽象为从<strong>输入设备</strong>读取输入信息，通过<strong>运算器</strong>和<strong>控制器</strong>来执行存储在<strong>存储器</strong>里的程序，最终把结果输出到<strong>输出设备</strong>中。</p>
-<figure data-type="image" tabindex="2"><img src="https://Joshua-Chang.github.io/post-images/1615448091025.jpg" alt="" loading="lazy"></figure>
-<h1 id="计算机性能">计算机性能</h1>
-<h2 id="什么是性能时间的倒数">什么是性能：时间的倒数</h2>
-<p>第一个是<strong>响应时间</strong>（Response time）或者叫执行时间（Execution time）。想要提升响应时间这个性能指标，你可以理解为让计算机“跑得更快”</p>
-<p>第二个是<strong>吞吐率</strong>（Throughput）或者带宽（Bandwidth），想要提升这个指标，你可以理解为让计算机“搬得更多”。</p>
-<p>我们一般把性能，定义成响应时间的倒数，也就是：</p>
-<p>性能 = 1/ 响应时间</p>
-<h2 id="计算机的计时单位cpu-时钟">计算机的计时单位：CPU 时钟</h2>
-<p><strong>首先，自然时间不“准”</strong></p>
-<figure data-type="image" tabindex="3"><img src="https://Joshua-Chang.github.io/post-images/1615451589290.jpg" alt="" loading="lazy"></figure>
-<blockquote>
-<p>Wall Clock Time 或者 Elapsed Time，我们自然统计时间，就是在运行程序期间，挂在墙上的钟走掉的时间。</p>
-<p>P2/P3，CPU 在各个程序之间进行切换、从网络、硬盘去读取数据的时间</p>
-<p><strong>程序实际花费的 CPU 执行时间（CPU Time），就是 user time （在用户态运行指令的时间）加上 sys （在操作系统内核里运行指令的时间）time</strong>。</p>
-</blockquote>
-<p><strong>其次， CPU 执行时间也受到影响</strong>。 CPU 可能满载/降频运行，还会受到主板、内存这些其他相关硬件的影响。</p>
-<p>**结果，**程序的 CPU 执行时间 =CPU 时钟周期数（CPU Cycles）×时钟周期时间 （Clock Cycle）</p>
-<blockquote>
-<p>在 CPU 内部，和我们平时戴的电子石英表类似，有一个叫晶体振荡器（Oscillator Crystal）的东西，简称为晶振。我们把晶振当成 CPU 内部的电子表来使用。晶振带来的每一次“滴答”，就是时钟周期时间。</p>
-<p>在2.8GHz 的 CPU 上，这个时钟周期时间，就是 1/2.8G。超频，就相当于把 CPU 内部的钟给调快了</p>
-</blockquote>
-<p>CPU 时钟周期数（CPU Cycles）=指令数×<strong>每条指令的平均时钟周期数</strong>（Cycles Per Instruction，简称 CPI）</p>
-<p><strong>程序的 CPU 执行时间 = 指令数×CPI×Clock Cycle Time</strong>  性能提升从这三方面</p>
-<h1 id="计算机功耗">计算机功耗</h1>
-<h2 id="功耗">功耗</h2>
-<blockquote>
-<p>CPU，一般都被叫作<strong>超大规模集成电路</strong>（Very-Large-Scale Integration，VLSI）。这些电路，实际上都是一个个晶体管组合而成的。CPU 在计算，其实就是让晶体管里面的“开关”不断地去“打开”和“关闭”，来组合完成各种运算和功能。</p>
-</blockquote>
-<p>想要计算得快：都会增加功耗，带来耗电和散热的问题。</p>
-<ol>
-<li><strong>增加密度</strong>（在 CPU 里，同样的面积里面，多放一些晶体管）；</li>
-<li><strong>提升主频</strong>（让晶体管“打开”和“关闭”得更快一点）。</li>
-</ol>
-<p>在 CPU 里面，能够放下的晶体管数量和晶体管的“开关”频率也都是有限的。一个 CPU 的功率，可以用这样一个公式来表示：</p>
-<p>功耗 ~= 1/2 ×负载电容×电压的平方×开关频率×晶体管数量</p>
-<p>要提升性能，同样的面积下，我们想要增加晶体管数量，就要把晶体管造得小一点。这个就是提升“制程”。</p>
-<p>功耗和电压的平方是成正比的，</p>
-<h2 id="并行优化">并行优化</h2>
-<p>通过多核提升“吞吐率”而不是“响应时间”</p>
-<p><strong>阿姆达尔定律</strong></p>
-<p>优化后的执行时间 = 受优化影响的执行时间 / 加速倍数 + 不受影响的执行时间</p>
-<h2 id="其他优化">其他优化</h2>
-<ol>
-<li><strong>加速大概率事件</strong>。cpu-&gt;gpu-&gt;tpu深度学习</li>
-<li><strong>通过流水线提高性能</strong>。</li>
-<li><strong>通过预测提高性能</strong>。</li>
-</ol>
 ]]></content>
     </entry>
 </feed>
