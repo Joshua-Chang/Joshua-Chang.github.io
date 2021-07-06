@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>JVM | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1625543798712">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1625549616638">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="JVM | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -15,7 +15,13 @@
     <meta name="description" content="
 
 
-![image-20210703132213706](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703132213706...." />
+
+
+
+
+
+
+之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长而且容易出错的事..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
@@ -28,7 +34,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1625543798712" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1625549616638" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -88,7 +94,7 @@
                 2021-07-03
               </span>
               <span>
-                22 min read
+                14 min read
               </span>
               
             </div>
@@ -100,14 +106,13 @@
                 <table>
 <thead>
 <tr>
-<th>![image-20210703132213706](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703132213706.png)</th>
-<th><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703131238763.png" alt="image-20210703131238763" /></th>
+<th><img src="https://i.imgur.com/FlYWN1d.png" alt="image-20210703132213706" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703131238763.png" alt="123" loading="lazy"></th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
-<p><img src="https://Joshua-Chang.github.io/post-images/1625543779067.png" alt="" loading="lazy"><br>
-之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长而且容易出错的事务，例如内存管理。</p>
+<p>之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长而且容易出错的事务，例如内存管理。</p>
 <table>
 <thead>
 <tr>
@@ -134,12 +139,12 @@ HotSpot 装载了多个不同的即时编译器，以便在编译时间和生成
 <p>Java 虚拟机识别方法的方式略有不同，除了方法名和参数类型之外，它还会考虑返回类型。</p>
 <p>在 Java 虚拟机中，静态绑定指的是在解析时便能够直接识别目标方法的情况，而动态绑定则指的是需要在运行过程中根据调用者的动态类型来识别目标方法的情况。由于 Java 编译器已经区分了重载的方法，因此可以认为 Java 虚拟机中不存在重载。</p>
 <p>在 class 文件中，Java 编译器会用符号引用指代目标方法。在执行调用指令前，它所附带的符号引用需要被解析成实际引用。对于可以静态绑定的方法调用而言，实际引用为目标方法的指针。对于需要动态绑定的方法调用而言，实际引用为辅助动态绑定的信息。</p>
-<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703193948926.png" alt="image-20210703193948926" style="zoom:50%;" />
+<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703193948926.png" alt="image-20210703193948926" style="zoom:50%;" />
 <table>
 <thead>
 <tr>
-<th><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703194854583.png" alt="image-20210703194854583" style="zoom:50%;" /></th>
-<th><img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703195002837.png" alt="image-20210703195002837" style="zoom:50%;" /></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703194854583.png" alt="83" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703195002837.png" alt="" loading="lazy"></th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -153,16 +158,16 @@ HotSpot 装载了多个不同的即时编译器，以便在编译时间和生成
 </thead>
 <tbody>
 <tr>
-<td>![image-20210703215452248](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703215452248.png)</td>
-<td>![image-20210703215551942](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703215551942.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703215452248.png" alt="image-20210703215452248" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703215551942.png" alt="image-20210703215551942" loading="lazy"></td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
 <tr>
-<th>![image-20210703222834382](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703222834382.png)</th>
-<th>![image-20210703224610137](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703224610137.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703222834382.png" alt="image-20210703222834382" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703224610137.png" alt="image-20210703224610137" loading="lazy"></th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -171,16 +176,16 @@ HotSpot 装载了多个不同的即时编译器，以便在编译时间和生成
 <table>
 <thead>
 <tr>
-<th>![image-20210703235422140](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703235422140.png)<br />![image-20210703235546550](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703235546550.png)</th>
-<th>类连结中的准备：为类的静态变量分配内存并赋缺省值如0，赋真正的初始值（=?）实在初始化阶段![image-20210703235014519](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703235014519.png)</th>
-<th>![image-20210703235942762](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210703235942762.png)<br/>初始化语句=静态属性/方法/代码块![image-20210704000507286](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704000507286.png)<br />![image-20210704000811687](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704000811687.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703235422140.png" alt="image-20210703235422140" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703235546550.png" alt="image-20210703235546550" loading="lazy"></th>
+<th>类连结中的准备：为类的静态变量分配内存并赋缺省值如0，赋真正的初始值（=?）实在初始化阶段<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703235014519.png" alt="image-20210703235014519" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703235942762.png" alt="image-20210703235942762" loading="lazy"><br/>初始化语句=静态属性/方法/代码块<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704000507286.png" alt="image-20210704000507286" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704000811687.png" alt="image-20210704000811687" loading="lazy"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>![image-20210704101912989](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704101912989.png)<br />8）初次调用 MethodHandle 时</td>
-<td>![image-20210704102210346](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704102210346.png)<br />主类=main方法类</td>
-<td>![image-20210704115557956](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704115557956.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704101912989.png" alt="image-20210704101912989" loading="lazy"><br />8）初次调用 MethodHandle 时</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704102210346.png" alt="image-20210704102210346" loading="lazy"><br />主类=main方法类</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704115557956.png" alt="image-20210704115557956" loading="lazy"></td>
 </tr>
 </tbody>
 </table>
@@ -227,18 +232,18 @@ public class App {
 <table>
 <thead>
 <tr>
-<th>![image-20210704124551809](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704124551809.png)<br />![image-20210704124613379](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704124613379.png)</th>
-<th>![image-20210704124952132](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704124952132.png)<br />![image-20210704125231430](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704125231430.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704124551809.png" alt="image-20210704124551809" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704124613379.png" alt="image-20210704124613379" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704124952132.png" alt="image-20210704124952132" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704125231430.png" alt="image-20210704125231430" loading="lazy"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>![image-20210704130004781](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704130004781.png)</td>
-<td>![image-20210704130028605](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704130028605.png)<br />jdk8以后永久区改为元空间</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704130004781.png" alt="image-20210704130004781" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704130028605.png" alt="image-20210704130028605" loading="lazy"><br />jdk8以后永久区改为元空间</td>
 </tr>
 <tr>
-<td>![image-20210704130646995](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704130646995.png)</td>
-<td>![image-20210704131016908](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704131016908.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704130646995.png" alt="image-20210704130646995" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704131016908.png" alt="image-20210704131016908" loading="lazy"></td>
 </tr>
 </tbody>
 </table>
@@ -249,8 +254,8 @@ public class App {
 <table>
 <thead>
 <tr>
-<th>![image-20210704141903971](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704141903971.png)</th>
-<th>![image-20210704141934898](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704141934898.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704141903971.png" alt="image-20210704141903971" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704141934898.png" alt="image-20210704141934898" loading="lazy"></th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -258,8 +263,8 @@ public class App {
 <table>
 <thead>
 <tr>
-<th>![image-20210704142122235](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142122235.png)<br />![image-20210704142206299](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142206299.png)</th>
-<th>![image-20210704142318308](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142318308.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704142122235.png" alt="image-20210704142122235" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704142206299.png" alt="image-20210704142206299" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704142318308.png" alt="image-20210704142318308" loading="lazy"></th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -268,14 +273,14 @@ public class App {
 <table>
 <thead>
 <tr>
-<th>![image-20210704142407666](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142407666.png)</th>
-<th>![image-20210704142429226](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142429226.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704142407666.png" alt="image-20210704142407666" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704142429226.png" alt="image-20210704142429226" loading="lazy"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>![image-20210704142515397](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142515397.png)</td>
-<td>![image-20210704142627592](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704142627592.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704142515397.png" alt="image-20210704142515397" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704142627592.png" alt="image-20210704142627592" loading="lazy"></td>
 </tr>
 <tr>
 <td>对象实例发生变化只影响句柄指向不影响reference</td>
@@ -385,14 +390,14 @@ public class App {
 <table>
 <thead>
 <tr>
-<th>![image-20210704221125426](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704221125426.png)</th>
-<th>![image-20210704221153895](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704221153895.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704221125426.png" alt="image-20210704221125426" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704221153895.png" alt="image-20210704221153895" loading="lazy"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>![image-20210704221248193](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704221248193.png)<br />静态方法就没有this![image-20210704221355962](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210704221355962.png)</td>
-<td>![image-20210705012342931](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705012342931.png)<br />![image-20210705012436995](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705012436995.png)<br />![image-20210705012846529](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705012846529.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704221248193.png" alt="image-20210704221248193" loading="lazy"><br />静态方法就没有this<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704221355962.png" alt="image-20210704221355962" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705012342931.png" alt="image-20210705012342931" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705012436995.png" alt="image-20210705012436995" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705012846529.png" alt="image-20210705012846529" loading="lazy"></td>
 </tr>
 </tbody>
 </table>
@@ -493,8 +498,8 @@ public static void main(String[] args) {
 <table>
 <thead>
 <tr>
-<th>![image-20210705132501413](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705132501413.png)</th>
-<th>![image-20210705132550761](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705132550761.png)<br />4无法再任何地方通过反射访问这个类<br /><br />没有用的类JVM就可以把它从内存卸载</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705132501413.png" alt="image-20210705132501413" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705132550761.png" alt="image-20210705132550761" loading="lazy"><br />4无法再任何地方通过反射访问这个类<br /><br />没有用的类JVM就可以把它从内存卸载</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -502,20 +507,20 @@ public static void main(String[] args) {
 <table>
 <thead>
 <tr>
-<th>![image-20210705184127924](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184127924.png)</th>
-<th>![image-20210705184301530](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184301530.png)</th>
-<th>![image-20210705184228618](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184228618.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705184127924.png" alt="image-20210705184127924" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705184301530.png" alt="image-20210705184301530" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705184228618.png" alt="image-20210705184228618" loading="lazy"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>![image-20210705184407694](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184407694.png)</td>
-<td>![image-20210705184344602](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184344602.png)</td>
-<td>![image-20210705184445983](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705184445983.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705184407694.png" alt="image-20210705184407694" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705184344602.png" alt="image-20210705184344602" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705184445983.png" alt="image-20210705184445983" loading="lazy"></td>
 </tr>
 <tr>
-<td>![image-20210705190413920](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705190413920.png)</td>
-<td>![image-20210705190518042](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705190518042.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705190413920.png" alt="image-20210705190413920" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705190518042.png" alt="image-20210705190518042" loading="lazy"></td>
 <td></td>
 </tr>
 </tbody>
@@ -529,8 +534,8 @@ public static void main(String[] args) {
 <table>
 <thead>
 <tr>
-<th>![image-20210705190637047](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705190637047.png)</th>
-<th>![image-20210705194007855](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705194007855.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705190637047.png" alt="image-20210705190637047" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705194007855.png" alt="image-20210705194007855" loading="lazy"></th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -541,42 +546,42 @@ public static void main(String[] args) {
 <table>
 <thead>
 <tr>
-<th>![image-20210705191207939](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191207939.png)</th>
-<th>![image-20210705191131988](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191131988.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191207939.png" alt="image-20210705191207939" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191131988.png" alt="image-20210705191131988" loading="lazy"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>![image-20210705191420093](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191420093.png)</td>
-<td>![image-20210705191756628](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191756628.png)<br />![image-20210705191844011](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191844011.png)<br />-XX:ParallelGCThreads指定线程数最好和cpu核数一致</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191420093.png" alt="image-20210705191420093" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191756628.png" alt="image-20210705191756628" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191844011.png" alt="image-20210705191844011" loading="lazy"><br />-XX:ParallelGCThreads指定线程数最好和cpu核数一致</td>
 </tr>
 <tr>
-<td>![image-20210705191510815](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191510815.png)</td>
-<td>![image-20210705192110314](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192110314.png)<br />![image-20210705192425140](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192425140.png)<br />-XX:+UseParallelGC/-XX:+UseParallelOldGC开启<br /></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191510815.png" alt="image-20210705191510815" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705192110314.png" alt="image-20210705192110314" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705192425140.png" alt="image-20210705192425140" loading="lazy"><br />-XX:+UseParallelGC/-XX:+UseParallelOldGC开启<br /></td>
 </tr>
 <tr>
-<td>![image-20210705191602749](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191602749.png)</td>
-<td>![image-20210705192626044](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192626044.png)<br />![image-20210705192803209](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192803209.png)<br />![image-20210705192849309](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192849309.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191602749.png" alt="image-20210705191602749" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705192626044.png" alt="image-20210705192626044" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705192803209.png" alt="image-20210705192803209" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705192849309.png" alt="image-20210705192849309" loading="lazy"></td>
 </tr>
 <tr>
-<td>![image-20210705191641957](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191641957.png)</td>
-<td>![image-20210705193041560](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193041560.png)<br />![image-20210705193128793](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193128793.png)<br />![image-20210705193225337](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193225337.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191641957.png" alt="image-20210705191641957" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705193041560.png" alt="image-20210705193041560" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705193128793.png" alt="image-20210705193128793" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705193225337.png" alt="image-20210705193225337" loading="lazy"></td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
 <tr>
-<th>![image-20210705191602749](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191602749.png)</th>
-<th>![image-20210705192626044](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192626044.png)<br />![image-20210705192803209](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192803209.png)</th>
-<th>![image-20210705192849309](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705192849309.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191602749.png" alt="image-20210705191602749" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705192626044.png" alt="image-20210705192626044" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705192803209.png" alt="image-20210705192803209" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705192849309.png" alt="image-20210705192849309" loading="lazy"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>![image-20210705191641957](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705191641957.png)<br />![image-20210705193823497](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193823497.png)</td>
-<td>![image-20210705193041560](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193041560.png)<br />![image-20210705193128793](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193128793.png)<br />![image-20210705193225337](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193225337.png)</td>
-<td>![image-20210705193649657](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193649657.png)<br />![image-20210705193717877](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210705193717877.png)<br /></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705191641957.png" alt="image-20210705191641957" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705193823497.png" alt="image-20210705193823497" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705193041560.png" alt="image-20210705193041560" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705193128793.png" alt="image-20210705193128793" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705193225337.png" alt="image-20210705193225337" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705193649657.png" alt="image-20210705193649657" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705193717877.png" alt="image-20210705193717877" loading="lazy"><br /></td>
 </tr>
 </tbody>
 </table>
@@ -591,23 +596,23 @@ public static void main(String[] args) {
 <table>
 <thead>
 <tr>
-<th>![image-20210706004744232](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706004744232.png)</th>
-<th>![image-20210706005149482](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005149482.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706004744232.png" alt="image-20210706004744232" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005149482.png" alt="image-20210706005149482" loading="lazy"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>![image-20210706005641447](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005641447.png)<br />![image-20210706005728965](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005728965.png)<br />![image-20210706005819841](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005819841.png)</td>
-<td><img src="file:///Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004821761.png?lastModify=1625503879" alt="image-20210706004821761" loading="lazy"><br /><img src="file:///Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004920244.png?lastModify=1625503879" alt="image-20210706004920244" loading="lazy"><br />![image-20210706005012823](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005012823.png)</td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005641447.png" alt="image-20210706005641447" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005728965.png" alt="image-20210706005728965" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005819841.png" alt="image-20210706005819841" loading="lazy"></td>
+<td><img src="/Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004821761.png" alt="image-20210706004821761" loading="lazy"><br /><img src="file:///Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004920244.png?lastModify=1625503879" alt="image-20210706004920244" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005012823.png" alt="image-20210706005012823" loading="lazy"></td>
 </tr>
 </tbody>
 </table>
 <table>
 <thead>
 <tr>
-<th>![image-20210706005935649](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706005935649.png)<br />![image-20210706010008067](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010008067.png)<br />![image-20210706010111759](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010111759.png)</th>
-<th>![image-20210706010136210](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010136210.png)<br />![image-20210706010212690](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010212690.png)<br />![image-20210706010245048](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010245048.png)</th>
-<th>![image-20210706004158281](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706004158281.png)<br />上文的锁优化JVM内自动进行![image-20210706010319025](/Users/joshuachang/Library/Application Support/typora-user-images/image-20210706010319025.png)</th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005935649.png" alt="image-20210706005935649" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706010008067.png" alt="image-20210706010008067" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706010111759.png" alt="image-20210706010111759" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706010136210.png" alt="image-20210706010136210" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706010212690.png" alt="image-20210706010212690" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706010245048.png" alt="image-20210706010245048" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706004158281.png" alt="image-20210706004158281" loading="lazy"><br />上文的锁优化JVM内自动进行<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706010319025.png" alt="image-20210706010319025" loading="lazy"></th>
 </tr>
 </thead>
 <tbody></tbody>

@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>重学操作系统 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1625543798712">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1625549616638">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="重学操作系统 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -26,7 +26,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1625543798712" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1625549616638" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -858,7 +858,7 @@ leave(&amp;lock);
 <p>根据新创建出来的对象，死亡（被回收）概率会更高，而那些已经存在了一段时间的对象，往往更不容易死亡：</p>
 <p>把新创建的对象，都先放到一个统一的区域，在 Java 中称为伊甸园（Eden）。这个区域因为频繁有新对象死亡，因此需要经常 GC。将存活下来的对象拷贝到另一个区域，Java 中称为存活区（Survior）。存活区生存下来的对象再进入下一个区域，Java 中称为老生代。Eden、Survior 及老生代之间的关系是对象的死亡概率逐级递减，对象的存活周期逐级增加。三个区域都采用三色标记-清除算法。</p>
 <p>Eden 可以考虑和 Survivor 用 1:1 的空间，老生代则可以用更大的空间。Eden 中全量 GC 可以频繁执行，也可以增量 GC 混合全量 GC 执行。老生代中的 GC 频率可以更低，偶尔执行一次全量的 GC。</p>
-<p>通常选择 GC 会有实时性要求（最大容忍的暂停时间），需要从是否为高并发场景、内存实际需求等维度去思考。在选择 GC 的时候，复杂的算法并不一定更有效。<img src="/Users/joshuachang/Library/Application Support/typora-user-images/image-20210702114136599.png" alt="image-20210702114136599" style="zoom:50%;" /></p>
+<p>通常选择 GC 会有实时性要求（最大容忍的暂停时间），需要从是否为高并发场景、内存实际需求等维度去思考。在选择 GC 的时候，复杂的算法并不一定更有效。<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210702114136599.png" alt="image-20210702114136599" style="zoom:50%;" /></p>
 
               </div>
               <div class="toc-container">
