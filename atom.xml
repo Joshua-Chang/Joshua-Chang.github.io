@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-07-05T17:51:38.156Z</updated>
+    <updated>2021-07-06T03:56:42.760Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -25,7 +25,8 @@
 </thead>
 <tbody></tbody>
 </table>
-<p>之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长而且容易出错的事务，例如内存管理。</p>
+<p><img src="https://Joshua-Chang.github.io/post-images/1625543779067.png" alt="" loading="lazy"><br>
+之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长而且容易出错的事务，例如内存管理。</p>
 <table>
 <thead>
 <tr>
