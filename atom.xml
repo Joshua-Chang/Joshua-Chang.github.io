@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-07-06T05:37:59.110Z</updated>
+    <updated>2021-07-06T05:39:20.072Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -516,7 +516,7 @@ public static void main(String[] args) {
 <tbody>
 <tr>
 <td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005641447.png" alt="image-20210706005641447" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005728965.png" alt="image-20210706005728965" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005819841.png" alt="image-20210706005819841" loading="lazy"></td>
-<td><img src="/Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004821761.png" alt="image-20210706004821761" loading="lazy"><br /><img src="file:///Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004920244.png?lastModify=1625503879" alt="image-20210706004920244" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005012823.png" alt="image-20210706005012823" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic//image-20210706004821761.png" alt="image-20210706004821761" loading="lazy"><br /><img src="/Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004920244.png?lastModify=1625503879" alt="image-20210706004920244" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005012823-20210706133540008-20210706133553863.png" alt="image-20210706005012823" loading="lazy"></td>
 </tr>
 </tbody>
 </table>
@@ -533,6 +533,106 @@ public static void main(String[] args) {
 <pre><code class="language-java">Integer a=1;//字节码指令是invokeStatic Integer.valueOf()即把基本类型封装成Integer对象
 if (x==2){}//字节码指令是invokeStatic Integer.intValue()即从Integer解封出基本类型
 </code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[编译原理]]></title>
+        <id>https://Joshua-Chang.github.io/post/bian-yi-yuan-li/</id>
+        <link href="https://Joshua-Chang.github.io/post/bian-yi-yuan-li/">
+        </link>
+        <updated>2021-07-02T04:31:29.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="01-理解代码编译器的前端技术">01 | 理解代码：编译器的前端技术</h1>
+<p>“前端”指的是编译器对程序代码的分析和理解过程。它通常只跟语言的语法有关，跟目标机器无关。而与之对应的“后端”则是生成目标代码的过程，跟目标机器有关。</p>
+<img src="https://static001.geekbang.org/resource/image/06/93/06b80f8484f4d88c6510213eb27f2093.jpg" />
+<p>编译器的“前端”技术分为<strong>词法分析、语法分析</strong>和<strong>语义分析</strong>三个部分。而它主要涉及自动机和形式语言方面的基础的计算理论。</p>
+<h2 id="词法分析">词法分析</h2>
+<p>编译器的第一项工作叫做词法分析。程序由一个个的“词法记号”( Token)组成的。</p>
+<p>读一片段代码时，识别出 if、else、int 这样的关键字，main、printf、age 这样的标识符，+、-、= 这样的操作符号，还有花括号、圆括号、分号这样的符号，以及数字字面量、字符串字面量等。这些都是 Token。</p>
+<p>不同的Token在代码里可以是连在一起的，可以通过制定一些规则来区分每个不同的 Token，即词法分析器。</p>
+<blockquote>
+<ul>
+<li>**识别 age 这样的标识符。**它以字母开头，后面可以是字母或数字，直到遇到第一个既不是字母又不是数字的字符时结束。</li>
+<li><strong>识别 &gt;= 这样的操作符。</strong> 当扫描到一个 &gt; 字符的时候，就要注意，它可能是一个 GT（Greater Than，大于）操作符。但由于 GE（Greater Equal，大于等于）也是以 &gt; 开头的，所以再往下再看一位，如果是 =，那么这个 Token 就是 GE，否则就是 GT。</li>
+<li>**识别 45 这样的数字字面量。**当扫描到一个数字字符的时候，就开始把它看做数字，直到遇到非数字的字符。</li>
+</ul>
+</blockquote>
+<p><strong>词法分析器</strong>有的是手写实现的（GNU 的 C 语言编译器），有的使用词法分析器的生成工具来生成（Lex或其 GNU 版本，Flex）。这些生成工具是基于一些规则来工作的，这些规则用“正则文法”表达，符合正则文法的表达式称为“正则表达式”。生成工具可以读入正则表达式，生成一种叫“有限自动机”的算法，来完成具体的词法分析工作。</p>
+<p>有限自动机是有限个状态的自动机器。词法分析器也是一样，它分析整个程序的字符串，当遇到不同的字符时，会驱使它迁移到不同的状态。</p>
+<blockquote>
+<p>例如，词法分析程序在扫描 age 的时候，处于“标识符”状态，等它遇到一个 &gt; 符号，就切换到“比较操作符”的状态。词法分析过程，就是这样一个个状态迁移的过程。</p>
+</blockquote>
+<h2 id="语法分析">语法分析</h2>
+<p>编译器下一个阶段的工作是语法分析。词法分析是识别一个个的单词，而语法分析就是在词法分析的基础上识别出程序的语法结构。这个结构是一个树状结构，是计算机容易理解和执行的。</p>
+<p>自然语言为例有“主、谓、宾”，宾语又可以拆分成定语。</p>
+<p>程序也有定义良好的语法结构，它的语法分析过程，就是构造这么一棵树。一个程序就是一棵树，这棵树叫做<strong>抽象语法树</strong>（Abstract Syntax Tree，AST）。树的每个节点（子树）是一个语法单元，这个单元的构成规则就叫“语法”。每个节点还可以有下级节点。计算机程序是层层嵌套的树状结构。</p>
+<p>如果再把循环语句、判断语句、赋值语句等节点加到 AST 上，并解释执行它，那么你实际上就实现了一个脚本语言。而执行脚本语言的过程，就是遍历 AST 的过程。</p>
+<img src="https://static001.geekbang.org/resource/image/cb/16/cbf2b953cb84ef30b154470804262c16.jpg" style="zoom:74%;" />
+<p>构造AST的算法就是递归下降算法。</p>
+<p>语法分析器有比如 Yacc（或 GNU 的版本，Bison）、Antlr、JavaCC 等工具，还能找到很多开源的语法规则文件改造。对日志文件每行日志的解析、解析XML、JSON 格式的各种配置文件、模型定义文件的过程，其实本质也是语法分析过程。</p>
+<h2 id="语义分析">语义分析</h2>
+<p>语义分析就是要让计算机理解我们的真实意图，把一些模棱两可的地方消除掉。</p>
+<p>计算机语言的语义一般可以表达为一些规则，语义分析就是要检查是否符合这些规则</p>
+<blockquote>
+<p>比如：</p>
+<ul>
+<li>某个表达式的计算结果是什么数据类型？如果有数据类型不匹配的情况，是否要做自动转换？</li>
+<li>如果在一个代码块的内部和外部有相同名称的变量，我在执行的时候到底用哪个？ 就像“我喜欢又聪明又勇敢的你”中的“你”，到底指的是谁，需要明确。</li>
+<li>在同一个作用域内，不允许有两个名称相同的变量，这是唯一性检查。你不能刚声明一个变量 a，紧接着又声明同样名称的一个变量 a，这就不允许了。</li>
+</ul>
+</blockquote>
+<p>语义分析工作的某些成果，会作为属性标注在抽象语法树上，比如在 age 这个标识符节点和 45 这个字面量节点上，都会标识它的数据类型是 int 型的。</p>
+<blockquote>
+<p>在这个树上还可以标记很多属性，有些属性是在之前的两个阶段就被标注上了，比如所处的源代码行号，这一行的第几个字符。这样，在编译程序报错的时候，就可以比较清楚地了解出错的位置。</p>
+</blockquote>
+<p>做完这些属性标注以后，编译器再依据这些信息生成目标代码。</p>
+<h2 id="课程小结">课程小结</h2>
+<ul>
+<li>词法分析是把程序分割成一个个 Token 的过程，可以通过构造有限自动机来实现。</li>
+<li>语法分析是把程序的结构识别出来，并形成一棵便于由计算机处理的抽象语法树。可以用递归下降的算法来实现。</li>
+<li>语义分析是消除语义模糊，生成一些属性信息，让计算机能够依据这些信息生成目标代码。</li>
+</ul>
+<h1 id="02-正则文法和有限自动机纯手工打造词法分析器">02 | 正则文法和有限自动机：纯手工打造词法分析器</h1>
+<p>解析 age &gt;= 45有限自动机如图：</p>
+<p>**1. 初始状态：**刚开始启动词法分析的时候，程序所处的状态。</p>
+<p>**2. 标识符状态：**在初始状态时，当第一个字符是字母的时候，迁移到状态 2。当后续字符是字母和数字时，保留在状态 2。如果不是，就离开状态 2，写下该 Token，回到初始状态。</p>
+<p>**3. 大于操作符（GT）：**在初始状态时，当第一个字符是 &gt; 时，进入这个状态。它是比较操作符的一种情况。</p>
+<p>**4. 大于等于操作符（GE）：**如果状态 3 的下一个字符是 =，就进入状态 4，变成 &gt;=。它也是比较操作符的一种情况。</p>
+<p>**5. 数字字面量：**在初始状态时，下一个字符是数字，进入这个状态。如果后续仍是数字，就保持在状态 5</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/15/35/15da400d09ede2ce6ac60fa6d5342835.jpg" style="zoom:67%;" /></th>
+<th><img src="https://static001.geekbang.org/resource/image/f6/17/f6601b74204140836bd409137924be17.jpg" style="zoom:67%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>双线的意思是这个状态已经是一个合法的 Token 了，单线的意思是这个状态还是临时状态。</p>
+</blockquote>
+<p>这 4 种 Token 用正则表达式表达：</p>
+<pre><code>Id :        [a-zA-Z_] ([a-zA-Z_] | [0-9])*
+IntLiteral: [0-9]+
+GT :        '&gt;'
+GE :        '&gt;='
+</code></pre>
+<p>解析 int age = 40，处理标识符和关键字规则的冲突</p>
+<p>int 这个字符串，既符合标识符的规则，又符合 int 这个关键字的规则。</p>
+<ol>
+<li>关键字是语言设计中作为语法要素的词汇，例如表示数据类型的 int、char，表示程序结构的 while、if，表述特殊数据取值的 null、NAN 等。关键字比标识符的规则优先级高，普通的标识符是不允许跟这些关键字重名的。</li>
+<li>保留字在当前的语言设计中还没用到，但是保留下来，因为将来会用到。</li>
+</ol>
+<p>我们命名自己的变量、类名称，不可以用到跟关键字和保留字相同的字符串。<strong>那么我们在词法分析器中，如何把关键字和保留字跟标识符区分开呢？</strong></p>
+<p>在识别普通的标识符之前，你先看看它是关键字还是保留字就可以了。具体做法是：</p>
+<blockquote>
+<p>当第一个字符是 i 的时候，我们让它进入一个特殊的状态。接下来，如果它遇到 n 和 t，就进入状态 4。但这还没有结束，如果后续的字符还有其他的字母和数字，它又变成了普通的标识符。比如，我们可以声明一个 intA（int 和 A 是连着的）这样的变量，而不会跟 int 关键字冲突。<img src="https://static001.geekbang.org/resource/image/52/b4/52afab1d7c30b04c91b2b0a018dcc9b4.jpg" alt="" loading="lazy"></p>
+</blockquote>
+<h1 id="03-语法分析一纯手工打造公式计算器">03 | 语法分析（一）：纯手工打造公式计算器</h1>
+<p>之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长而且容易出错的事务，例如内存管理。</p>
+<p>Java 虚拟机将运行时内存区域划分为五个部分，分别为方法区、堆、PC 寄存器、Java 方法栈和本地方法栈。Java 程序编译而成的 class 文件，需要先加载至方法区中，方能在 Java 虚拟机中运行。</p>
+<p>为了提高运行效率，标准 JDK 中的 HotSpot 虚拟机采用的是一种混合执行的策略。</p>
+<p>它会解释执行 Java 字节码，然后会将其中反复执行的热点代码，以方法为单位进行即时编译，翻译成机器码后直接运行在底层硬件之上。</p>
+<p>HotSpot 装载了多个不同的即时编译器，以便在编译时间和生成代码的执行效率之间做取舍。</p>
 ]]></content>
     </entry>
     <entry>
@@ -2648,305 +2748,6 @@ C4 是前 4 位的计算结果是否进位的门电路表示。因此一个 4 �
 }
 </code></pre>
 <p>一般情况下，在实践应用中，对于需要精确数值的，比如银行存款、电商交易，我们都会使用定点数或者整数类型。比如在 MySQL 里的 decimal(12,2)，</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[ 计算机组成原理02指令和运算 上]]></title>
-        <id>https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-02-zhi-ling-he-yun-suan/</id>
-        <link href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-02-zhi-ling-he-yun-suan/">
-        </link>
-        <updated>2021-03-11T09:41:24.000Z</updated>
-        <summary type="html"><![CDATA[<p>从硬件角度来看，CPU 就是一个超大规模集成电路，通过电路实现了加法、乘法乃至各种各样的处理逻辑<br>
-从软件角度讲，CPU 就是一个执行各种计算机指令（Instruction Code）的逻辑机器。计算机指令，就好比一门 CPU 能够听得懂的语言，我们也可以把它叫作机器语言（Machine Language）。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>从硬件角度来看，CPU 就是一个超大规模集成电路，通过电路实现了加法、乘法乃至各种各样的处理逻辑<br>
-从软件角度讲，CPU 就是一个执行各种计算机指令（Instruction Code）的逻辑机器。计算机指令，就好比一门 CPU 能够听得懂的语言，我们也可以把它叫作机器语言（Machine Language）。</p>
-<!-- more -->
-<p>不同的 CPU 能够听懂的语言不太一样，即计算机指令集Instruction Set<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615480260058.png" style="zoom:25%;" /></p>
-<h2 id="指令和机器码">指令和机器码</h2>
-<ol>
-<li>
-<p>把高级语言程序翻译成汇编语言（ASM，Assembly Language）程序，的过程叫编译（Compile）成汇编代码</p>
-</li>
-<li>
-<p>再用汇编器（Assembler）翻译成机器码（Machine Code），CPU 能够真正认识的计算机指令<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615460135310.png" style="zoom: 33%;" /><br>
-<img src="https://Joshua-Chang.github.io/post-images/1615460148801.jpg" alt="" loading="lazy"></p>
-</li>
-</ol>
-<blockquote>
-<p>e.g.<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615460725402.jpg" alt="" loading="lazy"><br>
-MIPS 的指令是一个 32 位的整数，高 6 位叫操作码（Opcode），分别是 R、I 和 J，代表这条指令具体的操作类别。rt、rt、rd均为寄存器地址。<br>
-R 指令是一般用来做算术和逻辑操作，里面有读取和写入数据的寄存器的地址。如果是逻辑位移操作，后面还有位移操作的位移量，而最后的功能码，则是在前面的操作码不够的时候，扩展操作码表示对应的具体指令的。</p>
-<p>I 指令，则通常是用在数据传输、条件分支，以及在运算的时候使用的并非变量还是常数的时候。这个时候，没有了位移量和操作码，也没有了第三个寄存器，而是把这三部分直接合并成了一个地址值或者一个常数。</p>
-<p>J 指令就是一个跳转指令，高 6 位之外的 26 位都是一个跳转后的地址。</p>
-<p><code>add $t0,$s2,$s1</code>为例 s1 17    s2 18      t0 8<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615461145867.jpg" alt="" loading="lazy"><br>
-<img src="https://Joshua-Chang.github.io/post-images/1615461154758.png" style="zoom: 15%;" /></p>
-</blockquote>
-<p>除了 C 这样的编译型的语言之外，Python 这样的解释型语言，是通过解释器在程序运行的时候逐句翻译，而 Java 这样使用虚拟机的语言，则是由虚拟机对编译出来的中间代码进行解释，或者即时编译(JIT)成为机器码来最终执行。</p>
-<h2 id="指令跳转">指令跳转</h2>
-<blockquote>
-<p>CPU 其实就是由一堆寄存器组成的。而寄存器是由多个触发器（Flip-Flop）或者锁存器（Latches）组成的简单电路。</p>
-<p>N 个触发器或者锁存器，就可以组成一个 N 位（Bit）的寄存器，能够保存 N 位的数据。比方说，我们用的 64 位 Intel 服务器，寄存器就是 64 位的。</p>
-</blockquote>
-<h3 id="cpu-里面的寄存器">CPU 里面的寄存器：</h3>
-<p>一个是<strong>PC 寄存器</strong>（Program Counter Register），我们也叫<strong>指令地址寄存器</strong>（Instruction Address Register）。它就是用来存放下一条需要执行的计算机指令的内存地址。</p>
-<p>第二个是<strong>指令寄存器</strong>（Instruction Register），用来存放当前正在执行的指令。</p>
-<p>第三个是<strong>条件码寄存器</strong>（Status Register），用里面的一个一个标记位（Flag），存放 CPU 进行算术或者逻辑计算的结果。<strong>零标志条件码</strong>（对应的条件码是 ZF，Zero Flag 不等为0）、<strong>进位标志</strong>（CF，Carry Flag A&gt;B 为0）、<strong>符号标志</strong>（SF，Sign Flag正数为0）以及<strong>溢出标志</strong>（OF，Overflow Flag）</p>
-<p>其他用来存储数据和内存地址的寄存器：通常根据存放的数据内容来给它们取名字，比如整数寄存器、浮点数寄存器、向量寄存器和地址寄存器等等，通用寄存器（既可以存放数据，又能存放地址）</p>
-<p>一个程序执行的时候，CPU 会根据 PC 寄存器里的地址，从内存里面把需要执行的指令，读取到指令寄存器里面执行，然后顺序读取下一条指令。<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615472744523.jpg" alt="" loading="lazy"></p>
-<h3 id="ifelse">if…else</h3>
-<pre><code class="language-c">#include &lt;time.h&gt;
-#include &lt;stdlib.h&gt;
-int main()
-{
-  srand(time(NULL));
-  int r = rand() % 2;
-  int a = 10;
-  if (r == 0)
-  {
-    a = 1;
-  } else {
-    a = 2;
-  } 
-}
-</code></pre>
-<pre><code class="language-shell">$ gcc -g -c test.c
-$ objdump -d -M intel -S test.o 
-</code></pre>
-<p><strong>汇编代码</strong></p>
-<p>r == 0 的条件判断，被编译成了 cmp 和 jne 这两条指令</p>
-<p>cmp 指令比较了前后两个操作数的值： 操作对象1 - 操作对象2 但不保存结果，只是根据结果修改相应的标志位。</p>
-<ol>
-<li>DWORD PTR 代表操作的数据类型是 32 位的整数，[rbp-0x4] 则是一个寄存器的地址。</li>
-<li>第二个操作数 0x0 就是我们设定的常量 0 的 16 进制表示</li>
-</ol>
-<p>cmp 指令的比较结果，会存入到<strong>条件码寄存器</strong>当中去，<strong>零标志条件码</strong>ZF 相等为1，不等为0</p>
-<p>cmp 指令执行完成之后，PC 寄存器会自动自增，开始执行下一条 jne 的指令</p>
-<p>jne 指令： jump not equal 查看零标志位ZF不等于0，则跳转到4a（当跳转发生的时候，PC 寄存器就不再是自增变成下一条指令的地址）</p>
-<p>CPU 再把 4a 地址里的指令加载到指令寄存器中来执行，mov 指令把 2 设置到对应的寄存器里去，相当于一个赋值操作。然后，PC 寄存器里的值继续自增，执行下一条 mov 指令。</p>
-<p>mov 指令的第一个操作数 eax，代表累加寄存器，这条指令其实没有实际的作用，它的作用是一个占位符。</p>
-<p>if 条件满足的话，在赋值的 mov 指令执行完成之后，有一个 jmp 的无条件跳转指令，跳转的地址就是51。</p>
-<p>main 函数没有设定返回值，而 mov eax, 0x0 其实就是给 main 函数生成了一个默认的为 0 的返回值到累加器里面。</p>
-<pre><code class="language-shell"> if (r == 0)
-  3b:   83 7d fc 00             cmp    DWORD PTR [rbp-0x4],0x0 //只比较，结果存入标识位
-  3f:   75 09                   jne    4a &lt;main+0x4a&gt; //标识位ZF不等于0则执行
-    {
-        a = 1;
-  41:   c7 45 f8 01 00 00 00    mov    DWORD PTR [rbp-0x8],0x1
-  48:   eb 07                   jmp    51 &lt;main+0x51&gt;
-    }
-    else
-    {
-        a = 2;
-  4a:   c7 45 f8 02 00 00 00    mov    DWORD PTR [rbp-0x8],0x2
-  51:   b8 00 00 00 00          mov    eax,0x0
-    } 
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://Joshua-Chang.github.io/post-images/1615472764389.jpg" alt="" loading="lazy"></figure>
-<h3 id="forwhile">for/while</h3>
-<p>对应的循环也是用 1e 这个地址上的 cmp 比较指令，和紧接着的 jle 条件跳转指令来实现的。</p>
-<p>jle 跳转的地址，是在这条指令之前的地址 14。往前跳转使得，PC 寄存器会把指令地址设置到之前执行过的指令位置，重新执行之前执行过的指令，直到条件不满足，顺序往下执行 jle 之后的指令，整个循环才结束。<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615472775030.jpg" alt="" loading="lazy"></p>
-<p>除了简单地通过 PC 寄存器自增的方式顺序执行外，条件码寄存器会记录下当前执行指令的条件判断状态，然后通过跳转指令读取对应的条件码，修改 PC 寄存器内的下一条指令的地址，最终实现 if…else 以及 for/while 这样的程序控制流程。</p>
-<h2 id="函数调用">函数调用</h2>
-<blockquote>
-<p>函数调用和 if…else 和 for/while 循环有点像。都是在原来顺序执行的指令过程里，执行了一个内存地址的跳转指令，让指令从原来顺序执行的过程里跳开，从新的跳转后的位置开始执行。</p>
-<p>区别是，if…else 和 for/while 的跳转，是跳转走了就不再回来了，就在跳转后的新地址开始顺序地执行指令。</p>
-<p>而函数调用的跳转，在对应函数的指令执行完了之后，还要再回到函数调用的地方，继续执行 call 之后的指令。</p>
-<p>把被调用函数的指令直接插入在调用处的方法不太好。那就把后面要跳回来执行的指令地址给记录下来。</p>
-</blockquote>
-<p>我们在内存里面开辟一段空间，用栈这个<strong>后进先出</strong>（LIFO，Last In First Out）的数据结构。</p>
-<p>每次程序调用函数之前，都把函数调用完成后的返回地址、参数数据等开辟一块内存空间，即<strong>栈帧</strong>（Stack Frame）。<strong>压栈</strong>。如果函数执行完了，这就<strong>出栈</strong>。栈底的内存地址是在一开始就固定的，而一层层压栈之后，栈顶的内存地址是在逐渐变小。</p>
-<p>指令地址本身的压栈和出栈是在 call 和 ret 的部分进行的。</p>
-<p>call 的同时进行了一次 push把PC寄存器里面的内容压栈了，而在 ret 的时候 pop 把这部分数据出栈写回到PC寄存器里面了。</p>
-<pre><code class="language-c">// function_example.c
-#include &lt;stdio.h&gt;
-int static add(int a, int b)
-{
-    return a+b;
-}
-int main()
-{
-    int x = 5;
-    int y = 10;
-    int u = add(x, y);
-}
-</code></pre>
-<pre><code class="language-shell">int static add(int a, int b)
-{
-   0:   55                      push   rbp //压栈register base pointer原栈帧指针
-   1:   48 89 e5                mov    rbp,rsp //register stack pointer当前栈指针
-   4:   89 7d fc                mov    DWORD PTR [rbp-0x4],edi
-   7:   89 75 f8                mov    DWORD PTR [rbp-0x8],esi
-    return a+b;
-   a:   8b 55 fc                mov    edx,DWORD PTR [rbp-0x4]
-   d:   8b 45 f8                mov    eax,DWORD PTR [rbp-0x8]
-  10:   01 d0                   add    eax,edx
-}
-  12:   5d                      pop    rbp //将当前的栈顶出栈
-  13:   c3                      ret //出栈 到call调用时PC里的下一条地址  
-0000000000000014 &lt;main&gt;:
-int main()
-{
-  14:   55                      push   rbp
-  15:   48 89 e5                mov    rbp,rsp
-  18:   48 83 ec 10             sub    rsp,0x10
-    int x = 5;
-  1c:   c7 45 fc 05 00 00 00    mov    DWORD PTR [rbp-0x4],0x5
-    int y = 10;
-  23:   c7 45 f8 0a 00 00 00    mov    DWORD PTR [rbp-0x8],0xa
-    int u = add(x, y);
-  2a:   8b 55 f8                mov    edx,DWORD PTR [rbp-0x8]
-  2d:   8b 45 fc                mov    eax,DWORD PTR [rbp-0x4]
-  30:   89 d6                   mov    esi,edx
-  32:   89 c7                   mov    edi,eax
-  34:   e8 c7 ff ff ff          call   0 &lt;add&gt;//跳转后的程序地址 PC里的下一条地址等信息压栈
-  39:   89 45 f4                mov    DWORD PTR [rbp-0xc],eax
-  3c:   b8 00 00 00 00          mov    eax,0x0
-}
-  41:   c9                      leave  
-  42:   c3                      ret    
-</code></pre>
-<h3 id="stack-overflow">stack overflow</h3>
-<p>通过引入栈，函数调用只需要通过维持 rbp 和 rsp，这两个维护栈顶所在地址的寄存器，就能管理好不同函数之间的跳转。但函数调用层数太多，我们往栈里压入它存不下的内容，程序在执行的过程中就会遇到栈溢出的错误。（如：函数调用自己，并且不设任何终止条件）</p>
-<p>除了无限递归，递归层数过深，在栈空间里面创建非常占内存的变量（比如一个巨大的数组），这些情况都很可能给你带来 stack overflow。</p>
-<h3 id="函数内联inline">函数内联inline</h3>
-<p>只要在 GCC 编译的时候，加上对应的一个让编译器自动优化的参数 -O，编译器就会在可行的情况下，进行这样的指令替换。或者在定义函数的地方，加上 inline 的关键字，来提示编译器对函数进行内联。</p>
-<p>内联意味着，我们把可以复用的程序指令在调用它的地方完全展开了。</p>
-<p>没有调用其他函数，只会被调用的函数，我们一般称之为<strong>叶子函数（或叶子过程）</strong></p>
-<h2 id="elf和静态链接">ELF和静态链接</h2>
-<blockquote>
-<p><strong>C 语言代码 - 汇编代码 - 机器码</strong></p>
-<p>这个描述把过程大大简化了。</p>
-<p>通过 objdump 命令查看它们的汇编代码，发现两个程序的地址都是从 0 开始的，如果需要通过 call 指令调用函数的话，它怎么知道应该跳转到哪一个文件里呢？</p>
-</blockquote>
-<pre><code class="language-c">// add_lib.c
-int add(int a, int b)
-{
-    return a+b;
-}
-</code></pre>
-<pre><code class="language-c">// link_example.c
-#include &lt;stdio.h&gt;
-int main()
-{
-    int a = 10;
-    int b = 5;
-    int c = add(a, b);
-    printf(&quot;c = %d\n&quot;, c);
-}
-</code></pre>
-<pre><code class="language-shell">$ gcc -g -c add_lib.c link_example.c
-$ objdump -d -M intel -S add_lib.o
-$ objdump -d -M intel -S link_example.o
-</code></pre>
-<p>add_lib.o 以及 link_example.o 并不是一个<strong>可执行文件</strong>（Executable Program），而是<strong>目标文件</strong>（Object File）。</p>
-<p>只有通过链接器（Linker）把多个目标文件以及调用的各种函数库链接起来，我们才能得到一个可执行文件。</p>
-<pre><code class="language-shell">$ gcc -o link-example add_lib.o link_example.o
-$ ./link_example
-c = 15
-</code></pre>
-<p>“<strong>C 语言代码 - 汇编代码 - 机器码</strong>” 这个过程，在我们的计算机上进行的时候是由两部分组成的。</p>
-<p>第一个部分由编译（Compile）、汇编（Assemble）以及链接（Link）三个阶段组成。在这三个阶段完成之后，我们就生成了一个可执行文件。</p>
-<p>第二部分，我们通过装载器（Loader）把可执行文件装载（Load）到内存中。CPU 从内存中读取指令和数据，来开始真正执行程序。<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615482190792.jpg" style="zoom: 25%;" /></p>
-<h3 id="elf-格式和链接">ELF 格式和链接</h3>
-<p>可执行代码 通过objdump命令dump 出来的内容，不仅有编译成的汇编指令，还保留了很多别的数据。因为在 Linux 下，可执行文件和目标文件所使用的都是一种叫<strong>ELF</strong>（Execuatable and Linkable File Format）的文件格式，中文名字叫<strong>可执行与可链接文件格式</strong>。</p>
-<p>ELF文件有三类:可重定向文件、可执行文件、共享目标文件。代码经过预处理、编译、汇编后形成可重定向文件，可重定向文件经过链接后生成可执行文件。</p>
-<p>ELF 文件格式把各种信息，分成一个一个的 Section 保存起来。ELF 有一个基本的文件头（File Header），用来表示这个文件的基本属性，比如是否是可执行文件，对应的 CPU、操作系统等等<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615482163121.jpg" alt="" loading="lazy"><br>
-除了这些基本属性之外，大部分程序还有这么一些 Section：</p>
-<ol>
-<li>首先是.text Section，也叫作<strong>代码段</strong>或者指令段（Code Section），用来保存程序的代码和指令；</li>
-<li>接着是.data Section，也叫作<strong>数据段</strong>（Data Section），用来保存程序里面设置好的初始化数据信息；</li>
-<li>然后就是.rel.text Secion，叫作<strong>重定位表</strong>（Relocation Table）。重定位表里，保留的是当前的文件里面，哪些跳转地址其实是我们不知道的。比如上面的 link_example.o 里面，我们在 main 函数里面调用了 add 和 printf 这两个函数，但是在链接发生之前，我们并不知道该跳转到哪里，这些信息就会存储在重定位表里；</li>
-<li>最后是.symtab Section，叫作<strong>符号表</strong>（Symbol Table）。符号表保留了我们所说的当前文件里面定义的函数名称和对应地址的地址簿。</li>
-</ol>
-<h3 id="链接过程">链接过程</h3>
-<img src="https://Joshua-Chang.github.io/post-images/1615482146761.jpg" style="zoom:50%;" />
-<blockquote>
-<p>链接器会扫描所有输入的目标文件，然后把所有符号表里的信息收集起来，构成一个全局的符号表。然后再根据重定位表，把所有不确定要跳转地址的代码，根据符号表里面存储的地址，进行一次修正。最后，把所有的目标文件的对应段进行一次合并，变成了最终的可执行代码。因此可执行文件里面的函数调用的地址都是正确的。</p>
-</blockquote>
-<h3 id="动态链接">动态链接</h3>
-<p>在动态链接的过程中，我们想要“链接”的，不是存储在硬盘上的目标文件代码，而是加载到内存中的<strong>共享库</strong>（Shared Libraries）</p>
-<blockquote>
-<p>Windows 下，.dll 文件，Dynamic-Link Libary（DLL，动态链接库）。</p>
-<p>Linux 下，这些共享库文件就是.so 文件，Shared Object（一般我们也称之为动态链接库）。</p>
-<p>“动态链接”、“共享”</p>
-</blockquote>
-<p>在程序运行的时候共享代码，这些机器码必须是“<strong>地址无关</strong>”的。编译出来的共享库文件的指令代码，是地址无关码（Position-Independent Code）。动态代码库内部变量和函数调用要使用<strong>相对地址</strong>（Relative Address）<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615535954056.jpg" alt="" loading="lazy"><br>
-虽然共享库用的都是同一段物理内存地址，但是在不同的应用程序里，它所在的虚拟内存地址是不同的。</p>
-<h4 id="plt-got">PLT GOT</h4>
-<pre><code class="language-c">// lib.c
-#include &lt;stdio.h&gt;
-void show_me_the_money(int money)
-{
-    printf(&quot;Show me USD %d from lib.c \n&quot;, money);
-}
-// show_me_poor.c
-#include &quot;lib.h&quot;
-int main()
-{
-    int money = 5;
-    show_me_the_money(money);
-}
-</code></pre>
-<pre><code class="language-shell">$ gcc lib.c -fPIC -shared -o lib.so
-$ gcc -o show_me_poor show_me_poor.c ./lib.so
-</code></pre>
-<pre><code class="language-shell">……
-0000000000400540 &lt;show_me_the_money@plt-0x10&gt;:
-  400540:       ff 35 12 05 20 00       push   QWORD PTR [rip+0x200512]        # 600a58 &lt;_GLOBAL_OFFSET_TABLE_+0x8&gt;//全局偏移表GOT
-  400546:       ff 25 14 05 20 00       jmp    QWORD PTR [rip+0x200514]        # 600a60 &lt;_GLOBAL_OFFSET_TABLE_+0x10&gt;
-  40054c:       0f 1f 40 00             nop    DWORD PTR [rax+0x0]
- 
-0000000000400550 &lt;show_me_the_money@plt&gt;:
-  400550:       ff 25 12 05 20 00       jmp    QWORD PTR [rip+0x200512]        # 600a68 &lt;_GLOBAL_OFFSET_TABLE_+0x18&gt;
-  400556:       68 00 00 00 00          push   0x0
-  40055b:       e9 e0 ff ff ff          jmp    400540 &lt;_init+0x28&gt;
-……
-0000000000400676 &lt;main&gt;:
-....
-  40068a:       e8 c1 fe ff ff          call   400550 &lt;show_me_the_money@plt&gt;
-....//从PLT（程序链接表Procedure Link Table）里找要调用的函数,地址 400550 
-……
-</code></pre>
-<p>在动态链接对应的共享库时，在共享库的 data section 里面，保存了一张<strong>全局偏移表</strong>（GOT，Global Offset Table）。<strong>虽然共享库的代码部分的物理内存是共享的，但是数据部分是各个动态链接它的应用程序里面各加载一份的。</strong><br>
-<img src="https://Joshua-Chang.github.io/post-images/1615535922650.jpg" alt="" loading="lazy"><br>
-不同的进程，调用同样的动态库，各自 GOT 里面指向最终加载的动态链接库里面的虚拟内存地址是不同的。</p>
-<h3 id="延伸">延伸</h3>
-<p>Windows 的可执行文件格式是一种叫作<strong>PE</strong>（Portable Executable Format）的文件格式。Linux 下的装载器只能解析 ELF 格式而不能解析 PE 格式，Linux 的Wine/ 微软的WSL，也就是 Windows Subsystem for Linux可以兼容</p>
-<h2 id="程序装载">程序装载</h2>
-<blockquote>
-<p>在运行这些可执行文件的时候，我们其实是通过一个装载器，解析 ELF 或者 PE 格式的可执行文件。装载器会把对应的指令和数据加载到内存里面来，实际上装载器需要满足两个要求。</p>
-<p><strong>第一，可执行程序加载后占用的内存空间应该是连续的</strong>。PC程序计数器是顺序地一条一条指令执行下去</p>
-<p>**第二，我们需要同时加载很多个程序，并且不能让程序自己规定在内存中加载的位置。**因为我们现在的计算机通常会同时运行很多个程序，可能你想要的内存地址已经被其他加载了的程序占用了。</p>
-</blockquote>
-<h3 id="虚拟内存">虚拟内存</h3>
-<p>在内存里面，找到一段连续的内存空间，然后分配给装载的程序，然后把这段连续的内存空间地址，和整个程序指令里指定的内存地址做一个映射。我们维护一个虚拟内存到物理内存的映射表，这样实际程序指令执行的时候，会通过虚拟内存地址，找到对应的物理内存地址，然后执行。因为是连续的内存地址空间，所以我们只需要维护映射关系的起始地址和对应的空间大小就可以了。</p>
-<p>指令里用到的内存地址叫作<strong>虚拟内存地址</strong>（Virtual Memory Address），实际在内存硬件里面的空间地址，叫<strong>物理内存地址</strong>（Physical Memory Address）<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615484615617.png" alt="" loading="lazy"></p>
-<h3 id="内存分段">内存分段</h3>
-<p>这种找出一段连续的物理内存和虚拟内存地址进行映射的方法，我们叫<strong>分段</strong>（Segmentation）**。**这里的段，就是指系统分配出来的那个连续的内存空间。</p>
-<p>缺点第一个就是<strong>内存碎片</strong>（Memory Fragmentation）的问题。<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615484604209.png" alt="" loading="lazy"><br>
-解决的办法叫<strong>内存交换</strong>（Memory Swapping），即把不足够连续的程序占用的内存写到硬盘上，再从硬盘上读回来到内存里面，不过读回来的时候，我们不再把它加载到原来的位置，而是放在连续的位置。</p>
-<h3 id="内存分页">内存分页</h3>
-<p>硬盘的访问速度要比内存慢很多，因此简单的内存交换并不高效。</p>
-<p><strong>和分段这样分配一整段连续的空间给到程序相比，分页是把整个物理内存空间切成一段段固定尺寸的大小</strong>。</p>
-<p>对应的程序所需要占用的虚拟内存空间，也会同样切成一段段固定尺寸的大小。这样一个连续并且尺寸固定的内存空间，我们叫<strong>页</strong>（Page）。从虚拟内存到物理内存的映射，不再是拿整段连续的内存的物理地址，而是按照一个一个页来的。<br>
-<img src="https://Joshua-Chang.github.io/post-images/1615484579925.png" alt="" loading="lazy"><br>
-即使内存空间不够，需要让现有的、正在运行的其他程序，通过内存交换释放出一些内存的页出来更加高效。</p>
-<p>分页的方式使得我们在加载程序的时候，不再需要一次性都把程序加载到物理内存中。</p>
-<blockquote>
-<p>在进行虚拟内存和物理内存的页之间的映射之后，并不真的把页加载到物理内存里，而是只在程序运行中，需要用到对应虚拟内存页里面的指令和数据时，再加载到物理内存里面去。当要读取特定的页，却发现数据并没有加载到物理内存里的时候，就会触发一个来自于 CPU 的<strong>缺页错误</strong>（Page Fault）。我们的操作系统会捕捉到这个错误，然后将对应的页，从存放在硬盘上的虚拟内存里读取出来，加载到物理内存里。可以运行那些远大于我们实际物理内存的程序</p>
-</blockquote>
 ]]></content>
     </entry>
 </feed>
