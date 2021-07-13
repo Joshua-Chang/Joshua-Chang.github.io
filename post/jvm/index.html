@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>JVM | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1625549898308">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1626162429103">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="JVM | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -12,7 +12,7 @@
 
 
 
-    <meta name="description" content="
+    <meta name="description" content="JVM基本原理
 
 
 
@@ -21,7 +21,8 @@
 
 
 
-之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长而且容易出错的事..." />
+
+之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
@@ -34,7 +35,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1625549898308" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1626162429103" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -94,7 +95,7 @@
                 2021-07-03
               </span>
               <span>
-                14 min read
+                71 min read
               </span>
               
             </div>
@@ -103,7 +104,8 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <table>
+                <h1 id="jvm基本原理">JVM基本原理</h1>
+<table>
 <thead>
 <tr>
 <th><img src="https://i.imgur.com/FlYWN1d.png" alt="image-20210703132213706" loading="lazy"></th>
@@ -116,33 +118,89 @@
 <table>
 <thead>
 <tr>
-<th><img src="https://static001.geekbang.org/resource/image/ab/77/ab5c3523af08e0bf2f689c1d6033ef77.png" style="zoom:50%;" /></th>
-<th><img src="https://static001.geekbang.org/resource/image/5e/3b/5ee351091464de78eed75438b6f9183b.png" style="zoom:50%;" /></th>
+<th><img src="https://static001.geekbang.org/resource/image/ab/77/ab5c3523af08e0bf2f689c1d6033ef77.png" style="zoom:70%;" /></th>
+<th><img src="https://static001.geekbang.org/resource/image/5e/3b/5ee351091464de78eed75438b6f9183b.png" style="zoom:70%;" /></th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
 <p>Java 虚拟机将运行时内存区域划分为五个部分，分别为方法区、堆、PC 寄存器、Java 方法栈和本地方法栈。Java 程序编译而成的 class 文件，需要先加载至方法区中，方能在 Java 虚拟机中运行。<br>
-为了提高运行效率，标准 JDK 中的 HotSpot 虚拟机采用的是一种混合执行的策略。它会解释执行 Java 字节码，然后会将其中反复执行的热点代码，以方法为单位进行即时编译，翻译成机器码后直接运行在底层硬件之上。<br>
+为了提高运行效率，标准 JDK 中的 HotSpot 虚拟机采用的是一种混合执行的策略。它会解释执行 Java 字节码，然后会将其中反复执行的热点代码（一个方法内的代码)，以方法为单位进行即时编译，翻译成机器码后直接运行在底层硬件之上。<br>
 HotSpot 装载了多个不同的即时编译器，以便在编译时间和生成代码的执行效率之间做取舍。</p>
-<figure data-type="image" tabindex="1"><img src="https://static001.geekbang.org/resource/image/77/45/77dfb788a8ad5877e77fc28ed2d51745.png" alt="1" loading="lazy"></figure>
-<p>boolean 类型在 Java 虚拟机中被映射为整数类型：“true”被映射为 1，而“false”被映射为 0。Java 代码中的逻辑运算以及条件跳转，都是用整数相关的字节码来实现的。</p>
-<p>除 boolean 类型之外，Java 还有另外 7 个基本类型。它们拥有不同的值域，但默认值在内存中均为 0。这些基本类型之中，浮点类型比较特殊。基于它的运算或比较，需要考虑 +0.0F、-0.0F 以及 NaN 的情况。</p>
-<p>在局部变量中除 long 和 double 外，boolean、byte、char、short 这四种类型，在栈上占用的空间和 int 是一样的，和引用类型也是一样的在 32/64位的 HotSpot 中，这些类型在栈上将占用 4 /8个字节。</p>
-<p>但在存储于堆中的字段或者数组元素上。对于 byte、char 以及 short 这三种类型的字段或者数组单元，它们在堆上占用的空间分别为一字节、两字节，以及两字节，跟这些类型的值域相吻合。</p>
-<p>在将 boolean、byte、char 以及 short 的值存入字段或者数组单元时，Java 虚拟机会进行掩码操作。在读取时，Java 虚拟机则会将其扩展为 int 类型。</p>
-<p>Java 虚拟机将字节流转化为 Java 类的过程分为加载、链接以及初始化三大步骤。</p>
-<p>加载是指查找字节流，并且据此创建类的过程。加载需要借助类加载器，在 Java 虚拟机中，类加载器使用了双亲委派模型，即接收到加载请求时，会先将请求转发给父类加载器。</p>
-<p>链接，是指将创建成的类合并至 Java 虚拟机中，使之能够执行的过程。链接还分验证、准备和解析三个阶段。其中，解析阶段为非必须的。</p>
-<p>初始化，则是为标记为常量值的字段赋值，以及执行 &lt; clinit &gt; 方法的过程。Java 虚拟机会通过加锁来确保类的 &lt; clinit &gt; 方法仅被执行一次，这个特性被用来实现单例的延迟初始化。</p>
-<p>在 Java 中，方法存在重载以及重写的概念，重载指的是方法名相同而参数类型不相同的方法之间的关系，重写指的是方法名相同并且参数类型也相同的方法之间的关系。</p>
-<p>Java 虚拟机识别方法的方式略有不同，除了方法名和参数类型之外，它还会考虑返回类型。</p>
-<p>在 Java 虚拟机中，静态绑定指的是在解析时便能够直接识别目标方法的情况，而动态绑定则指的是需要在运行过程中根据调用者的动态类型来识别目标方法的情况。由于 Java 编译器已经区分了重载的方法，因此可以认为 Java 虚拟机中不存在重载。</p>
-<p>在 class 文件中，Java 编译器会用符号引用指代目标方法。在执行调用指令前，它所附带的符号引用需要被解析成实际引用。对于可以静态绑定的方法调用而言，实际引用为目标方法的指针。对于需要动态绑定的方法调用而言，实际引用为辅助动态绑定的信息。</p>
-<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703193948926.png" alt="image-20210703193948926" style="zoom:50%;" />
 <table>
 <thead>
 <tr>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/77dfb788a8ad5877e77fc28ed2d51745.png" alt="1" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/2019-01-24-01.png" style="zoom:100%;" /></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>boolean 类型在 Java 虚拟机中被映射为整数类型：“true”被映射为 1，而“false”被映射为 0。Java 代码中的逻辑运算以及条件跳转，都是用整数相关的字节码来实现的。</p>
+<p>Java 基本类型有不同的值域，但默认值在内存中均为 0。这些基本类型之中，浮点类型比较特殊。基于它的运算或比较，需要考虑 +0.0F、-0.0F 以及 NaN 的情况。</p>
+<p>在局部变量中除 long 和 double 外，boolean、byte、char、short 这四种类型，在栈上占用的空间和 int 是一样的，和引用类型也是一样的在 32/64位的 HotSpot 中，这些类型在栈上将占用 4 /8个字节。</p>
+<p>但在存储于堆中的字段或者数组元素上。对于 byte、char 以及 short 这三种类型的字段或者数组单元，它们在堆上占用的空间分别为一字节、两字节，以及两字节，跟这些类型的值域相吻合。</p>
+<p>在将 boolean、byte、char 以及 short 的值存入字段或者数组单元时，Java 虚拟机会进行掩码操作(一串二进制数字，通过与目标数字的<a href="https://segmentfault.com/a/1190000039239875">按位操作</a>，达到屏蔽指定位而实现需求)。在读取时，Java 虚拟机则会将其扩展为 int 类型。在算数运算时几乎全部依赖于操作数栈，即将堆中的 boolean、byte、char 以及 short <strong>加载到操作数栈上，而后将栈上的值当成 int 类型来运算</strong>。</p>
+<blockquote>
+<p>对于 boolean、char 这两个无符号类型来说，加载伴随着零扩展。char 的大小为两个字节。在加载时 char 的值会被复制到 int 类型的低二字节，而高二字节则会用 0 来填充。</p>
+<p>对于 byte、short 这两个类型来说，加载伴随着符号扩展。short 的大小为两个字节。在加载时 short 的值同样会被复制到 int 类型的低二字节。如果该 short 值为非负数，则该 int 类型的值的高二字节会用 0 来填充，否则用 1 来填充。</p>
+</blockquote>
+<p>基本类型（primitive types）8大，和引用类型（reference types）：类、接口、数组类和泛型参数。</p>
+<blockquote>
+<p>由于泛型参数会在编译过程中被擦除，因此 Java 虚拟机实际上只有前三种。在类、接口和数组类中，数组类是由 Java 虚拟机直接生成的，其他两种则有对应的字节流。字节流最常见的形式要属由 Java 编译器生成的 class 文件，不同形式的字节流，都会被加载到 Java 虚拟机中，成为类或接口。无论是直接生成的数组类，还是加载的类，Java 虚拟机都需要对其进行链接和初始化。</p>
+</blockquote>
+<h2 id="分层编译模式">分层编译模式</h2>
+<blockquote>
+<p>class是.java编译成的二进制流文件，又叫字节码。</p>
+<p>像C、C++ 是编译型的语言。传统的Java执行如下</p>
+<ol>
+<li>.class由编译器编译成.class字节码。</li>
+<li>JVM解释器再把class字节码解释成机器码。</li>
+<li>机器码在本地操作系统上执行。</li>
+</ol>
+<p>java代码相对于虚拟机是编译执行的，即：把.java编译成.class就可以在虚拟机上执行。</p>
+<p>虚拟机上的class字节码相对于本地操作系统是解释执行的，即：把class解释翻译成操作系统的机器码</p>
+</blockquote>
+<p>现代的Java的执行过程整体可以分为两个部分：</p>
+<p>第一步由javac将源码编译成字节码，在这个过程中会进行词法分析、语法分析、语义分析，编译原理中这部分的编译称为前端编译。</p>
+<p>第二步逐条将字节码解释执行，在解释执行的过程中，虚拟机同时对运行信息进行收集，编译器会逐渐进行后端编译：把被JVM认定为的热点代码的字节码编译成机器码。</p>
+<p>JVM中会设置一个阈值，当方法的调用次数和循环回边的执行次数超过这个阈值时就会被编译，存入codeCache中。当下次执行这段代码，就会从codeCache中读取机器码，直接执行，以此来提升程序运行的性能：</p>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/ba83857ecf9f344e4972fd551c4973d653952.png@648w_454h_80q" alt="img" loading="lazy"></figure>
+<p><strong>profile轮廓、profiling性能分析(profile+trace)、profiler性能分析工具</strong></p>
+<blockquote>
+<p>例如 JDK 附带的 hprof。这些 profiler 大多通过注入（instrumentation）或者 JVMTI 事件来实现的。</p>
+</blockquote>
+<p>profiling 是指在程序执行过程中，收集能够反映程序执行状态的数据。这里所收集的数据我们称之为程序的 profile。</p>
+<p>HotSpot 虚拟机包含多个即时编译器 C1、C2 和 Graal（实验性替代C2）。</p>
+<p>C1编译效率较快：编译对于执行时间较短的，或者对启动性能有要求的程序，对应参数 -client。</p>
+<p>C2生成代码执行效率较快 ：编译对于执行时间较长的，或者对峰值性能有要求的程序，对应参数 -server。</p>
+<p>通常代码会先被 Java 虚拟机解释执行，之后反复执行的热点代码则会被即时编译成为机器码，直接运行在底层硬件之上。综合了 C1 的启动性能优势和 C2 的峰值性能优势，Java 7 引入了分层编译（对应参数 -XX:+TieredCompilation）：</p>
+<ol>
+<li>解释执行；</li>
+<li>执行不带 profiling 的 C1 生成的机器码；</li>
+<li>执行仅带方法调用次数以及循环回边执行次数 profiling 的 C1  生成的机器码；</li>
+<li>执行带所有 profiling 的 C1  生成的机器码；</li>
+<li>执行 C2  生成的机器码。</li>
+</ol>
+<p>profiling 是指在程序执行过程中，收集能够反映程序执行状态的数据。这里所收集的数据我们称之为程序的 profile。</p>
+<blockquote>
+<p>profiling 越多，其额外的性能开销越大，因此2，3，4的C1执行效率逐渐降低，但C2执行效率比C1高。</p>
+<p>循环回边是一个控制流图中的概念。在字节码中，我们可以简单理解为往回跳转的指令。如for、方法递归编译后的标签回跳</p>
+</blockquote>
+<p>方法的调用次数和循环回边的执行次数，决定一个方法是否为热点代码，并触发以方法为单位的即时编译JIT。</p>
+<p>Java 虚拟机还存在着另一种以循环为单位的即时编译，叫做 On-Stack-Replacement（OSR）编译，也由循环回边计数器。</p>
+<blockquote>
+<p>OSR 指的是在程序执行过程中，动态地替换掉 Java 方法栈桢，从而使得程序能够在非方法入口处进行解释执行，以及和编译后的代码之间的切换。</p>
+</blockquote>
+<p>在编译原理中，通常把编译器分为前端和后端，前端编译经过词法分析、语法分析、语义分析生成中间表达形式（Intermediate Representation，以下称为IR），后端会对IR进行优化，生成目标代码。</p>
+<p>Java字节码就是一种IR，但是字节码的结构复杂，字节码这样代码形式的IR也不适合做全局的分析优化。现代编译器一般采用图结构的IR，其中静态单赋值（Static Single Assignment，SSA）IR比较常用。这种IR的特点是每个变量只能被赋值一次，而且只有当变量被赋值之后才能使用。借助了SSA IR，编译器进行识别冗余赋值及死代码删除等优化（Dead Code Elimination删除不会走的else）</p>
+<p>C1编译器优化大部分都是在高级中间表达形式HIR上完成的，当优化完成之后将HIR转为低级中间表达形式LIR来进行各种优化，这两种IR都是SSA形式的。</p>
+<p>C2编译器中的Ideal Graph采用的是一种名为Sea-of-Nodes中间表达形式，同样也是SSA形式的。它去除了变量的概念，直接采用值来进行运算。（可以利用IR可视化工具Ideal Graph Visualizer（IGV）查看）</p>
+<h1 id="类的加载">类的加载</h1>
+<table>
+<thead>
+<tr>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703193948926.png" alt="image-20210703193948926" style="zoom:120%;" /></th>
 <th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703194854583.png" alt="83" loading="lazy"></th>
 <th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210703195002837.png" alt="" loading="lazy"></th>
 </tr>
@@ -172,7 +230,44 @@ HotSpot 装载了多个不同的即时编译器，以便在编译时间和生成
 </thead>
 <tbody></tbody>
 </table>
-<p>Java 类的过程分为加载、链接(验证、准备和解析)以及初始化。然后才能使用，用完既可卸载。</p>
+<p>Java 虚拟机将字节流转化为 Java 类的过程分为加载、链接(验证、准备和解析)以及初始化三大步骤。然后才能使用，用完既可卸载。</p>
+<p>加载是指查找字节流class，并且据此创建类的过程。加载需要借助类加载器，在 Java 虚拟机中，类加载器使用了双亲委派模型，即接收到加载请求时，会先将请求转发给父类加载器。</p>
+<blockquote>
+<p>自定义的类加载器来实现特殊的加载方式。比如我们可以对 class 文件进行加密，加载时再利用自定义的类加载器对其解密。<br>
+除了加载功能之外，类加载器还提供了命名空间的作用。在 Java 虚拟机中，类的唯一性是由类加载器实例以及类的全名一同确定的。即便是同一串字节流class，经由不同的类加载器加载，也会得到两个不同的类。</p>
+</blockquote>
+<p>链接，是指将创建成的类合并至 Java 虚拟机中，使之能够执行的过程。链接还分验证、准备和解析三个阶段。其中，解析阶段为非必须的。</p>
+<ol>
+<li>验证：保被加载类能够满足 Java 虚拟机的约束条件</li>
+<li>准备：为被加载类的静态字段分配内存(具体初始化在初始化阶段)。（分配内存后有缺省值如0）还会构造与该类相关联的方法表。</li>
+<li>解析：将符号引用解析成为实际引用</li>
+</ol>
+<blockquote>
+<p>在 class 文件被加载至 Java 虚拟机之前，这个类无法知道其他类及其方法、字段所对应的具体地址，甚至不知道自己方法、字段的地址。因此，每当需要引用这些成员时，Java 编译器会生成一个<strong>符号引用</strong>。在运行阶段，这个符号引用一般都能够无歧义地定位到具体目标上。</p>
+<p>举例来说，对于一个方法调用，编译器会生成一个包含目标方法所在类的名字、目标方法的名字、接收参数类型以及返回值类型的符号引用，来指代所要调用的方法。</p>
+<p>Java 虚拟机规范并没有要求在链接过程中完成解析。它仅规定了：如果某些字节码使用了符号引用，那么在执行这些字节码之前，需要完成对这些符号引用的解析。</p>
+</blockquote>
+<p>初始化时，为标记为常量值的字段赋值。并执行&lt; clinit &gt;方法的过程。</p>
+<blockquote>
+<p>常量值：初始化时基本类型或字符串类型的静态字段被 final 所修饰时，会被 Java 编译器标记成常量值（ConstantValue）由 Java 虚拟机常量池直接初始化。</p>
+<p>&lt; clinit &gt;方法：初始化语句(除常量之外静态字段/方法/代码块)被 Java 编译器置于&lt; clinit &gt;方法中依次执行。</p>
+<p>Java 虚拟机会通过加锁(初始化锁)来确保类的 &lt; clinit &gt; 方法仅被执行一次，这个特性被用来实现<strong>单例的延迟初始化</strong>。</p>
+</blockquote>
+<pre><code class="language-java">//单例延迟初始化
+public class Singleton {
+  private Singleton() {}
+  private static class LazyHolder {
+    static final Singleton INSTANCE = new Singleton();
+  }
+  public static Singleton getInstance() {
+    return LazyHolder.INSTANCE;
+  }
+}
+</code></pre>
+<blockquote>
+<p>只有当调用 Singleton.getInstance 时，程序才会访问 LazyHolder.INSTANCE，才会触发对 LazyHolder 的初始化（访问类的静态变量时触发类的初始化），继而新建一个 Singleton 的实例。</p>
+<p>由于类初始化时有初始化锁是线程安全的，且(&lt; clinit&gt;)仅被执行一次，因此可以确保多线程环境下有且仅有一个 Singleton 实例。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -227,26 +322,7 @@ public class App {
 <li>初始化阶段：初始化(静态)语句依次执行，第一行，构造方法时0++ ab=1</li>
 <li>初始化阶段：初始化(静态)语句依次执行，二三行，a=0 b=1。即对静态变量赋初始值a=0，b没初始值还=1</li>
 </ol>
-<p>类加载<strong>初始化</strong>时除常量之外的初始化语句(静态字段/方法/代码块)会被 Java 编译器置于&lt; clinit &gt;方法中。基本类型或字符串类型的静态字段被 final 所修饰时，会被 Java 编译器标记成常量值（ConstantValue），其初始化直接由 Java 虚拟机完成。</p>
-<p>类加载的初始化，便是为标记为常量值的字段赋值，以及执行 &lt; clinit &gt; 方法的过程。Java 虚拟机会通过加锁来确保类的 &lt; clinit &gt; 方法仅被执行一次。</p>
-<table>
-<thead>
-<tr>
-<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704124551809.png" alt="image-20210704124551809" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704124613379.png" alt="image-20210704124613379" loading="lazy"></th>
-<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704124952132.png" alt="image-20210704124952132" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704125231430.png" alt="image-20210704125231430" loading="lazy"></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704130004781.png" alt="image-20210704130004781" loading="lazy"></td>
-<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704130028605.png" alt="image-20210704130028605" loading="lazy"><br />jdk8以后永久区改为元空间</td>
-</tr>
-<tr>
-<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704130646995.png" alt="image-20210704130646995" loading="lazy"></td>
-<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704131016908.png" alt="image-20210704131016908" loading="lazy"></td>
-</tr>
-</tbody>
-</table>
+<h1 id="堆内存">堆内存</h1>
 <blockquote>
 <p>栈内存线程私有，堆内存线程共享。但堆内存的分配是通常被很少讨论，但实际却很复杂的。</p>
 <p>堆内存的分配通常用指针碰撞法、空闲列表法。但是堆是全局共享的，在同一时间可能会有多个线程并发地在堆上分配空间。解决并发问题用CAS、TLAB(hotspot用：给每个线程在堆里预分配一块区域，分配完成后便不再线程独享。因此hotspot中的TLAB可以在堆里”线程私有“)</p>
@@ -269,6 +345,22 @@ public class App {
 </thead>
 <tbody></tbody>
 </table>
+<figure data-type="image" tabindex="2"><img src="https://static001.geekbang.org/resource/image/2c/e5/2cc29b8de676d3747416416a3523e4e5.png" alt="内存" loading="lazy"></figure>
+<blockquote>
+<p>堆内存分布如图：</p>
+<p>Eden 区的空间耗尽则Minor GC，Eden 区和 from  区中的存活对象会被复制到 to， 然后交换 from 和 to 指针。保证to区永远是空的。</p>
+<p>对象被复制的次数为 15（对应虚拟机参数 -XX:+MaxTenuringThreshold）则晋升至老年代。</p>
+<p>单个 Survivor 区已经被占用了 50%（对应虚拟机参数 -XX:TargetSurvivorRatio），那么较高复制次数的对象也会被晋升至老年代。</p>
+</blockquote>
+<p>当我们调用 new 指令时，它会在 Eden 区中划出一块作为存储对象的内存。由于堆空间是线程共享的，因此划分空间时有同步问题。</p>
+<p>TLAB（Thread Local Allocation Buffer)技术：每个线程可以向 Java 虚拟机申请一段连续的线程私有内存，次操作需要加锁。线程需要维护两个指针，一个指向 TLAB 中空余内存的起始位置，一个则指向 TLAB 末尾。</p>
+<ol>
+<li>new 指令时，直接通过指针加法（bump the pointer）(误译为指针碰撞，bump为提高)，即把指向空余内存位置的指针加上所请求的字节数。</li>
+<li>加法后空余内存指针的值仍小于或等于指向末尾的指针，则代表分配成功。</li>
+<li>否则TLAB空间不足，当前线程重新申请新的TLAB</li>
+</ol>
+<p>因为 Minor GC 只针对新生代进行垃圾回收，所以在枚举 GC Roots 的时候，它需要考虑从老年代到新生代的引用。为了避免扫描整个老年代，Java 虚拟机引入了名为卡表的技术，大致地标出可能存在老年代到新生代引用的内存区域。</p>
+<p>卡表（Card Table）技术将整个堆划分为一个个大小为 512 字节的卡，并且维护一个卡表，用来存储每张卡的一个标识位。这个标识位代表对应的卡是否可能存有指向新生代对象的引用。如果可能存在，那么我们就认为这张卡是脏的。如果想要保证每个可能有指向新生代对象引用的卡都被标记为脏卡，那么 Java 虚拟机需要截获每个引用型实例变量的写操作，并作出对应的写标识位操作。需要在编译器生成的机器码中，插入额外的逻辑，即写屏障（write barrier）。</p>
 <p>引用类型(reference)访问对象实例的方式：</p>
 <table>
 <thead>
@@ -292,6 +384,17 @@ public class App {
 </tr>
 </tbody>
 </table>
+<h2 id="对象的内存布局">对象的内存布局</h2>
+<p>Java 新建对象的方式：</p>
+<ol>
+<li>new 语句和反射机制，则是通过调用构造器来初始化实例字段。invokespecial</li>
+<li>Object.clone 方法和反序列化通过直接复制已有的数据，来初始化新建对象的实例字段</li>
+<li>Unsafe.allocateInstance 方法则没有初始化实例字段</li>
+</ol>
+<p>如果一个类没有定义任何构造器的话， Java 编译器会自动添加一个无参数的构造器。如果任何构造器有则不添加。</p>
+<p>每个类的构造器皆会直接或者间接调用父类的构造器，直至Object类。父类存在无参构造器则通过编译期自动隐式调用；父类没有无参构造器，则子类构造器要super显式调用父类构造器。</p>
+<p>Java 对象都有一个对象头（object header），由标记字段和类型指针所构成。标记字段内有哈希码、GC 信息以及锁信息等运行数据；类型指针则指向该对象的类。</p>
+<p>Java 虚拟机引入了压缩指针的概念，将原本的 64 位指针压缩成 32 位。压缩指针要求 Java 虚拟机堆中对象的起始地址要对齐至 8 的倍数。Java 虚拟机还会对每个类的字段进行重排列，使得字段也能够内存对齐。</p>
 <p>Trace跟踪参数</p>
 <table>
 <thead>
@@ -387,6 +490,25 @@ public class App {
 <p>Survivor分成两份，From区和To区（两个区不同时存在，只做拷贝算法时区分）。-XX:ServivorRatio=8时，1eden/1Survivor=8/1 实际Survivor存在两份因此eden/2Survivor=8/2。每个Survivor占新生代的1/10</p>
 </blockquote>
 <p>在JDK新版本默认G1收集器之前，默认使用的是CMS收集器。</p>
+<h1 id="jvm如何执行方法">JVM如何执行方法</h1>
+<table>
+<thead>
+<tr>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704124551809.png" alt="image-20210704124551809" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704124613379.png" alt="image-20210704124613379" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704124952132.png" alt="image-20210704124952132" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704125231430.png" alt="image-20210704125231430" loading="lazy"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704130004781.png" alt="image-20210704130004781" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704130028605.png" alt="image-20210704130028605" loading="lazy"><br />jdk8以后永久区改为元空间</td>
+</tr>
+<tr>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704130646995.png" alt="image-20210704130646995" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704131016908.png" alt="image-20210704131016908" loading="lazy"></td>
+</tr>
+</tbody>
+</table>
 <table>
 <thead>
 <tr>
@@ -396,15 +518,74 @@ public class App {
 </thead>
 <tbody>
 <tr>
-<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704221248193.png" alt="image-20210704221248193" loading="lazy"><br />静态方法就没有this<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704221355962.png" alt="image-20210704221355962" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704221248193.png" alt="image-20210704221248193" loading="lazy"><br />long/double静态方法就没有this<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210704221355962.png" alt="image-20210704221355962" loading="lazy"></td>
 <td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705012342931.png" alt="image-20210705012342931" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705012436995.png" alt="image-20210705012436995" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210705012846529.png" alt="image-20210705012846529" loading="lazy"></td>
 </tr>
 </tbody>
 </table>
-<p>实例方法：是区别与静态方法的叫法，即要初始化一个实例才能调用的方法。不同于静态方法[类名.方法名]的调用，多数都是实例方法。因此类外的才叫函数。</p>
+<p>实例方法：是区别与静态方法的叫法，即要初始化一个实例才能调用的方法。不同于静态方法[类名.方法名]的调用，多数都是实例方法。因此类外的才叫函数。因此实例方法在局部变量表里0位位this，可以供实例来调用。</p>
+<p>java中父类的私有方法可以被子类继承，但无法访问。看起来就跟不能继承一样。</p>
 <p>方法分派：</p>
-<p>静态分派：根据方法名称、参数不同再编译器就决定的<strong>重载方法</strong>。</p>
+<p>静态分派：根据方法名称、参数不同再编译期就决定的<strong>重载方法</strong>。</p>
 <p>动态分派：多态下运行时才能决定到底是哪个实例调用的<strong>重写方法</strong>。</p>
+<p>在 Java语言中，方法重载指的是方法同名不同参，重写指的是方法同名同参。Java 虚拟机识别方法的方式略有不同，除了方法名和参数类型之外，它还会考虑返回类型。</p>
+<p>重载在编译期，Java 编译器会根据所传入参数的<strong>声明类型</strong>（注意与实际类型区分）来选取重载方法。**重载也可用于继承方法。**若子类和父类非私有方法同名不同参，同样构成重载。若子类和父类非私有方法同名同参同返回值类型(或派生类型)：</p>
+<ul>
+<li>若都是静态方法则子类隐藏父类方法</li>
+<li>若都是非私有非静态方法，构成重写</li>
+</ul>
+<blockquote>
+<p>重载也可以作用于继承方法：在子类直接重载父类方法，或在子类重载已被继承过来的方法都可以。</p>
+</blockquote>
+<p>方法重写，正是<strong>Java 面向对象的特性多态</strong>最重要的一种体现方式：它允许子类在继承父类部分功能的同时，拥有自己独特的行为。</p>
+<blockquote>
+<ol>
+<li>优先选择没有基本类型自动装拆箱的参数、没有可变参数的方法重载。</li>
+<li>其次允许有基本类型自动拆装箱的参数的方法，但没有可变参数的方法重载。</li>
+<li>最后才允许基本类型自动拆装箱参数和可变参数的方法重载。</li>
+</ol>
+<p>存在多个符合条件的重载时，再根据参数类型的集成关系决定贴切程度。</p>
+<p>如比三个重载方法同名，参数类型分别为int、Integer、Object。传int类型(非包装)参数调用时，int类型的更贴切。</p>
+</blockquote>
+<p>Java 虚拟机通过<strong>类名、方法名以及方法描述符</strong>（method descriptor）识别一个方法。方法描述符，是由方法的参数类型以及返回类型所构成。</p>
+<blockquote>
+<p>JVM的方法重载识别和Java语言(编译器前端的文法语法解析)不同，并不限制同名同参仅返回值不同的两个方法在一个类里(在Java语言前端编译回报错)。因为方法调用者附带的方法描述符包含了返回值，足以识别出该方法。</p>
+<p>JVM的方法重写也基于方法描述符，即子类和父类的非私有非静态方法同名且同参同返回值类型时，JVM才判定位重写。(java语法判定重写还支持返回值类型的派生类型。）</p>
+<p>子类和父类 同名同参，但返回值是其父类方法返回值类型的派生类 的非私非静方法，编译器会通过生成桥接方法实现 Java语言中的重写语义。(jvm判定非重写--返回值类型不同，java语法判定为重写--返回值类型为派生类型，因此要桥接)</p>
+<p>前端判定只根据文法，后端判定根据JVM规则。因此才有Java语言书写和Jvm判定对于重载/重写的不同。</p>
+<p>由于 Java 编译器已经区分了重载的方法，因此对于JVM来说不存在重载这一概念。静态绑定（static binding）/动态绑定（dynamic binding）是重载/重写的说法并不准确。如某个类的重载方法可以被子类重写。因此 Java 编译器会将<strong>所有对非私有实例方法的调用</strong>编译为需要动态绑定。</p>
+<p>Java 字节码中与调用相关的指令共有五种。</p>
+<ol>
+<li>invokestatic：用于调用静态方法。</li>
+<li>invokespecial：用于调用私有实例方法、构造器，以及使用 super 关键字调用父类的实例方法或构造器，和所实现接口的默认方法。</li>
+<li>invokevirtual：用于调用非私有实例方法。</li>
+<li>invokeinterface：用于调用接口方法。</li>
+<li>invokedynamic：用于调用动态方法。</li>
+</ol>
+</blockquote>
+<h2 id="方法符号引用解析优先级">方法符号引用解析优先级</h2>
+<p>在类的加载、链接(验证、准备和解析)、初始化。解析阶段把符号引用解析成实际引用。符号引用在常量池中，可以用<code>javap -v</code>查看。</p>
+<p>装载方法所在的类时，并不知道目标方法(还有变量等)的具体内存地址。因此在编译时会暂时用符号引用来表示该目标方法。其中方法的符号引用内包括：目标方法名、方法描述符(参数、返回值)、和所在类/接口名，且有接口方法符号引用(InterfaceMethodref)和方法符号引用(Methodref)两种。在执行调用指令前(链接-解析)，把附带的符号引用解析成实际引用。流程如下：</p>
+<ol>
+<li>优先解析成：<strong>当前类/接口内的同名同描述符方法</strong></li>
+<li>如果当前类/接口不存在符合的方法，则<strong>递归寻找父类中的符合方法</strong>(直至Object类，没非静态限制)</li>
+<li>如果在父类里还不存在符合的方法，则寻找<strong>直接实现或间接实现的接口中的非私有、非静态方法。</strong></li>
+</ol>
+<blockquote>
+<p>因此，静态方法也可以通过子类来调用。此外，子类的静态方法会隐藏（注意与重写区分）父类中的同名、同描述符的静态方法。</p>
+</blockquote>
+<p>经过上述的解析步骤之后，符号引用会被解析成实际引用。可以静态绑定的方法调用，实际引用为目标方法的指针。对于需要动态绑定的方法调用而言，实际引用为<strong>方法表的索引值等</strong>辅助动态绑定的信息。</p>
+<h2 id="虚方法与索引表">虚方法与索引表</h2>
+<p>Java 里所有<strong>非私有实例方法</strong>调用都会被编译成 invokevirtual 指令，而<strong>接口方法</strong>调用都会被编译成 invokeinterface 指令。这两种指令，均属于 <strong>Java 虚拟机中的虚方法调用，虚拟机将根据调用者的动态类型采用动态绑定</strong></p>
+<blockquote>
+<p>Java 虚拟机中，静态绑定包括用于调用静态方法的 invokestatic 指令，和用于调用构造器、私有实例方法以及超类非私有实例方法的 invokespecial 指令。(如果虚方法调用指向一个标记为 final 的方法，那么 Java 虚拟机也可以静态绑定该虚方法调用的目标方法。)</p>
+<p>Java 虚拟机为每个类生成一张<strong>方法表</strong>，用以快速定位目标方法。方法表本质上是一个数组，每个数组元素指向一个当前类及其祖先类中非私有的实例方法。这些方法可以是具体方法或抽象方法。方法表满足两个特质：其一，子类方法表中包含父类方法表中的所有方法；其二，子类方法在方法表中的索引值，与它所重写的父类方法的索引值相同。</p>
+<p>invokevirtual 所使用的虚方法表（virtual method table，vtable）</p>
+<p>invokeinterface 所使用的接口方法表（interface method table，itable）</p>
+</blockquote>
+<p>方法调用指令中的符号引用会在执行之前解析成实际引用。对于静态绑定的方法调用而言，实际引用将指向具体的目标方法。对于动态绑定的方法调用而言，实际引用则是方法表的索引值。</p>
+<p>链接-解析时，把常量池中「方法的符号引用」解析成实际引用。当虚方法被调用时，会根据调用者的实际类型，查找该实际类型的虚方法表，根据索引值确定目标方法。</p>
+<p>Java 虚拟机中的即时编译器会使用<strong>内联缓存</strong>来加速动态绑定。新的调用时，有缓存则区，没有还退化使用方法表进行动态绑定。</p>
 <pre><code class="language-java">//局部变量表5:只有把bs包裹住，再用方案覆盖slot槽位/置空bs，剩余的内存才会变多
 public static void main(String[] args) {
     {//用方法块包裹住局部变量
@@ -454,7 +635,7 @@ public static void main(String[] args) {
     }
 }
 </code></pre>
-<pre><code class="language-java">public int add(int a, int b) {//栈帧-操作数栈
+<pre><code class="language-java">public int add(int a, int b) {//栈帧-操作数栈：操作的指令哪个在最顶部
     int c = a + b;
     return a + b + c;
 }
@@ -480,7 +661,7 @@ public static void main(String[] args) {
 </code></pre>
 <p>可做为GC Roots对象包括：</p>
 <ol>
-<li>虚拟机栈中所引用到的对象（局部变量表引用的）</li>
+<li>栈帧中方法局部变量所引用到的对象（局部变量表引用的）</li>
 <li>方法区中类的静态属性引用的对象</li>
 <li>方法区中常量引用的对象</li>
 <li>本地方法栈中jni引用的对象</li>
@@ -593,6 +774,42 @@ public static void main(String[] args) {
 <li>GC频率：一个时间段发生GC的次数</li>
 <li>反应速度：对象成为垃圾到被回收的时间</li>
 </ul>
+<p>编译器优化的指令重排序</p>
+<p>happens-before 关系是用来描述两个操作的内存可见性的。如果操作 X happens-before 操作 Y，那么 X 的结果对于 Y 可见。happens-before 关系还具备传递性。如果操作 X happens-before 操作 Y，而操作 Y happens-before 操作 Z，那么操作 X happens-before 操作 Z。</p>
+<p>除了线程内的 happens-before 关系之外，Java 内存模型还定义了下述线程间的 happens-before 关系。</p>
+<ol>
+<li>解锁操作 happens-before 之后（这里指时钟顺序先后）对同一把锁的加锁操作。</li>
+<li>volatile 字段的写操作 happens-before 之后（这里指时钟顺序先后）对同一字段的读操作。</li>
+<li>线程的启动操作（即 Thread.starts()） happens-before 该线程的第一个操作。</li>
+<li>线程的最后一个操作 happens-before 它的终止事件（即其他线程通过 Thread.isAlive() 或 Thread.join() 判断该线程是否中止）。</li>
+<li>线程对其他线程的中断操作 happens-before 被中断线程所收到的中断事件（即被中断线程的 InterruptedException 异常，或者第三个线程针对被中断线程的 Thread.interrupted 或者 Thread.isInterrupted 调用）。</li>
+<li>构造器中的最后一个操作 happens-before 析构器的第一个操作。</li>
+</ol>
+<blockquote>
+<p>Java 内存模型的底层实现通过内存屏障（memory barrier），编译器针对前面提到的每一个 happens-before 关系，向正在编译的目标方法中插入相应的读读、读写、写读以及写写内存屏障来禁止重排序。</p>
+<p>编译器将内存屏障替换成具体的 CPU 指令(如x86读读、读写以及写写内存屏障是空操作（no-op）)。</p>
+</blockquote>
+<h2 id="锁volatile-字段final-字段与安全发布">锁，volatile 字段，final 字段与安全发布</h2>
+<p>解锁操作 happens-before 之后对同一把锁的加锁操作。实际上，在解锁时，Java 虚拟机同样需要强制刷新缓存，使得当前线程所修改的内存对其他线程可见。</p>
+<p>volatile 字段可以看成一种轻量级的、不保证原子性的同步，其性能往往优于（至少不亚于）锁操作，频繁地访问 volatile 字段也会因为不断地强制刷新缓存而严重影响程序的性能。</p>
+<p>volatile 字段的使用应当多读少写，并且应当只有一个线程进行写操作。</p>
+<p>volatile  字段的每次访问均需要直接从内存中读写，不能缓存到寄存器里。</p>
+<p>当一个对象包含 final 实例字段时，为了保证其他线程只能看到已初始化的 final 实例字段。编译器会在 final 字段的写操作后插入一个写写屏障，以防某些优化将新建对象的发布（即将实例对象写入一个共享引用中）重排序至 final 字段的写操作之前。当发布一个已初始化的对象时，要保证所有已初始化的实例字段对其他线程可见。</p>
+<p>synchronized 代码块，编译而成的字节码将包含一个 monitorenter 和 多个monitorexit 指令。(这是因为 Java 虚拟机需要确保所获得的锁在正常执行路径，以及异常执行路径上都能够被解锁。)这两种指令均会把操作数栈上的一个引用类型的元素（也就是 synchronized 关键字括号里的引用），作为所要加锁解锁的锁对象。</p>
+<p>monitorenter 和 monitorexit 操作所对应的锁对象是隐式的。对于实例方法来说，这两个操作对应的锁对象是 this；对于静态方法来说，这两个操作对应的锁对象则是所在类的 Class 实例。</p>
+<p>重量级锁: 虚拟机会阻塞加锁失败的线程，并且在目标锁被释放的时候，唤醒这些线程。</p>
+<blockquote>
+<p>Java 线程的阻塞以及唤醒，都是依靠操作系统来完成的。比如linux中是通过 pthread 的互斥锁（mutex）来实现的，此外，这些操作将涉及系统调用，需要从操作系统的用户态切换至内核态，开销大。</p>
+<p>为了尽量避免昂贵的线程阻塞、唤醒操作，线程进入阻塞前或被唤醒但竞争不到锁时进入自旋状态，在处理器上空跑并且轮询锁是否被释放，获取到则不必进入阻塞。自旋多久呢？自适应自旋：根据以往自旋等待时是否能够获得锁，来动态调整自旋的时间。</p>
+<p>阻塞相当于熄火，自旋状态相当于怠速。</p>
+</blockquote>
+<p>CAS，Compare and Swap即比较并交换，设计并发算法时常用到的一种技术，java.util.concurrent包全完建立在CAS之上，没有CAS也就没有此包，可见CAS的重要性。</p>
+<p>当前的处理器基本都支持CAS，只不过不同的厂家的实现不一样罢了。<strong>CAS有三个操作数：内存值V、旧的预期值A、要修改的值B，当且仅当预期值A和内存值V相同时，将内存值修改为B并返回true，否则什么都不做并返回false</strong>。</p>
+<p>轻量级锁采用 CAS 操作，比较锁对象的标记字段的值是否为当前锁记录的地址：将锁对象的标记字段替换为一个指针，指向当前线程栈上的一块空间，存储着锁对象原本的标记字段。它针对的是多个线程在不同时间段申请同一把锁的情况。</p>
+<p>偏向锁只会在第一次请求时采用 CAS 操作，在锁对象的标记字段中记录下当前线程的地址。在之后的运行过程中，持有该偏向锁的线程的加锁操作将直接返回。它针对的是锁仅会被同一线程持有的情况。</p>
+<blockquote>
+<p>对象头中的标记字段（mark word）的最后两位表示对象的锁状态：00 代表轻量级锁，01 代表无锁（或偏向锁），10 代表重量级锁</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -603,7 +820,7 @@ public static void main(String[] args) {
 <tbody>
 <tr>
 <td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005641447.png" alt="image-20210706005641447" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005728965.png" alt="image-20210706005728965" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005819841.png" alt="image-20210706005819841" loading="lazy"></td>
-<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic//image-20210706004821761.png" alt="image-20210706004821761" loading="lazy"><br /><img src="/Users/joshuachang/Library/Application%20Support/typora-user-images/image-20210706004920244.png?lastModify=1625503879" alt="image-20210706004920244" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005012823-20210706133540008-20210706133553863.png" alt="image-20210706005012823" loading="lazy"></td>
+<td><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706004821761-20210706135125579-20210706135208204.png" alt="image-20210706004821761" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706004920244.png" alt="image-20210706004920244" loading="lazy"><br /><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210706005012823-20210706133540008-20210706133553863-20210706135125698-20210706135208448.png" alt="image-20210706005012823" loading="lazy"></td>
 </tr>
 </tbody>
 </table>
@@ -620,10 +837,344 @@ public static void main(String[] args) {
 <pre><code class="language-java">Integer a=1;//字节码指令是invokeStatic Integer.valueOf()即把基本类型封装成Integer对象
 if (x==2){}//字节码指令是invokeStatic Integer.intValue()即从Integer解封出基本类型
 </code></pre>
+<ol>
+<li><code>java -jar asmtools.jar jdis Foo.class &gt;Foo.jasm</code>	用JASM语法查看Foo.class，并将查看结果重定向到Foo.jasm</li>
+<li>修改Foo.jasm中的指令</li>
+<li><code>java -jar asmtools.jar jasm Foo.jasm</code>  用JASM语法的Foo.jasm生成相应的class文件，并执行。</li>
+</ol>
+<blockquote>
+<p><code>AsmTools</code>引入了两种表示<code>.class</code>文件的语法：</p>
+<ul>
+<li>
+<p>JASM</p>
+<p>用类似java本身的语法来定义类和函数，字节码指令则很像传统的汇编。</p>
+</li>
+<li>
+<p>JCOD</p>
+<p>整个<code>.class</code>用容器的方式来表示，可以很清楚表示类文件的结构。</p>
+<p>查看：<code>java -jar asmtools.jar jdec Foo.class</code></p>
+<p>生成class：<code>java -jar asmtools.jar jcoder Foo.jasm</code></p>
+</li>
+</ul>
+</blockquote>
+<h2 id="异常">异常</h2>
+<p>Java 的异常分为 Exception 和 Error 两种，而 Exception 又分为 RuntimeException 和其他类型。RuntimeException 和 Error 属于非检查异常。其他的 Exception 皆属于检查异常，在触发时需要显式捕获，或者在方法头用 throws 关键字声明。</p>
+<ol>
+<li>try 代码块：标记需要异常监控的代码。</li>
+<li>catch 代码块：捕获异常的类型和异常处理器（可多个）</li>
+<li>finally 代码块：不管是否能catch到，都会执行。</li>
+</ol>
+<p>Java 字节码中，每个方法对应一个异常表。当程序触发异常时，Java 虚拟机将查找异常表，并依此决定需要将控制流转移至哪个异常处理器之中。Java 代码中的 catch 代码块和 finally 代码块都会生成异常表条目。</p>
+<p>javap中异常表（Exception table）用偏移量来定位每个异常处理器所监控的范围（由 from 到 to 的代码区域），以及异常处理器的起始位置（target）。除此之外，它还会声明所捕获的异常类型（type）</p>
+<p>原始的finally就是把finally区指令拷贝几份，根据是否catch异常，放在try、catch前后执行</p>
+<h2 id="反射">反射</h2>
+<p>方法的反射调用为委派实现，委派给本地实现来进行方法调用。在调用超过 15 次之后，委派实现便会将委派对象切换至动态实现。这个动态实现的字节码是自动生成的，它将直接使用 invoke 指令来调用目标方法。</p>
+<p>方法的反射调用会带来不少性能开销，原因主要有三个：变长参数方法导致的 Object 数组，基本类型的自动装箱、拆箱，还有最重要的方法内联。</p>
+<p>使用反射 API 的第一步便是获取 Class 对象。在 Java 中常见的有这么三种。</p>
+<ol>
+<li>使用静态方法 Class.forName 来获取。</li>
+<li>调用对象的 getClass() 方法。</li>
+<li>直接用类名 +“.class”访问。对于基本类型来说，它们的包装类型（wrapper classes）拥有一个名为“TYPE”的 final 静态字段，指向该基本类型对应的 Class 对象。</li>
+</ol>
+<blockquote>
+<p>例如，Integer.TYPE 指向 int.class。对于数组类型来说，可以使用类名 +“[ ].class”来访问，如 int[ ].class。</p>
+<p>除此之外，Class 类和 java.lang.reflect 包中还提供了许多返回 Class 对象的方法。例如，对于数组类的 Class 对象，调用 Class.getComponentType() 方法可以获得数组元素的类型。</p>
+</blockquote>
+<p>一旦得到了 Class 对象，我们便可以正式地使用反射功能了。下面我列举了较为常用的几项。</p>
+<ol>
+<li>使用 newInstance() 来生成一个该类的实例。它要求该类中拥有一个无参数的构造器。</li>
+<li>使用 isInstance(Object) 来判断一个对象是否该类的实例，语法上等同于 instanceof 关键字（JIT 优化时会有差别，我会在本专栏的第二部分详细介绍）。</li>
+<li>使用 Array.newInstance(Class,int) 来构造该类型的数组。</li>
+<li>使用 getFields()/getConstructors()/getMethods() 来访问该类的成员。除了这三个之外，Class 类还提供了许多其他方法。方法名中带 Declared 的不会返回父类的成员，但是会返回私有成员；而不带 Declared 的则相反。</li>
+</ol>
+<p>当获得了类成员之后，我们可以进一步做如下操作。</p>
+<ul>
+<li>使用 Constructor/Field/Method.setAccessible(true) 来绕开 Java 语言的访问限制。</li>
+<li>使用 Constructor.newInstance(Object[]) 来生成该类的实例。</li>
+<li>使用 Field.get/set(Object) 来访问字段的值。</li>
+<li>使用 Method.invoke(Object, Object[]) 来调用方法。</li>
+</ul>
+<h2 id="java语法糖与java编译器">Java语法糖与Java编译器</h2>
+<p>Java语法糖-是一种帮助开发人员提高开发效率的小甜点，原理是将一些繁琐的事情交给编译器来处理，开发人员少做一些事情。包装类型自动拆装箱泛型擦除等</p>
+<p>基本类型和其包装类型之间的自动转换，也就是自动装箱、自动拆箱，是通过加入 [Wrapper].valueOf（如 Integer.valueOf）以及 [Wrapper].[primitive]Value（如 Integer.intValue）方法调用来实现的。</p>
+<p>Java 语法的泛型信息，在编译成字节码后丢失了（这么做主要是为了兼容引入泛型之前的代码）。并不是每一个泛型参数被擦除类型后都会变成 Object 类。对于限定了继承类的泛型参数，经过类型擦除后，所有的泛型参数都将变成所限定的继承类。即Java 编译器将选取该泛型所能指代的所有类中层次最高的那个，作为替换泛型的类。</p>
+<blockquote>
+<p>泛型的类型擦除带来了不少问题。其中一个便是泛型方法重写：</p>
+<pre><code class="language-java">class Merchant&lt;T extends Customer&gt; {
+  public double actionPrice(T customer) {return 1;}
+}
+class VIPMerchant extends Merchant&lt;VIP&gt; {
+  @Override
+  public double actionPrice(VIP customer) {return 0.8;}
+  // 字节码层面的桥接方法等同于
+  public double actionPrice(Customer customer) {
+   return actionPrice((VIP) customer);
+  }
+}
+</code></pre>
+<p>为保证编译后Java 字节码能够保留原来重写的语义，Java 编译器在字节码层面额外添加了一个<strong>桥接方法</strong>。即子类重写父类的方法，并在内部调用子类自己的方法。</p>
+<p>javap 中，该桥接方法的访问标识为 ACC_BRIDGE或 ACC_SYNTHETIC。</p>
+<p>隐藏的桥接方法能被反射机制调用。</p>
+<p>除了泛型重写会生成桥接方法之外；子类定义了一个与父类参数类型相同的方法，其返回类型为父类方法返回类型的子类，那么 Java 编译器也会为其生成桥接方法。</p>
+</blockquote>
+<p>变长参数、try-with-resources （在try小括号内，保证操作完的资源自动关闭）以及在同一 catch 代码块中捕获多种异常等语法糖。</p>
+<p>对数组或者 Iterable 对象的foreach 循环语法糖<code>for (int item : array) {}</code> ：根据下标访问数组元素，Iterable 对象hasNext 以及 next 方法来遍历该 Iterable 对象中的元素。</p>
+<p>字符串 switch语法糖：是一个哈希桶。由于每个 case 所截获的字符串都是常量值，因此，Java 编译器会将原来的字符串 switch 转换为 int 值 switch，比较所输入的字符串的哈希值。</p>
+<p>由于字符串哈希值很容易发生碰撞，因此，我们还需要用 String.equals 逐个比较相同哈希值的字符串</p>
+<p><strong>方法内联</strong>：在编译过程中遇到方法调用时，将目标方法的方法体纳入编译范围之中，并取代原方法调用的优化手段。方法内联不仅可以消除调用本身带来的性能开销，还可以进一步触发更多的优化，是编译优化里最为重要的一环。</p>
+<h2 id="jni">JNI</h2>
+<p>在调用 native 方法前，Java 虚拟机需要将该 native 方法链接至对应的 C 函数上。</p>
+<p>方式一：采用<code>javac -h</code>命令，根据 Java 程序中的 native 方法声明，自动生成包含符合命名规范的 C 函数的头文件。让 Java 虚拟机自动查找符合默认命名规范的 C 函数，并且链接起来。</p>
+<p>方式二：是在 C 代码中主动链接。这种链接方式对 C 函数名没有要求，使用registerNatives 的 native 方法，并手动链接该类的其他 native 方法。使用这种方式进行链接时，要在其他 native 方法被调用之前完成链接工作。因此，通常会在类的初始化方法里调用该<code>registerNatives</code>方法，如静态代码块里。</p>
+<blockquote>
+<pre><code class="language-java">// 注：Object 类的 registerNatives 方法的实现位于 java.base 模块里的 C 代码中
+static JNINativeMethod methods[] = {
+    {&quot;hashCode&quot;,    &quot;()I&quot;,                    (void *)&amp;JVM_IHashCode},
+    {&quot;wait&quot;,        &quot;(J)V&quot;,                   (void *)&amp;JVM_MonitorWait},
+    {&quot;notify&quot;,      &quot;()V&quot;,                    (void *)&amp;JVM_MonitorNotify},
+    {&quot;notifyAll&quot;,   &quot;()V&quot;,                    (void *)&amp;JVM_MonitorNotifyAll},
+    {&quot;clone&quot;,       &quot;()Ljava/lang/Object;&quot;,   (void *)&amp;JVM_Clone},
+};
+ 
+JNIEXPORT void JNICALL
+Java_java_lang_Object_registerNatives(JNIEnv *env, jclass cls)
+{
+    (*env)-&gt;RegisterNatives(env, cls,
+                            methods, sizeof(methods)/sizeof(methods[0]));
+}
+</code></pre>
+</blockquote>
+<p>动态链接库的名字须以<code>lib</code>为前缀，以<code>.dylib</code>(或 Linux 上的<code>.so</code>）为扩展名。在 Java 程序中，我们可以通过<code>System.loadLibrary(&quot;foo&quot;)</code>方法来加载<code>libfoo.dylib</code></p>
+<p>如果<code>libfoo.dylib</code>不在当前路径下，我们可以在启动 Java 虚拟机时配置<code>java.library.path</code>参数，使其指向包含<code>libfoo.dylib</code>的文件夹。</p>
+<pre><code class="language-bash">$ java -Djava.library.path=/PATH/TO/DIR/CONTAINING/libfoo.dylib org.example.Foo
+</code></pre>
+<p>Java 虚拟机会将所有 JNI 函数的函数指针聚合到一个名为<code>JNIEnv</code>线程私有的数据结构之中。Java 虚拟机会为每个线程创建一个<code>JNIEnv</code>，并规定 C 代码不能将当前线程的<code>JNIEnv</code>共享给其他线程，否则 JNI 函数的正确性将无法保证。</p>
+<blockquote>
+<p>这么设计的原因主要有两个。一是给 JNI 函数提供一个单独命名空间。二是允许 Java 虚拟机通过更改函数指针替换 JNI 函数的具体实现\</p>
+</blockquote>
+<p>静态native方法传入jclass，即定义该static native方法的java类</p>
+<p>实例native方法传入jobject，代指该方法的调用者，即java类的实例</p>
+<pre><code class="language-c">// foo.c
+#include &lt;stdio.h&gt;
+#include &quot;org_example_Foo.h&quot; 
+JNIEXPORT void JNICALL Java_org_example_Foo_bar__Ljava_lang_String_2Ljava_lang_Object_2
+  (JNIEnv *env, jobject thisObject, jstring str, jobject obj) {
+  jclass cls = (*env)-&gt;GetObjectClass(env, thisObject);
+  jfieldID fieldID = (*env)-&gt;GetFieldID(env, cls, &quot;i&quot;, &quot;I&quot;);
+  jint value = (*env)-&gt;GetIntField(env, thisObject, fieldID);
+  printf(&quot;Hello, World 0x%x\n&quot;, value);
+  return;
+}
+</code></pre>
+<p>在 JNI 中访问字段类似于反射 API：我们首先需要通过类实例获得<code>FieldID</code>，然后再通过<code>FieldID</code>获得某个实例中该字段的值。</p>
+<p>JNI 函数的异常并不会显式地跳转至异常处理器或者调用者中，而是继续执行接下来的 C 代码。当从可能触发异常的 JNI 函数返回时，我们需要通过 JNI 函数<code>ExceptionOccurred</code>检查是否发生了异常，并且作出相应的处理。如果无须抛出该异常，那么我们需要通过 JNI 函数<code>ExceptionClear</code>显式地清空已缓存的异常。</p>
+<p>。</p>
+<p>JNI 的局部引用（Local Reference）和全局引用（Global Reference）。这些 C 代码中可能引用到的 Java 对象，垃圾回收算法会将被这两种引用指向的对象标记为不可回收。</p>
+<p>无论是传入的引用类型参数，还是通过 JNI 函数（除<code>NewGlobalRef</code>及<code>NewWeakGlobalRef</code>之外）返回的引用类型对象，都属于局部引用。</p>
+<p>一旦从 C 函数中返回至 Java 方法之中，那么局部引用将失效。垃圾回收器在标记垃圾时不再考虑这些局部引用。JNI 函数<code>NewGlobalRef</code>，将该局部引用转换为全局引用，以确保其指向的 Java 对象不会被垃圾回收。JNI 函数<code>DeleteGlobalRef</code>来消除全局引用，以便回收被全局引用指向的 Java 对象。</p>
+<h2 id="注解处理器">注解处理器</h2>
+<p>Java 的注解机制允许开发人员自定义注解。这些自定义注解同样可以为 Java 编译器添加编译规则。不过，这种功能需要由开发人员提供，并且以插件的形式接入 Java 编译器中，这些插件我们称之为注解处理器（annotation processor）。</p>
+<p>注解处理器主要有三个用途。一是定义编译规则，并检查被编译的源文件。二是修改已有源代码。三是生成新的源代码。</p>
+<figure data-type="image" tabindex="3"><img src="https://static001.geekbang.org/resource/image/64/b8/64e93f67c3b422afd90966bfe9aaf5b8.png" alt="注解" loading="lazy"></figure>
+<p>Java 源代码的编译过程可分为三个步骤：</p>
+<ol>
+<li>解析源文件生成抽象语法树</li>
+<li>调用已注册的注解处理器</li>
+<li>生成字节码</li>
+</ol>
+<p>如果在第 2 步中，注解处理器生成了新的源代码，那么 Java 编译器将重复第 1、2 步，直至不再生成新的源代码。解析并且处理新生成的源文件为一轮（Round），如果注解处理器生成了新的源文件则多轮直至不再生成新的源文件，并最终生成字节码。</p>
+<p>所有的注解处理器类都需要实现接口<code>Processor</code>。该接口主要有四个重要方法。</p>
+<ul>
+<li><code>init</code>方法用来存放注解处理器的初始化代码。<br>
+之所以不用构造器，是因为在 Java 编译器中，注解处理器的实例是通过反射 API 生成的。也正是因为使用反射 API，每个注解处理器类都需要定义一个无参数构造器。</li>
+<li><code>getSupportedAnnotationTypes</code>方法将返回注解处理器所支持的注解类型，这些注解类型只需用字符串形式表示即可。</li>
+<li><code>getSupportedSourceVersion</code>方法将返回该处理器所支持的 Java 版本，通常，这个版本需要与你的 Java 编译器版本保持一致；</li>
+<li><code>process</code>方法则是最为关键的注解处理方法。</li>
+</ul>
+<p>JDK 提供了一个实现<code>Processor</code>接口的抽象类<code>AbstractProcessor</code>。该抽象类实现了<code>init</code>、<code>getSupportedAnnotationTypes</code>和<code>getSupportedSourceVersion</code>方法。</p>
+<p>它的子类可以通过<code>@SupportedAnnotationTypes</code>和<code>@SupportedSourceVersion</code>注解来声明所支持的注解类型以及 Java 版本。</p>
+<pre><code class="language-java"> public boolean process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment roundEnv) {}
+</code></pre>
+<p><code>process</code>接收两个参数，分别代表该注解处理器所能处理的注解类型，以及囊括当前轮生成的抽象语法树的<code>RoundEnvironment</code>。<code>process</code>方法涉及各种不同类型的<code>Element</code>，分别指代 抽象语法树的各个结构。如<code>TypeElement</code>指代类或者接口，<code>VariableElement</code>指代字段、局部变量、enum 常量等，<code>ExecutableElement</code>指代方法或者构造器。这些结构之间也有从属关系，我们可以通过<code>TypeElement.getEnclosedElements</code>方法，获得上面这段代码中<code>Foo</code>类的字段、构造器以及方法。也可以通过<code>ExecutableElement.getParameters</code>方法，获得<code>setA</code>方法的参数。</p>
+<pre><code class="language-java">package foo;     // PackageElement
+class Foo {      // TypeElement
+  int a;           // VariableElement
+  static int b;    // VariableElement
+  Foo () {}        // ExecutableElement
+  void setA (      // ExecutableElement
+    int newA         // VariableElement
+  ) {}
+}
+</code></pre>
+<p>将该注解处理器编译成 class 文件后，可以将其注册为 Java 编译器的插件，并用来处理其他源代码。注册的方法主要有两种。</p>
+<p>第一种是直接使用 javac 命令的<code>-processor</code></p>
+<pre><code class="language-bash">$ javac -cp /CLASSPATH/TO/CheckGetterProcessor -processor bar.CheckGetterProcessor Foo.java
+</code></pre>
+<p>第二种则是将注解处理器编译生成的 class 文件压缩入 jar 包中，并在 jar 包的配置文件中记录该注解处理器的包名及类名，即<code>bar.CheckGetterProcessor</code>。当启动 Java 编译器时，它会寻找 classpath 路径上的 jar 包是否包含上述配置文件，并自动注册其中记录的注解处理器。</p>
+<pre><code class="language-bash">（具体路径及配置文件名为`META-INF/services/javax.annotation.processing.Processor`）
+$ javac -cp /PATH/TO/CheckGetterProcessor.jar Foo.java
+</code></pre>
+<p>注解处理器可以用来修改已有源代码或者生成源代码。确切地说，注解处理器并不能真正地修改已有源代码。这里指的是修改由 Java 源代码生成的抽象语法树，在其中修改已有树节点或者插入新的树节点，从而使生成的字节码发生变化。生成源代码的方式实际上非常容易理解。我们可以通过<code>Filer.createSourceFile</code>方法获得一个类似于文件的概念，并通过<code>PrintWriter</code>将具体的内容一一写入即可。</p>
+<p>jar：Java Archive，java二进制归档文件，多个.class文件打包的文件</p>
+<p>aar：Android Archive，Android二进制归档文件，由jar和Android资源文件</p>
+<p>dex：将.class优化打包后的文件，dalvik虚拟机则是.dex可执行文件</p>
+<p>smali：Smali，Baksmali分别是指安卓系统里的Java虚拟机（Dalvik）所使用的一种.dex格式文件的汇编器，反汇编器。</p>
+<p>apk：Android application package，包含.dex、resource文件资源、assets原生文件资源、应用证书签名、AndroidManifest等组成</p>
+<p>jar包内出了class还要包含MENIFEST.MF文件（包含Main-Class信息，必须尾空行 ），通常在META-INF文件夹下。</p>
+<pre><code class="language-bash"> jar -cvfm hello.jar META-INF\MENIFEST.MF Hello.class Tom.class 打包三个文件为hello.jar  
+ jar -cvfm hello.jar META-INF\MENIFEST.MF Hello.class com 打包两个文件和com目录 
+ java -jar hello.jar 允许jar
+</code></pre>
+<p>c表示要创建一个新的jar包，v表示创建的过程中在控制台输出创建过程的一些信息，f表示给生成的jar包命名，m表示要定义MENIFEST文件。</p>
+<p>javac编译class为jar时，-cp 引入所依赖的jar包，依赖其他类时也可以将其打成jar再依赖。:分割(win是/)；-cp即classpath即查找class的路径</p>
+<p>打jar包时还要依赖其他jar时。manifest.mf中定义Class-Path:。manifest.mf要在末尾空一行。manifest.mf的键值对(key： value)值前空格。要添加多个cp时要换行，换行时在行尾要空格，在新行的行首也要空格。</p>
+<h2 id="jvm是怎么和操作系统交互的">JVM是怎么和操作系统交互的</h2>
+<h3 id="内存管理角度">内存管理角度</h3>
+<p>为了提升 CPU 的指令处理速度，运算单元一直处于运算中（保证运算单元在执行前的准备工作都完成），而串行流程中取指、解码的时候运算单元是空闲的，而且取指和解码如果没有命中高速缓存还需要从主存取。CPU 有指令流水线(拆分成更多步骤)， 分支预测，乱序执行等优化速度的手段</p>
+<figure data-type="image" tabindex="4"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/format,png.jpeg" alt="img" loading="lazy"></figure>
+<p>从软件层面上， class 文件被加载进虚拟机后，类信息会存放在方法区，在实际运行的时候会执行方法区中的代码，在 JVM 中所有的线程共享堆内存和方法区，而每个线程有自己独立的 Java 方法栈，本地方法栈（面向 native 方法），PC寄存器（存放线程执行位置），当调用一个方法的时候， Java 虚拟机会在当前线程对应的方法栈中压入一个栈帧，用来存放 Java 字节码操作数以及局部变量，这个方法执行完会弹出栈帧，一个线程会连续执行多个方法，对应不同的栈帧的压入和弹出，压入栈帧后就是 JVM 解释执行的过程了。</p>
+<h4 id="进程上下文"><strong>进程上下文</strong></h4>
+<p>程序为一段可执行的指令集合，操作系统就会为程序分配 CPU ，内存等资源，而这个正在运行的程序就是进程，进程是操作系统对处理器中运行的程序的一种抽象。</p>
+<p>而为进程分配的内存以及 CPU 资源就是这个进程的上下文，保存了当前执行的指令，以及变量值。进程的物理实体和支持进程运行的环境合称为上下文。而上下文切换就是将当前正在运行的进程换下，换一个新的进程到处理器运行，上下文切换可能来自操作系统调度，也有可能来自程序内部，例如读取IO的时候，会让用户代码和操作系统代码之间进行切换。</p>
+<figure data-type="image" tabindex="5"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/format,png.png" alt="img" loading="lazy"></figure>
+<h4 id="虚拟存储"><strong>虚拟存储</strong></h4>
+<p>物理地址空间可以被多个进程共享，而这个映射关系将通过页表（ page table）进行维护。 标准页的尺寸一般为 4KB ，分页后，物理内存被分成若干个 4KB 的数据页，进程申请内存的时候，可以映射为多个 4KB 大小的物理内存，而应用程序读取数据的时候会以页为最小单位，当需要和硬盘发生交换swap的时候也是以页为单位。虚拟存储让每个进程以为自己独占整个内存空间，保护了各自进程不被其他进程破坏，另外，他把主存看成磁盘的一个缓存，主存中仅保存活动的程序段和数据段，当主存中不存在数据的时候发生缺页中断，然后从磁盘加载进来，当物理内存不足的时候会发生 swap 到磁盘。</p>
+<blockquote>
+<p>页表保存了虚拟地址和物理地址的映射，页表是一个数组，每个元素为一个页的映射关系，这个映射关系可能是和主存地址，也可能和磁盘，页表存储在主存，我们将存储在高速缓冲区 cache  中的页表称为快表 TLAB 。</p>
+<p>页表用虚拟内存解决了物理内存不足，并构建了内存到磁盘的缓存。也用内存映射解决了读取磁盘文件上下文切换的开销。</p>
+</blockquote>
+<h4 id="内存映射"><strong>内存映射</strong></h4>
+<p>传统的读取文件的流程为，先通过系统调用从磁盘读取数据，存入操作系统的内核缓冲区，然后在从内核缓冲区拷贝到用户空间。</p>
+<p>而内存映射，是将磁盘文件直接映射到用户的虚拟存储空间中，通过页表维护虚拟地址到磁盘的映射。通过内存映射的方式读取文件的好处有，因为减少了从内核缓冲区到用户空间的拷贝，直接从磁盘读取数据到内存，减少了系统调用的开销，对用户而言，仿佛直接操作的磁盘上的文件，另外由于使用了虚拟存储，所以不需要连续的主存空间来存储数据。</p>
+<p>在 Java 中，使用 MappedByteBuffer 来实现内存映射(unsafe)，这是一个堆外内存，在映射完之后，并没有立即占有物理内存，而是访问数据页的时候，先查页表，发现还没加载，发起缺页异常，然后在从磁盘将数据加载进内存。</p>
+<h4 id="jvm-中对象的内存布局"><strong>JVM 中对象的内存布局</strong></h4>
+<p>Java 中可以通过 Field.get(object) 的方式获取变量的值，即反射。原理是通过 UnSafe 类来实现，获取field在所在对象中的地址的偏移量 fieldoffset。通过属性相对对象起始地址的偏移量，来读取和写入属性的值。</p>
+<p>Java 对象都有一个对象头（object header），由标记字段和类型指针所构成。标记字段内有哈希码、GC 信息以及锁信息等运行数据；类型指针则指向该对象的类。</p>
+<p>Java 虚拟机引入了压缩指针的概念，将原本的 64 位指针压缩成 32 位。压缩指针要求 Java 虚拟机堆中对象的起始地址要对齐至 8 的倍数。Java 虚拟机还会对每个类的字段进行重排列，使得字段也能够内存对齐。</p>
+<blockquote>
+<p>java对象哪怕没有任何字段也占16字节/12字节(头+指针 压缩前后)</p>
+<p>内存对齐，会对字段进行重排序以避免内存浪费。字节码被加载之前难以精准分析出这个 Java 对象内存占用，只能通过递归父类的所有属性来预估对象大小，而真实占用的大小可以通过 Java agent 获取。</p>
+<p>内存对齐的原因有二：对字段进行重排序以避免内存浪费；让字段只出现在同一个 CPU 的缓存行中</p>
+</blockquote>
+<h3 id="nptl和java的线程">NPTL和java的线程</h3>
+<p>进程是资源管理的最小单位，而线程是 CPU 调度执行的最小单位，线程的出现是为了减少进程的上下文切换（线程的上下文切换比进程小很多），以及更好适配多核心 CPU 环境。在Linux中，线程是一个轻量级进程，只是优化了线程调度的开销。</p>
+<p>目前 Linux上 的线程模型为 NPTL （ Native POSIX Thread Library），他使用一对一模式，兼容 POSIX 标准，没有使用管理线程，可以更好地在多核 CPU 上运行。</p>
+<p>而在 JVM 中的线程和内核线程是一一对应的，线程的调度完全交给了内核，当调用Thread.run 的时候，就会通过系统调用 fork() 创建一个内核线程，这个方法会在用户态和内核态之间进行切换，性能没有在用户态实现线程高，当然由于直接使用内核线程，所以能够创建的最大线程数也受内核控制。</p>
+<blockquote>
+<p>POSIX表示可移植操作系统接口（Portable Operating System Interface of UNIX，缩写为 POSIX ），POSIX标准定义了操作系统应该为应用程序提供的接口标准。</p>
+</blockquote>
+<h4 id="线程的状态"><strong>线程的状态</strong></h4>
+<p>对进程而言，就三种状态，就绪，运行，阻塞，而在 JVM 中，阻塞有四种类型，我们可以通过 jstack 生成 dump 文件查看线程的状态。</p>
+<ul>
+<li>BLOCKED （on object monitor)  通过 synchronized(obj) 同步块获取锁的时候，等待其他线程释放对象锁，dump 文件会显示 waiting to lock &lt;0x00000000e1c9f108&gt;</li>
+<li>TIMED WAITING (on object monitor) 和 WAITING (on object monitor) 在获取锁后，调用了 object.wait() 等待其他线程调用 object.notify()，两者区别是是否带超时时间</li>
+<li>TIMED WAITING (sleeping) 程序调用了 thread.sleep()，这里如果 sleep(0) 不会进入阻塞状态，会直接从运行转换为就绪</li>
+<li>TIMED WAITING (parking) 和 WAITING (parking) 程序调用了 Unsafe.park()，线程被挂起，等待某个条件发生，waiting on condition</li>
+</ul>
+<p>而在 POSIX 标准中，thread_block 接受一个参数 stat ，这个参数也有三种类型，TASK_BLOCKED， TASK_WAITING， TASK_HANGING，而调度器只会对线程状态为 READY 的线程执行调度，另外一点是线程的阻塞是线程自己操作的，相当于是线程主动让出 CPU 时间片，所以等线程被唤醒后，他的剩余时间片不会变，该线程只能在剩下的时间片运行，如果该时间片到期后线程还没结束，该线程状态会由 RUNNING 转换为 READY ，等待调度器的下一次调度。</p>
+<p>而Java 并发包，核心都在 AQS 里，底层是通过 UnSafe类的 cas 方法，以及 park 方法实现。</p>
+<h4 id="线程的同步"><strong>线程的同步</strong></h4>
+<p>线程同步出现的根本原因是访问公共资源需要多个操作，而这多个操作的执行过程不具备原子性，被任务调度器分开了，而其他线程会破坏共享资源，所以需要在临界区做线程的同步。临界区，是指多个任务访问共享资源如内存或文件时候的指令，是指令并不是受访问的资源。</p>
+<p>POSIX 定义了五种同步对象，互斥锁，条件变量，自旋锁，读写锁，信号量，这些对象在 JVM 中也都有对应的实现，并没有全部使用 POSIX 定义的 api，通过 Java 实现灵活性更高，也避免了调用native方法的性能开销，当然底层最终都依赖于 pthread 的 互斥锁 mutex 来实现，这是一个系统调用，开销很大，所以 JVM 对锁做了自动升降级 。</p>
+<p>如当声明 synchronized 的代码块时，编译而成的字节码会包含一个 monitorenter 和 多个 monitorexit （多个退出路径，正常和异常情况），当执行 monitorenter 的时候会检查目标锁对象的计数器是否为0，如果为0则将锁对象的持有线程设置为自己，然后计数器加1，获取到锁，如果不为0则检查锁对象的持有线程是不是自己，如果是自己就将计数器加1获取锁，如果不是则阻塞等待，退出的时候计数器减1，当减为0的时候清楚锁对象的持有线程标记，可以看出 synchronized 是支持可重入的。</p>
+<blockquote>
+<p>可重入的定义</p>
+<ul>
+<li>简单定义:&quot;可以正确重复使用&quot;：1，可以重复使用；2，并能正确使用。意味着在多次执行的时候能得到正确的值，并不受其他调用的影响。</li>
+<li>官方定义：若一个程序或子程序可以“在任意时刻被中断然后操作系统调度执行另外一段代码，这段代码又调用了该子程序不会出错”，则称其为可重入（reentrant或re-entrant）的。即当该子程序正在运行时，执行线程可以再次进入并执行它，仍然获得符合设计时预期的结果。与多线程并发执行的线程安全不同，可重入强调对单个线程执行时重新进入同一个子程序仍然是安全的。</li>
+</ul>
+<p>可重入的函数简单来说就是可以被中断的函数，也就是说，可以在这个函数执行的任何时刻中断它，转入OS调度下去执行另外一段代码，而返回控制时不会出现什么错误；而不可重入的函数由于使用了一些系统资源，比如全局变量区，中断向量表等，所以它如果被中断的话，可能会出现问题，这类函数是不能运行在多任务环境下的。</p>
+<p><strong>可重入锁</strong>也叫递归锁，指的是同一线程外层函数获得锁之后，内层递归函数仍然能获得该锁的代码，同一线程在外层方法获取锁的时候，再进入内层方法会自动获取锁。也就是说，线程可以进入任何一个它已经拥有的锁所同步着的代码块。ReentrantLock 和 synchronized 就是典型的可重入锁！</p>
+</blockquote>
+<p>线程的阻塞是一个系统调用，开销大，所以 JVM 设计了自适应自旋锁，就是当没有获取到锁的时候， CPU 回进入自旋状态等待其他线程释放锁，自旋的时间主要看上次等待多长时间获取的锁，自旋会导致 CPU 空跑，和不公平的锁机制，因为该线程自旋获取到锁，而其他正在阻塞的线程还在等待。</p>
+<p>除了自旋锁， JVM 还通过 CAS 实现了轻量级锁和偏向锁来分别针对多个线程在不同时间访问锁和锁仅会被一个线程使用的情况。这两种锁相当于并没有调用底层的信号量实现，只是自己在用户空间维护了锁的持有关系，所以更高效。</p>
+<blockquote>
+<p>通过信号量来控制线程A释放了锁例如调用了 wait()，而线程B就可以获取锁，这个只有内核才能实现，后面两种由于场景里没有竞争所以也就不需要通过底层信号量控制</p>
+</blockquote>
+<figure data-type="image" tabindex="6"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/format,png-20210713144506877.png" alt="img" loading="lazy"></figure>
+<ol>
+<li>如果线程A进入 monitorenter 会将自己放入该 objectmonitor 的 entryset 队列，然后阻塞；</li>
+<li>如果当前持有线程B调用了 wait 方法，将会释放锁，然后将自己封装成 objectwaiter 放入 objectmonitor 的 waitset 队列，这时候 entryset 队列里的某个X线程(A或其他)将会竞争到锁，并进入 active 状态；</li>
+<li>如果这个线程X调用了 notify 方法，将会把 waitset 的第一个 objectwaiter  Y拿出来放入 entryset （这个时候根据策略可能会先自旋），当调用 notify 的那个线程X执行 moniterexit 释放锁的时候， entryset 里的线程(可能是Y)就开始竞争锁后进入 active 状态。</li>
+</ol>
+<blockquote>
+<p>持有锁的线程wait会进入waitSet</p>
+<p>从waitSet中转移到EntrySet有一下几种</p>
+<p>有其他线程以notify方法唤醒该线程<br>
+有其它线程以notifyAll方法唤醒该线程<br>
+有其它线程以interrupt方法唤醒该线程<br>
+wait方法时间到期(时间到了)</p>
+</blockquote>
+<p>为了让应用程序免于数据竞争的干扰， Java  内存模型中定义了 happen-before 来描述两个操作的内存可见性，也就是 X 操作 happen-before 操作 Y ， 那么 X 操作结果 对 Y 可见。JVM 中针对 volatile 以及 锁 的实现有 happen-before 规则， JVM 底层通过插入内存屏障来限制编译器的重排序。</p>
+<p>以 volatile 为例，内存屏障将不允许 在 volatile 字段写操作之前的语句被重排序到写操作后面 ， 也不允许读取 volatile 字段之后的语句被重排序带读取语句之前。插入内存屏障的指令，会根据指令类型不同有不同的效果，例如在 monitorexit 释放锁后会强制刷新缓存，而 volatile 对应的内存屏障会在每次写入后强制刷新到主存，并且由于 volatile 字段的特性，编译器无法将其分配到寄存器，所以每次都是从主存读取，所以 volatile 适用于读多写少得场景，最好只有个线程写多个线程读，如果频繁写入导致不停刷新缓存会影响性能。</p>
+<p><strong>Java 中如何实现定时任务</strong></p>
+<p>Java 中实现定时任务，有两种方式，一种通过 <strong>timer</strong> 类， 另外一种是 JUC 中的 <strong>ScheduledExecutorService</strong> 。JVM 实现定时任务不能一直轮询时间，而是通过线程阻塞，等到时间到了在来唤醒线程。</p>
+<ul>
+<li>object.wait(long millisecond)  参数是毫秒，必须大于等于 0 ，如果等于 0 ，就一直阻塞直到其他线程来唤醒 ，timer 类就是通过 wait() 方法来实现。object.wait(long timeout,int nanos) 可以支持纳秒级的超时时间。</li>
+<li>Thread.sleep(long millisecond) 若参数为 0 ，表示释放 CPU 给更高优先级的线程。也提供了一个可以支持纳秒级的方法实现sleep(long millis， int nanos)。</li>
+<li>LockSupport.park(long nans) ： Condition.await()调用的该方法， ScheduledExecutorService 用的 condition.await() 来实现阻塞一定的超时时间，其他带超时参数的方法也都通过他来实现，目前大多定时器都是通过这个方法来实现的，该方法也提供了一个布尔值来确定时间的精度。</li>
+<li>System.currentTimeMillis() 以及 System.nanoTime() 这两种方式都依赖于底层操作系统，前者是毫秒级，而后者是纳秒级别。</li>
+</ul>
+<p>定时器的底层在现代PC机中有三种硬件时钟的实现，他们都是通过晶体振动产生的方波信号输入来完成时钟信号同步的。</p>
+<ul>
+<li>实时时钟 RTC ，用于长时间存放系统时间的设备，即使关机也可以依靠主板中的电池继续计时。Linux 启动的时候会从 RTC 中读取时间和日期作为初始值，之后在运行期间通过其他计时器去维护系统时间。</li>
+<li>可编程间隔定时器 PIT ，该计数器会有一个初始值，每过一个时钟周期，该初始值会减1，当该初始值被减到0时，就通过导线向 CPU 发送一个时钟中断， CPU 就可以执行对应的中断程序，也就是回调对应的任务</li>
+<li>时间戳计数器 TSC ， 所有的 Intel8086 CPU 中都包含一个时间戳计数器对应的寄存器，该寄存器的值会在每次 CPU 收到一个时钟周期的中断信号后就会加 1 。他比 PIT 精度高，但是不能编程，只能读取。</li>
+</ul>
+<blockquote>
+<p>时钟周期：硬件计时器在多长时间内产生时钟脉冲，而时钟周期频率为1秒内产生时钟脉冲的个数。</p>
+<p>时钟滴答/中断：当PIT中的初始值减到0的时候，就会产生一次时钟中断，这个初始值由编程的时候指定。</p>
+</blockquote>
+<p>Linux启动的时候，先通过 RTC 获取初始时间，之后内核通过 PIT 中的定时器的时钟滴答来维护日期，并且会定时将该日期写入 RTC。而应用程序的定时器主要是通过设置 PIT 的初始值设置的，当初始值减到0的时候，就表示要执行回调函数了。</p>
+<p>定时任务按照时间排序，越靠前待执行的任务放在前面，第一个任务到了再设置第二个任务相对当前的时间，而时间的精度问题，无法在软件层面做的完全精准，更大的依赖是硬件的时钟周期频率，目前 TSC 可以提高更高的精度。</p>
+<p>Java 中的超时时间，是通过可编程间隔定时器PIT设置一个初始值然后等待中断信号实现的，精度上受硬件时钟周期的影响，一般为毫秒级别(毕竟1纳秒光速也只有3米)；而获取当前时间 System.currentTimeMillis() ，是毫秒级精度，读取的是 Linux 内核维护的日期RTC；而 System.nanoTime() 会优先使用 TSC ，性能稍微低一点，但他是纳秒级，Random 类为了防止冲突就用nanoTime生成种子。</p>
 
               </div>
               <div class="toc-container">
-                
+                <ul class="markdownIt-TOC">
+<li><a href="#jvm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86">JVM基本原理</a>
+<ul>
+<li><a href="#%E5%88%86%E5%B1%82%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F">分层编译模式</a></li>
+</ul>
+</li>
+<li><a href="#%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD">类的加载</a></li>
+<li><a href="#%E5%A0%86%E5%86%85%E5%AD%98">堆内存</a>
+<ul>
+<li><a href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80">对象的内存布局</a></li>
+</ul>
+</li>
+<li><a href="#jvm%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95">JVM如何执行方法</a>
+<ul>
+<li><a href="#%E6%96%B9%E6%B3%95%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8%E8%A7%A3%E6%9E%90%E4%BC%98%E5%85%88%E7%BA%A7">方法符号引用解析优先级</a></li>
+<li><a href="#%E8%99%9A%E6%96%B9%E6%B3%95%E4%B8%8E%E7%B4%A2%E5%BC%95%E8%A1%A8">虚方法与索引表</a></li>
+<li><a href="#%E9%94%81volatile-%E5%AD%97%E6%AE%B5final-%E5%AD%97%E6%AE%B5%E4%B8%8E%E5%AE%89%E5%85%A8%E5%8F%91%E5%B8%83">锁，volatile 字段，final 字段与安全发布</a></li>
+<li><a href="#%E5%BC%82%E5%B8%B8">异常</a></li>
+<li><a href="#%E5%8F%8D%E5%B0%84">反射</a></li>
+<li><a href="#java%E8%AF%AD%E6%B3%95%E7%B3%96%E4%B8%8Ejava%E7%BC%96%E8%AF%91%E5%99%A8">Java语法糖与Java编译器</a></li>
+<li><a href="#jni">JNI</a></li>
+<li><a href="#%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86%E5%99%A8">注解处理器</a></li>
+<li><a href="#jvm%E6%98%AF%E6%80%8E%E4%B9%88%E5%92%8C%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%BA%A4%E4%BA%92%E7%9A%84">JVM是怎么和操作系统交互的</a>
+<ul>
+<li><a href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E8%A7%92%E5%BA%A6">内存管理角度</a>
+<ul>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87"><strong>进程上下文</strong></a></li>
+<li><a href="#%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8"><strong>虚拟存储</strong></a></li>
+<li><a href="#%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84"><strong>内存映射</strong></a></li>
+<li><a href="#jvm-%E4%B8%AD%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><strong>JVM 中对象的内存布局</strong></a></li>
+</ul>
+</li>
+<li><a href="#nptl%E5%92%8Cjava%E7%9A%84%E7%BA%BF%E7%A8%8B">NPTL和java的线程</a>
+<ul>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81"><strong>线程的状态</strong></a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5"><strong>线程的同步</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
               </div>
             </div>
           </article>

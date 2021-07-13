@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>编译原理 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1625549898308">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1626162429103">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="编译原理 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -12,10 +12,10 @@
 
 
 
-    <meta name="description" content="01 | 理解代码：编译器的前端技术
+    <meta name="description" content="编译器的前端技术
 “前端”指的是编译器对程序代码的分析和理解过程。它通常只跟语言的语法有关，跟目标机器无关。而与之对应的“后端”则是生成目标代码的过程，跟目标机器有关。
 
-编译器的“前端”技术分为词法分析、语法分析和语义..." />
+编译器的“前端”技术分为词法分析、语法分析和语义分析三个部分。而它主..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
@@ -28,7 +28,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1625549898308" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1626162429103" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -88,7 +88,7 @@
                 2021-07-02
               </span>
               <span>
-                9 min read
+                19 min read
               </span>
               
             </div>
@@ -97,7 +97,7 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h1 id="01-理解代码编译器的前端技术">01 | 理解代码：编译器的前端技术</h1>
+                <h1 id="编译器的前端技术">编译器的前端技术</h1>
 <p>“前端”指的是编译器对程序代码的分析和理解过程。它通常只跟语言的语法有关，跟目标机器无关。而与之对应的“后端”则是生成目标代码的过程，跟目标机器有关。</p>
 <img src="https://static001.geekbang.org/resource/image/06/93/06b80f8484f4d88c6510213eb27f2093.jpg" />
 <p>编译器的“前端”技术分为<strong>词法分析、语法分析</strong>和<strong>语义分析</strong>三个部分。而它主要涉及自动机和形式语言方面的基础的计算理论。</p>
@@ -144,7 +144,7 @@
 <h2 id="课程小结">课程小结</h2>
 <ul>
 <li>词法分析是把程序分割成一个个 Token 的过程，可以通过构造有限自动机来实现。</li>
-<li>语法分析是把程序的结构识别出来，并形成一棵便于由计算机处理的抽象语法树。可以用递归下降的算法来实现。</li>
+<li>语法分析是把程序的结构识别出来，并形成一棵便于由计算机处理的抽象语法树AST。可以用递归下降的算法来实现。</li>
 <li>语义分析是消除语义模糊，生成一些属性信息，让计算机能够依据这些信息生成目标代码。</li>
 </ul>
 <h1 id="02-正则文法和有限自动机纯手工打造词法分析器">02 | 正则文法和有限自动机：纯手工打造词法分析器</h1>
@@ -183,7 +183,99 @@ GE :        '&gt;='
 <blockquote>
 <p>当第一个字符是 i 的时候，我们让它进入一个特殊的状态。接下来，如果它遇到 n 和 t，就进入状态 4。但这还没有结束，如果后续的字符还有其他的字母和数字，它又变成了普通的标识符。比如，我们可以声明一个 intA（int 和 A 是连着的）这样的变量，而不会跟 int 关键字冲突。<img src="https://static001.geekbang.org/resource/image/52/b4/52afab1d7c30b04c91b2b0a018dcc9b4.jpg" alt="" loading="lazy"></p>
 </blockquote>
-<h1 id="03-语法分析一纯手工打造公式计算器">03 | 语法分析（一）：纯手工打造公式计算器</h1>
+<h1 id="编译器后端">编译器后端</h1>
+<p>编译器后端的最终结果，就是<strong>生成目标代码</strong>。如果目标是在计算机上直接运行，就像 C 语言程序那样，那这个目标代码指的是汇编代码。而如果运行目标是 Java 虚拟机，那这个目标代码就是指 JVM 的字节码。</p>
+<p>为了降低后端工作量，提高软件复用度，就需要引入<strong>中间代码（Intermediate Representation，IR）的机制</strong>，它是独立于具体硬件的一种代码格式。各个语言的前端可以先翻译成 IR，然后再从 IR 翻译成不同硬件架构的汇编代码。</p>
+<p>生成正确的、能够执行的代码比较简单，可这样的代码执行效率很低，因为直接翻译生成的代码往往不够简洁，比如会生成大量的临时变量，指令数量也较多。优化工作又分为**“独立于机器的优化”和“依赖于机器的优化”**两种。</p>
+<p>独立于机器的优化，是基于 IR 进行的。它可以通过对代码的分析，用更加高效的代码代替原来的代码。IR 的作用：基于 IR 对接不同语言的前端，也能对接不同的硬件架构，还能做很多的优化。</p>
+<p>**依赖于机器的优化，则是依赖于硬件的特征。**现代的计算机硬件设计了很多特性，以便提供更高的处理能力，比如并行计算能力，多层次内存结构（使用多个级别的高速缓存）等等。</p>
+<p><strong>编译期后端从前端生成中间代码，然后基于中间代码生成针对不同平台的目标代码；最后，需要对代码做各种优化工作，包括独立于机器的优化和依赖于机器的优化。</strong></p>
+<h2 id="程序运行的环境">程序运行的环境</h2>
+<p>程序运行的过程中，主要是跟两个硬件（CPU 和内存）以及一个软件（操作系统）打交道。</p>
+<p>程序在使用内存的时候，操作系统会把程序使用的逻辑地址映射到真实的物理内存地址。有的物理内存区域会映射进多个进程的地址空间。对于不太常用的内存数据，操作系统会写到磁盘上，以便腾出更多可用的物理内存。</p>
+<p>大多数语言还是会采用一些通用的内存管理模式。以 C 语言为例：</p>
+<p><strong>代码区（也叫文本段）存放编译完成以后的机器码。</strong></p>
+<p>**静态数据区保存程序中全局的变量和常量。**Data 段中的变量是在编译期就初始化好的，直接从程序装在进内存。BSS 段中是那些没有声明初始化值的变量，都会被初始化成缺省值 0。</p>
+<p><strong>堆适合管理生存期较长的一些数据，这些数据在退出作用域以后也不会消失。</strong></p>
+<p><strong>而栈适合保存生存期比较短的数据，比如函数和方法里的本地变量。<strong>在进入某个</strong>作用域</strong>的时候申请内存，退出这个作用域的时候就可以释放掉。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/45/6a/452137a61a7b051ffceb40ae45199f6a.jpg" alt="c" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/3b/f5/3bd535433e4aad9140bc0e114498def5.jpg" alt="调用" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>每次一次函数调用活动都产生活动记录，栈帧是活动记录的实现方式。</p>
+<h2 id="汇编">汇编</h2>
+<p>如 C / Go 这种静态编译型语言，编译器后端的任务就是生成汇编代码。然后再由汇编器生成机器码（即目标文件），最后再使用链接器就能生成可执行文件或库文件了。</p>
+<p>像 JavaScript/Java 这样的解释执行的语言，也要在运行时利用类似的机制生成机器码，以便调高执行的速度。Java 的字节码，在运行时通常也会通过 JIT 机制编译成机器码。</p>
+<figure data-type="image" tabindex="1"><img src="https://static001.geekbang.org/resource/image/fe/76/feadbf7a473c420d0693c249b48e0e76.jpg" alt="汇编" loading="lazy"></figure>
+<p>汇编器可以把每一个汇编文件都编译生成一个二进制的目标文件，或者叫做一个模块。而链接器则把这些模块组装成一个整体。</p>
+<p>生成汇编代码以后，编译器的任务完成了。后面是由汇编器和链接器完成的工作。但我们也可以把整个过程都看做编译过程。</p>
+<p>每个操作系统可执行程序的格式要求是不一样。在 Linux 下，目标文件、共享对象文件、二进制文件，都是采用 ELF 格式。在 ELF 格式中，同内存中的布局一样，代码和数据也是分开的。程序的代码部分，可以在多个进程中共享，不需要在内存里放多份。</p>
+<h2 id="中间代码">中间代码</h2>
+<p>IR 的意思是中间表达方式，它在高级语言和汇编语言的中间。与高级语言相比，IR 丢弃了大部分高级语言的语法特征和语义特征，比如循环语句、if 语句、作用域、面向对象等等，它更像高层次的汇编语言；而相比真正的汇编语言，它又不会有那么多琐碎的、与具体硬件相关的指令/寄存器操作细节。</p>
+<p>IR 有很多种类（AST 也是一种 IR。字节码也是），每种 IR 都有不同的特点和用途，有的编译器，甚至要用到几种不同的 IR。IR并不局限与编译器前端或后端。</p>
+<p>常见的 IR 的格式，它叫做<strong>三地址代码（Three Address Code, TAC）</strong>。每条三地址代码最多有三个地址，其中两个是源地址（比如第一行代码的 y 和 z），一个是目的地址（也就是 x），每条代码最多有一个操作（op）。</p>
+<pre><code class="language-java">x := y op z   // 二元操作
+x := op y     // 一元操作
+</code></pre>
+<blockquote>
+<p>另外几种 IR 的格式:</p>
+<ul>
+<li>四元式。它是与三地址代码等价的另一种表达方式，格式是：（OP，arg1，arg2，result）所以，“a := b + c” 就等价于（+，b，c，a）。</li>
+<li>逆波兰表达式。它把操作符放到后面，所以也叫做后缀表达式。“b + c”对应的逆波兰表达式是“b c +”；而“a = b + c”对应的逆波兰表达式是“a b c + =”。</li>
+</ul>
+</blockquote>
+<p>**LLVM 汇编码（LLVM Assembly），是 LLVM 的 IR。**即 LLVM 语言，可以把用 LLVM 汇编码书写的一个程序文件叫做 LLVM 程序。</p>
+<p><strong>LLVM 汇编码是采用静态单赋值代码形式的。</strong>（Static Single Assignment, <strong>SSA</strong>）即在三地址代码上基础上，一个变量只能被赋值一次。**LLVM IR 比起三地址代码，有更多的细节信息。**比如整型变量的字长、内存对齐方式等等，所以使用 LLVM IR 能够更准确地翻译成汇编码。</p>
+<blockquote>
+<p>每个变量很确定地只会被定义一次，然后可以多次使用。这种特点使得基于 SSA 更容易做数据流分析，而数据流分析又是很多代码优化技术的基础，所以，几乎所有语言的编译器、解释器或虚拟机中都使用了 SSA，因为有利于做代码优化。</p>
+</blockquote>
+<p>IR 是我们后续做代码优化、汇编代码生成的基础</p>
+<ol>
+<li>三地址代码是很常见的一种 IR，包含一个目的地址、一个操作符和至多两个源地址。它等价于四元式。</li>
+<li>LLVM IR 的第一个特点是静态单赋值（SSA），也就是每个变量（地址）最多被赋值一次，它这种特性有利于运行代码优化算法；第二个特点是带有比较多的细节，方便我们做优化和生成高质量的汇编代码。</li>
+</ol>
+<h2 id="编译器后端框架">编译器后端框架</h2>
+<p>相比前端的编译器工具，如 Lex（Flex）、Yacc（Bison）和 Antlr 等，对于后端工具有LLVM 和 GCC 。</p>
+<blockquote>
+<p>苹果系统上的 C 语言、C++、Objective-C 的编译器 Clang 就是基于 LLVM 的，最新的 Swift 编程语言也是基于 LLVM，支撑了无数的移动应用和桌面应用。Kotlin，也支持基于 LLVM 编译成本地代码。LLVM 有良好的模块化设计和接口。LLVM 同时支持 JIT（即时编译）和 AOT（提前编译）两种模式。</p>
+<p>GCC（GNU Compiler Collection，GNU 编译器套件）。它支持了 GNU Linux 上的很多语言，例如 C、C++、Objective-C、Fortran、Go 语言和 Java 语言等。</p>
+</blockquote>
+<p>LLVM 能够支持多种语言的前端、多种后端 CPU 架构。在 LLVM 内部，使用类型化的和 SSA 特点的 IR 进行各种分析、优化和转换：</p>
+<figure data-type="image" tabindex="2"><img src="https://static001.geekbang.org/resource/image/07/1c/079aa0c78325b3a4420d78523b5aa51c.png" alt="llvm" loading="lazy"></figure>
+<p>LLVM 项目包含了很多组成部分：</p>
+<ul>
+<li>LLVM 核心（core）包括：优化和分析工具、还包括了为各种 CPU 生成目标代码的功能；这些库采用的是 LLVM IR，一个良好定义的中间语言。</li>
+<li>Clang 前端（是基于 LLVM 的 C、C++、Objective-C 编译器）。</li>
+<li>LLDB（一个调试工具）。</li>
+<li>LLVM 版本的 C++ 标准类库。</li>
+<li>其他一些子项目。</li>
+</ul>
+<p>LLVM 本身是用 C++ 开发的，所以最好采用 C++ 调用它的功能。</p>
+<p>**LLVM 的 IR 有两种格式。**它的文本格式便于程序员阅读一般以.ll 结尾。字节码（bitcode）格式便于机器即时编译和执行以.bc 结尾。</p>
+<figure data-type="image" tabindex="3"><img src="https://static001.geekbang.org/resource/image/74/a7/74be02bbb36cf8d19e6b324b7d2373a7.png" alt="" loading="lazy"></figure>
+<p>使用 LLVM 从源代码到生成可执行文件有两条可能的路径：</p>
+<ul>
+<li>第一条路径，是把每个源文件分别编译成字节码文件，然后再编译成目标文件，最后链接成可执行文件。</li>
+<li>第二条路径，是先把编译好的字节码文件链接在一起，形成一个更大的字节码文件，然后对这个字节码文件进行进一步的优化，之后再生成目标文件和可执行文件。</li>
+</ul>
+<p>LLVM 用一套对象模型在内存中表示 IR，包括模块、函数、基本块和指令，你可以通过 API 来生成这些对象。这些对象一旦生成，就可以编译和执行。</p>
+<p>对于 if 语句和循环语句，需要生成多个基本块，并通过跳转指令形成正确的控制流图（CFG）。当存在多个前序节点可能改变某个变量的值的时候，使用 phi 指令来确定正确的值。</p>
+<p>存储在内存中的本地变量，可以多次赋值。</p>
+<p>LLVM 能够把外部函数和 IR 模型中的函数等价对待。</p>
+<h2 id="目标代码的生成和优化">目标代码的生成和优化</h2>
+<p>指令选择、寄存器分配、指令重排序</p>
+<ol>
+<li>指令的选择。同样一个功能，可以用不同的指令或指令序列来完成，而我们需要选择比较优化的方案。</li>
+<li>寄存器分配。每款 CPU 的寄存器都是有限的，我们要有效地利用它。</li>
+<li>指令重排序。计算执行的次序会影响所生成的代码的效率。在不影响运行结果的情况下，我们要通过代码重排序获得更高的效率。</li>
+</ol>
+<p>llvm后端的处理步骤</p>
+<figure data-type="image" tabindex="4"><img src="https://static001.geekbang.org/resource/image/79/fd/79bde8c10be1eaea92a70890dbea56fd.jpg" alt="优化" loading="lazy"></figure>
 <p>之所以要在虚拟机中运行，是因为它提供了可移植性。一旦 Java 代码被编译为 Java 字节码，便可以在不同平台上的 Java 虚拟机实现上运行。此外，虚拟机还提供了一个代码托管的环境，代替我们处理部分冗长而且容易出错的事务，例如内存管理。</p>
 <p>Java 虚拟机将运行时内存区域划分为五个部分，分别为方法区、堆、PC 寄存器、Java 方法栈和本地方法栈。Java 程序编译而成的 class 文件，需要先加载至方法区中，方能在 Java 虚拟机中运行。</p>
 <p>为了提高运行效率，标准 JDK 中的 HotSpot 虚拟机采用的是一种混合执行的策略。</p>
@@ -193,7 +285,7 @@ GE :        '&gt;='
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#01-%E7%90%86%E8%A7%A3%E4%BB%A3%E7%A0%81%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF">01 | 理解代码：编译器的前端技术</a>
+<li><a href="#%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF">编译器的前端技术</a>
 <ul>
 <li><a href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90">词法分析</a></li>
 <li><a href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90">语法分析</a></li>
@@ -202,7 +294,15 @@ GE :        '&gt;='
 </ul>
 </li>
 <li><a href="#02-%E6%AD%A3%E5%88%99%E6%96%87%E6%B3%95%E5%92%8C%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%BA%AF%E6%89%8B%E5%B7%A5%E6%89%93%E9%80%A0%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8">02 | 正则文法和有限自动机：纯手工打造词法分析器</a></li>
-<li><a href="#03-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%80%E7%BA%AF%E6%89%8B%E5%B7%A5%E6%89%93%E9%80%A0%E5%85%AC%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%99%A8">03 | 语法分析（一）：纯手工打造公式计算器</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E5%99%A8%E5%90%8E%E7%AB%AF">编译器后端</a>
+<ul>
+<li><a href="#%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E7%9A%84%E7%8E%AF%E5%A2%83">程序运行的环境</a></li>
+<li><a href="#%E6%B1%87%E7%BC%96">汇编</a></li>
+<li><a href="#%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81">中间代码</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E5%99%A8%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6">编译器后端框架</a></li>
+<li><a href="#%E7%9B%AE%E6%A0%87%E4%BB%A3%E7%A0%81%E7%9A%84%E7%94%9F%E6%88%90%E5%92%8C%E4%BC%98%E5%8C%96">目标代码的生成和优化</a></li>
+</ul>
+</li>
 </ul>
 
               </div>

@@ -1,0 +1,629 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>字节码操作 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1626162429103">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="字节码操作 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="字节码
+
+.class文件内的操作指令（OpCode）被固定为一个字节，是由两个十六进制组即1字节组成的，所以叫字节码。
+
+1byte字节=8bit位=2十六进制
+
+通过javap反汇编器，以可读的方式查看java编译器生成的字节码。-c方..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1626162429103" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              字节码操作
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-07-08
+              </span>
+              <span>
+                29 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://static001.geekbang.org/resource/image/79/a4/79da108fb878cbf9d0d472fcc567f4a4.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="字节码">字节码</h1>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/20190919203632299.png" alt="在这里插入图片描述" loading="lazy"></figure>
+<p>.class文件内的操作指令（OpCode）被固定为一个字节，是由两个十六进制组即1字节组成的，所以叫字节码。</p>
+<blockquote>
+<p>1byte字节=8bit位=2十六进制</p>
+</blockquote>
+<p>通过javap反汇编器，以可读的方式查看java编译器生成的字节码。-c方法为主 -v详情</p>
+<blockquote>
+<p>把源码编译成机器识别的机器码的过程叫汇编。</p>
+<p>把源码整个编译成可执行文件叫编译执行；源码逐行翻译执行叫解释执行。和汇编是不同的维度。</p>
+<p>把java编译成字节码，（字节码可看特殊的给虚拟机用的机器码）</p>
+</blockquote>
+<p>java 字节码工具有：</p>
+<p>ASMifier从<code>.class</code>文件生成asm java代码，再修改代码，生成新的<code>.class</code>文件。</p>
+<p>openjdk 的<code>AsmTools</code>引入了两种表示<code>.class</code>文件的语法：</p>
+<ul>
+<li>
+<p>JASM用类似java本身的语法来定义类和函数，字节码指令则很像传统的汇编。</p>
+<p>查看<code>java -jar asmtools.jar jdis Test.class</code></p>
+<p>生成<code>java -jar asmtools.jar jasm Test.jasm</code></p>
+</li>
+<li>
+<p>JCOD 整个<code>.class</code>用容器的方式来表示，可以很清楚表示类文件的结构。</p>
+<p>查看<code>java -jar asmtools.jar jdec Test.class</code></p>
+<p>生成<code>java -jar asmtools.jar jcoder Test.jasm</code></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/393097261d80d730f434561157e219c657820-20210708182124274.png" alt="图3 JVM规定的字节码结构" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/27b4609c522ee39916f14ee3f510af8a296734.png" alt="图13 反编译后的方法表" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/ac90457d635b90e2c08bf7659b0b7dfd50229.png" alt="图4 常量池的结构" style="zoom:200%;" /></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/0f795d2b2b28ce96b5963efb2e564e5a197874.png" alt="图10 字段表结构" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<ol>
+<li>
+<p>魔数4字节。</p>
+</li>
+<li>
+<p>版本号4字节。</p>
+</li>
+<li>
+<p>常量池计数器2字节，就是常量个数。（-1排除下标0）</p>
+<p>常量池数据区中存储两类常量字面量与符号引用：字面量为代码中声明为Final的常量值；符号引用如类和接口的全局限定名、字段的名称和描述符、方法的名称和描述符。（各种都用cp_info结构表示：Tag标识类型+index+数据，javap对照查看）。</p>
+</li>
+<li>
+<p>访问标识2字节，就是Public、Abstract、Final等修饰符，如ACC_PUBLIC | ACC_FINAL</p>
+</li>
+<li>
+<p>当前类名，2字节，描述的是当前类的全限定名。这两个字节保存的值为常量池中的索引值，根据索引值就能在常量池中找到这个类的全限定名。</p>
+</li>
+<li>
+<p>父类名称，2字节，描述父类的全限定名，保存的也是常量池中的索引值。</p>
+</li>
+<li>
+<p>接口信息，2字节，表示该类或父类实现的接口数量，紧接着的n个字节是所有接口名称的字符串常量的索引值。</p>
+</li>
+<li>
+<p>字段表，类级别的变量以及实例变量。计数器2字节，数据区。（各种都用fields_info结构表示：访问标识+字段名(常量表索引)+字段描述符(如:I代表Int)</p>
+</li>
+<li>
+<p><strong>方法表</strong>，计数器2字节。数据区：基本描述（名称、描述符、访问标识等）和Code区：</p>
+</li>
+</ol>
+<p>具体的操作数栈指令</p>
+<p>LocalVariableTable：**本地变量表，**包含This和方法参数和局部变量，（在实例方法内部可以调用This，是因为JVM将This作为每一个方法的第一个参数隐式进行传入。这是针对非Static方法而言。）</p>
+<p>LineNumberTable”：行号表，将Code区的操作码和源代码中的行号对应，debug用。</p>
+<ol start="10">
+<li>附加属性表，字节码的最后一部分，存放了在该文件中类或接口所定义属性的基本信息。</li>
+</ol>
+<h1 id="操作数栈及指令">操作数栈及指令</h1>
+<p>每当为 Java 方法分配栈桢时，Java 虚拟机往往需要开辟一块额外的空间作为操作数栈，来存放计算的操作数以及返回结果。执行每一条指令之前，Java 虚拟机要求该指令的操作数已被压入操作数栈中。在执行指令时，Java 虚拟机会将该指令所需的操作数弹出，并且将指令的结果重新压入栈中。</p>
+<p>正常情况下，操作数栈的压入弹出都是一条条指令完成的。唯一的例外情况是在抛异常时，Java 虚拟机会清除操作数栈上的所有内容，而后将异常实例压入操作数栈上。</p>
+<figure data-type="image" tabindex="2"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/ac42012daa48396d66eda1e9adcdb8c5624301.gif" alt="图14 控制操作数栈示意图" loading="lazy"></figure>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/13/21/13720f6eb83d096ec600309648330821.png" alt="iadd" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/13/db/138c20e60c081c8698770ff8d5d93fdb.png" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>以加法指令 iadd 为例。假设在执行该指令前，栈顶的两个元素分别为 int 值 1 和 int 值 2，那么 iadd 指令将弹出这两个 int，并将求得的和 int 值 3 压入栈中。</p>
+</blockquote>
+<ol>
+<li>
+<p>Java 字节码中直接作用在操作数栈上的指令有</p>
+<p>dup： 复制栈顶元素，以及 pop：舍弃栈顶元素(处理long、double时要用dup2/pop2)。dup 指令常用于复制 new 指令所生成的未经初始化的引用，然后用invokespecial 指令来调用构造器。pop 指令则常用于舍弃调用指令的返回结果，如调用方法却不用其返回值。</p>
+<p>还有 swap 指令，它将交换栈顶两个元素的值。</p>
+</li>
+<li>
+<p>直接将常量加载到操作数栈上的指令</p>
+<p>如iconst 指令加载 -1 至 5 之间的 int 值。( bipush、sipush 加载一个字节、两个字节所能代表的 int 值。 )</p>
+<p>ldc 指令加载常量池中的常量值，例如 ldc #18 将加载常量池中的第 18 项。其他类型如下</p>
+<blockquote>
+<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/0dfbecf954660bcdc76eac65beac1e8f.jpg" alt="c" style="zoom:50%;" />
+</blockquote>
+</li>
+<li>
+<p>操作本地变量表的指令。存储在局部变量区的值，通常需要加载至操作数栈中，方能进行计算，得到计算结果后再存储至局部变量数组中。这些加载、存储指令是区分类型的。</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/83/f9/83ece83ecd260c2eda282747467e49f9.jpg" alt="" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/c5/32/c57cb9c2222f0f79459bf4c58e1a4c32.png"  style="zoom:30%;" ></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<pre><code class="language-java">public static int bar(int i) {
+  return ((i + 1) - 2) * 3 / 4;
+}
+Code:
+  stack=2, locals=1, args_size=1//操作数栈空间为 2 局部变量数组空间为 1, 调用bar(5)如图
+     0: iload_0
+     1: iconst_1
+     2: iadd
+     3: iconst_2
+     4: isub
+     5: iconst_3
+     6: imul
+     7: iconst_4
+     8: idiv
+     9: ireturn
+</code></pre>
+</blockquote>
+</li>
+<li>
+<p>其他高层语义的字节码指令：</p>
+<blockquote>
+<ul>
+<li>new（后跟目标类，生成该类的未初始化的对象）</li>
+<li>instanceof（后跟目标类，判断栈顶元素是否为目标类 / 接口的实例。是则压入 1，否则压入 0）</li>
+<li>checkcast（后跟目标类，判断栈顶元素是否为目标类 / 接口的实例。如果不是便抛出异常）athrow（将栈顶异常抛出）</li>
+<li>锁指令：monitorenter（为栈顶对象加锁）和 monitorexit（为栈顶对象解锁）。</li>
+<li>字段访问指令：getstatic、putstatic（静态字段访问指令），getfield、putfield（实例字段访问指令 ）。这四条指令均附带用以定位目标字段的信息，但所消耗的操作数栈元素皆不同。</li>
+<li>方法调用指令：invokestatic，invokespecial，invokevirtual，invokeinterface 以及 invokedynamic。（方法调用指令）在进行方法调用之前，程序需要依次压入调用者（invokestatic 不需要），以及各个参数。消耗的操作数栈元素以情况而定。</li>
+<li>数组相关指令：newarray/ anewarray（新建基本类型/引用数据类型数组），生成多维数组（multianewarray），arraylength（求数组长度），iaload/iastore（int数组加载/存储指令）</li>
+<li>控制流指令：goto（无条件跳转），tableswitch 和 lookupswtich（条件跳转指令：前者针对密集的 cases，后者针对稀疏的 cases），ireturn（返回 int 值的指令）。除返回指令外的控制流指令，均附带一个或者多个字节码偏移量，代表需要跳转到的位置。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/5d/1f/5d935dcdd55e9f8461a6e5b0ac22001f.jpg" style="zoom:80%;" /></th>
+<th><img src="https://static001.geekbang.org/resource/image/f5/f0/f5195b5425a9547af9ce8371aef5c4f0.jpg" alt="1" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</blockquote>
+</li>
+</ol>
+<h1 id="jvmti后门-javaagent-instrumentation">JVMTI后门、javaagent、Instrumentation</h1>
+<p>JVMTI （JVM Tool Interface）是Java虚拟机对外提供的Native编程接口，通过JVMTI，外部进程可以获取到运行时JVM的诸多信息，比如线程、GC等。JVMTI可以用来开发并监控虚拟机，可以查看JVM内部的状态，并控制JVM应用程序的执行。可实现的功能包括但不限于：调试、监控、线程分析、覆盖率分析工具等。从Android9.0开始，Android ART已经加入了JVMTI的相关功能了。</p>
+<p>JVMTI只是一套接口，<strong>我们要开发JVM工具就需要写一个Agent程序来使用这些接口</strong>。Agent程序其实就是一个C/C++语言编写的动态链接库。可以在jvm启动时指定加载运行该agent，JVM启动后该agent程序就会开始工作。开发者可以构建一个基于Java编写的Agent来监控或者操作JVM了，比如替换或者修改某些类的定义等。</p>
+<p>虽然java提供了JVMTI，但是对应的agent需要用C/C++开发，直到Java SE 5的新特性中加入了<strong>Instrumentation机制</strong>。</p>
+<blockquote>
+<ol>
+<li>
+<p>JDK 1.5中提供的，开发者只能在main加载之前添加premain</p>
+</li>
+<li>
+<p>Java SE 6 的 Instrumentation 当中，提供了一个新的代理操作方法：agentmain，可以在 main 函数开始运行之后再运行。</p>
+<p>同样，agentmain 方法中带Instrumentation参数的方法也比不带优先级更高。开发者必须在 manifest 文件里面设置“Agent-Class”来指定包含 agentmain 函数的类。在Java6 以后实现启动后加载的新实现是Attach api。</p>
+</li>
+</ol>
+</blockquote>
+<p>Instrumention支持的功能都在<code>java.lang.instrument.Instrumentation</code>接口中体现，常用方法有:</p>
+<ol>
+<li>
+<p>addTransformer方法注册一个ClassFileTransformer，后面类加载的时候都会经过这个ClassFileTransformer处理。这是使用字节码编译工具（如javassist、ASM）即可对某些类对象进行改写。</p>
+<p>Transformer里的transform方法以被加载字节码byte数组为参数，可对此修改。</p>
+</li>
+<li>
+<p><strong>retransformClasses对于已加载过的类，重新触发这个Transformer的转换</strong>。即修改transfrom方法</p>
+</li>
+<li>
+<p>redefineClasses<strong>它需要直接给出新的类byte流，然后替换旧的</strong>。</p>
+<p>ClassFileTransformer可以判断是否需要修改类定义并根据自己的代码规则修改类定义然后返回给JVM。利用这个Transformer类，我们可以很好的实现虚拟机层面的AOP。</p>
+</li>
+</ol>
+<p>Attach API 主要的类是 <code>com.sun.tools.attach</code> 包里面的</p>
+<ol>
+<li>
+<p><code>VirtualMachine</code> 程序需要监控的目标虚拟机，提供了获取系统信息(比如获取内存dump、线程dump，类信息统计(比如已加载的类以及实例个数等)， 有loadAgent，Attach 和 Detach 等处理agent代理的方法。</p>
+<p><code>attach(pid)</code>远程连接到该pid的java进程上，即jvm上。</p>
+<p><code>loadAgent</code>方法向jvm注册一个代理程序agent，在该agent的代理程序中会得到一个Instrumentation实例，该实例可以 在class加载前改变class的字节码，也可以在class加载后重新加载。在调用Instrumentation实例的方法时，这些方法会使用ClassFileTransformer接口中提供的方法进行处理。</p>
+</li>
+<li>
+<p><code>VirtualMachineDescriptor</code> 则是一个描述虚拟机的容器类，配合 VirtualMachine 类完成各种功能。</p>
+</li>
+</ol>
+<p>通过VirtualMachine类的<code>attach(pid)</code>方法，便可以attach到一个运行中的java进程上，之后便可以通过<code>loadAgent(agentJarPath)</code>来将agent的jar包注入(启动了一个socket进程去传输agent.jar)到对应的进程，然后对应的进程会调用agentmain方法。</p>
+<figure data-type="image" tabindex="3"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/1607781-20190817155003876-767522290.png" alt="img" loading="lazy"></figure>
+<blockquote>
+<p>在mac上安装了的jdk是能直接找到 VirtualMachine 类的，但是在windows中安装的jdk无法找到，如果你遇到这种情况，请手动将你jdk安装目录下：lib目录中的tools.jar添加进当前工程的Libraries中。</p>
+<p>tools包找不到，在idea可先javac编译后执行</p>
+</blockquote>
+<p><strong>premain与agentmain的区别</strong>：</p>
+<p>premain对应的就是VM启动时的Instrument Agent加载，即<code>agent on load</code></p>
+<p>agentmain对应的是VM运行时的Instrument Agent加载，即<code>agent on attach</code></p>
+<p>两种加载形式所加载的<code>Instrument Agent</code>都关注同一个<code>JVMTI</code>事件 – <code>ClassFileLoadHook</code>事件，这个事件是在读取字节码文件之后回调时用，也就是说**premain和agentmain方式的回调时机都是类文件字节码读取之后（或者说是类加载之后），之后对字节码进行重定义或重转换。</p>
+<p><code>premain</code>和<code>agentmain</code>两种方式最终的目的都是为了回调<code>Instrumentation</code>实例并激活<code>sun.instrument.InstrumentationImpl#transform()</code>（InstrumentationImpl是Instrumentation的实现类）从而回调注册到<code>Instrumentation</code>中的<code>ClassFileTransformer</code>实现字节码修改，本质功能上没有很大区别。两者的非本质功能的区别如下：</p>
+<ul>
+<li>premain方式是JDK1.5引入的，agentmain方式是JDK1.6引入的，JDK1.6之后可以自行选择使用<code>premain</code>或者<code>agentmain</code>。</li>
+<li><code>premain</code>需要通过命令行使用外部代理jar包，即<code>-javaagent:代理jar包路径</code>；<code>agentmain</code>则可以通过<code>attach</code>机制直接附着到目标VM中加载代理，也就是使用<code>agentmain</code>方式下，操作<code>attach</code>的程序和被代理的程序可以是完全不同的两个程序。</li>
+<li><code>premain</code>方式回调到<code>ClassFileTransformer</code>中的类是虚拟机加载的所有类，这个是由于代理加载的顺序比较靠前决定的，在开发者逻辑看来就是：所有类首次加载并且进入程序<code>main()</code>方法之前，<code>premain</code>方法会被激活，然后所有被加载的类都会执行<code>ClassFileTransformer</code>列表中的回调。</li>
+<li><code>agentmain</code>方式由于是采用<code>attach</code>机制，被代理的目标程序VM有可能很早之前已经启动，当然其所有类已经被加载完成，这个时候需要借助<code>Instrumentation#retransformClasses(Class&lt;?&gt;... classes)</code>让对应的类可以重新转换，从而激活重新转换的类执行<code>ClassFileTransformer</code>列表中的回调。</li>
+<li>通过premain方式的代理Jar包进行了更新的话，需要重启服务器，而agentmain方式的Jar包如果进行了更新的话，需要重新attach，但是agentmain重新attach还会导致重复的字节码插入问题，不过也有<code>Hotswap</code>和<code>DCE VM</code>方式来避免。</li>
+</ul>
+<p>使用 javaagent 的premain例子：</p>
+<ol>
+<li>定义一个 MANIFEST.MF 文件，必须包含 Premain-Class 选项，通常也会加入Can-Redefine-Classes 和 Can-Retransform-Classes 选项。</li>
+<li>创建一个Premain-Class 指定的类，类中包含 premain 方法，方法逻辑由用户自己确定。</li>
+<li>将 premain 的类class和 MANIFEST.MF 文件打成 jar 包。（要在被打包的类的包名之上的目录运行jar命令）</li>
+<li>使用参数 -javaagent: jar包路径 启动要代理的方法。</li>
+</ol>
+<blockquote>
+<p>在执行以上步骤后，JVM 会先执行 premain 方法，在 main 方法启动前拦截大部分类的加载活动(遗漏的主要是系统类)，既然可以拦截类的加载，那么就可以去做重写类这样的操作，结合第三方的字节码编译工具，比如ASM，javassist，cglib等等来改写实现类。</p>
+<p>可以附上多个<code>-javaagent</code>参数添加多个代理。</p>
+</blockquote>
+<p>使用agentmain前三步同上,MANIFEST.MF 文件里是Agent-Class选项。然后先 attach 到已经运行的VM上，再loadAgent加载有agentmain的jar包。</p>
+<p>Java agent 的这些功能都是通过 JVMTI agent，也就是 C agent 来实现的。JVMTI 是一个事件驱动的工具实现接口，通常，我们会在 C agent 加载后的入口方法<code>Agent_OnLoad</code>处注册各个事件的钩子（hook）方法。当 Java 虚拟机触发了这些事件时，便会调用对应的钩子方法。</p>
+<pre><code class="language-c">JNIEXPORT jint JNICALL
+Agent_OnLoad(JavaVM *vm, char *options, void *reserved);
+</code></pre>
+<p>如为 JVMTI 中的<code>ClassFileLoadHook</code>事件设置钩子，从而在 C 层面拦截所有的类加载事件。</p>
+<p>JDK 本身也使用了 ASM 库，如用来生成 Lambda 表达式的适配器类。</p>
+<h1 id="字节码增强">字节码增强</h1>
+<p><strong>字节码增强技术就是对现有字节码进行修改或者动态生成全新字节码文件的技术。</strong> asm/Javassist可以直接生产 .class字节码文件，也可以在<strong>类被加载入JVM之前</strong>动态修改类行为。应用场景有AOP（Cglib就是基于ASM）、热部署、修改其他jar包中的类等。可以配合JVMTI的<em>Instrumentation机制</em> 添加agent对premain/agentmain的ClassFileTransformer.transform方法中的class二进制数组，使用asm/Javassist修改class二进制数据，在运行前/运行时替换字节码。</p>
+<blockquote>
+<p>通过JVMTI，可以实现对JVM的多种操作，它通过接口注册各种事件勾子，在JVM事件触发时，同时触发预定义的勾子，以实现对各个JVM事件的响应，事件包括类文件加载、异常产生与捕获、线程启动和结束、进入和退出临界区、成员变量修改、GC开始和结束、方法调用进入和退出、临界区竞争与等待、VM启动与退出等等。</p>
+<p>JVMTI （JVM Tool Interface）是Java虚拟机对外提供的Native编程接口，Agent程序其实就是一个C/C++语言编写的动态链接库，后来出现了java agent可以用java写agent程序。</p>
+<p>JVMTI的<em>Instrumentation机制</em>可以把agent attench到运行中的jvm上。</p>
+</blockquote>
+<h2 id="asm">ASM</h2>
+<img src="https://img-blog.csdnimg.cn/20191106150639622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hvc2Fvcw==,size_16,color_FFFFFF,t_70" alt="sam" style="zoom:50%;" />
+<p>ASM Core API可以类比解析XML文件中的SAX方式，不需要把这个类的整个结构读取进来，就可以用流式的方法来处理字节码文件。好处是非常节约内存，但是编程难度较大。</p>
+<p>然而出于性能考虑，一般情况下编程都使用Core API。在Core API中有以下几个关键类：</p>
+<ul>
+<li>ClassReader：用于读取已经编译好的.class文件。</li>
+<li>ClassWriter：用于重新构建编译后的类，如修改类名、属性以及方法，也可以生成新的类的字节码文件。</li>
+<li>各种Visitor类：如上所述，CoreAPI根据字节码从上到下依次处理，对于字节码文件中不同的区域有不同的Visitor，比如用于访问方法的MethodVisitor、用于访问类变量的FieldVisitor、用于访问注解的AnnotationVisitor等。为了实现AOP，重点要使用的是MethodVisitor。</li>
+</ul>
+<p>ASM Tree API可以类比解析XML文件中的DOM方式，把整个类的结构读取到内存中，缺点是消耗内存多，但是编程比较简单。TreeApi不同于CoreAPI，TreeAPI通过各种Node类来映射字节码的各个区域，类比DOM节点，就可以很好地理解这种编程方式。</p>
+<ol>
+<li>
+<p>先通过ClassReader读取编译好的.class文件</p>
+</li>
+<li>
+<p>再通过访问者模式（Visitor）对字节码进行修改，常见的Visitor类有：对方法进行修改的MethodVisitor，或者对变量进行修改的FieldVisitor等，MethodVisitor中的方法有</p>
+<p>visitCode会在某个方法被访问时调用，故前置增强逻辑在此编写，<br>
+visitInsn会在无参数的指令的执行时调用，退出语句return被调用时就会调用visitInsn方法，因此，后置增强逻辑可以写在这里</p>
+<p>重写上述方法，手动写入或者修改字节码。通过调用methodVisitor的visitXXXXInsn()方法就可以实现字节码的插入，XXXX对应相应的操作码助记符类型，比如mv.visitLdcInsn(“end”)对应的操作码就是ldc “end”，即将字符串“end”压入栈。使用idea插件ASM ByteCode Outline 查看ASMified并和原来的原文件生成的asm比较。</p>
+</li>
+<li>
+<p>通过ClassWriter重新构建编译修改后的字节码文件、或者将修改后的字节码文件输出到文件中</p>
+</li>
+</ol>
+<h3 id="cglib">Cglib</h3>
+<p>CGLIB创建一个继承实现类的子类，用Asm库动态修改子类的代码来实现AOP效果</p>
+<p>调用<code>Enhancer</code>来动态生成子类，设置其父类和并在<code>MethodInterceptor</code>方法拦截器中对方法修改。</p>
+<h2 id="javassist">Javassist</h2>
+<p>ASM是在指令层次上操作字节码的，在指令层次上操作字节码的框架实现起来比较晦涩。利用Javassist实现字节码增强时，可以无须关注字节码刻板的结构，编程简单。直接使用java编码的形式，而不需要了解虚拟机指令，就能动态改变类的结构或者动态生成类。其中最重要的是ClassPool、CtClass、CtMethod、CtField这四个类：</p>
+<ul>
+<li>CtClass（compile-time class）：编译时类信息，它是一个class文件在代码中的抽象表现形式，可以通过一个类的全限定名来获取一个CtClass对象，用来表示这个类文件。</li>
+<li>ClassPool：从开发视角来看，ClassPool是一张保存CtClass信息的HashTable，key为类名，value为类名对应的CtClass对象。当我们需要对某个类进行修改时，就是通过pool.getCtClass(“className”)方法从pool中获取到相应的CtClass。</li>
+<li>CtMethod、CtField：这两个比较好理解，对应的是类中的方法和属性。</li>
+</ul>
+<p>从pool中获取到相应的CtClass对象和其中的方法，然后执行method.insertBefore和insertAfter方法，参数为要插入的Java代码，再以字符串的形式传入即可，实现起来极为简单。</p>
+<h2 id="运行时注入">运行时注入</h2>
+<p>果只能在类加载前对类中字节码进行修改，那将失去其存在意义，毕竟大部分运行的Java系统，都是在运行状态的线上系统。结合之前的JVMTI 的Instrumentation机制，定义一个agentmain attach到运行的jvm进程上。</p>
+<blockquote>
+<p>Agent是JVMTI的一种实现，Agent有两种启动方式</p>
+<ol>
+<li>一是随Java进程启动而启动，经常见到的java -agentlib就是这种方式；</li>
+<li>二是运行时载入，通过attach API，将模块（jar包）动态地Attach到指定进程id的Java进程内</li>
+</ol>
+<figure data-type="image" tabindex="4"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hvc2Fvcw==,size_16,color_FFFFFF,t_70.png" alt="在这里插入图片描述" loading="lazy"></figure>
+<p>通过Attach API的loadAgent()方法，将打包好的Agent jar包动态Attach到目标JVM上</p>
+</blockquote>
+<ol>
+<li>
+<p>定义agent：在agentmain中addTransformer添加ClassFileTransformer后，在ClassFileTransformer.transform内使用javassist或asm完成字节码的修改。然后retransformClasses把修改的类从新载入。ctClass要引入classpath和解冻</p>
+<pre><code class="language-java">//CtClass ctClass = classPool.get(&quot;com.aop.inst.RuntimeInstr&quot;);
+//若NotFoundException可能是不同classloader造成的。用如下方法先加cp
+classPool.insertClassPath(new ClassClassPath(RuntimeInstr.class));
+ctClass= classPool.get(RuntimeInstr.class.getName());
+</code></pre>
+<p>CtClass有如下操作时writeFile(), toClass(), or toBytecode(), Javassist freezes that CtClass会被冻结，操作完成后要解冻ctClass.defrost()</p>
+</li>
+<li>
+<p>打包agent为jar，javac -cp 引入所依赖的包并编译成class，依赖其他类时也可以将其打成jar再依赖。:分割(win是/)；-cp即classpath即查找class的路径。<br>
+把编译成的class打包成jar，必须在manifest.mf中定义Agent-Class:代理类和Class-Path:。manifest.mf要在末尾空一行。manifest.mf的键值对(key： value)值前空格。要添加多个cp时要换行，换行时在行尾要空格，在新行的行首也要空格。</p>
+<pre><code class="language-bash">javac -cp /Users/joshuachang/.m2/repository/org/javassist/javassist/3.28.0-GA/javassist-3.28.0-GA.jar:runtime.jar com/aop/inst/RuntimeAgent.java 
+
+jar cvfm inst.jar com/aop/inst/MANIFEST.MF com/aop/inst/RuntimeAgent.class com/aop/inst/RuntimeAgent\$1.class com/aop/inst/RuntimeAgent\$1\$1.class com/aop/inst/RuntimeAgent\$1\$1\$1.class com/aop/inst/RuntimeInstr.class 
+</code></pre>
+</li>
+<li>
+<p>先运行jvm(agent所代理的类)并得到pid。再运行VirtualMachine.attach(pid)把agent连上jvm，再loadAgent把agent所在的jar包加载。</p>
+</li>
+</ol>
+<p>面向切面编程（Aspect-Oriented Programming，AOP）。面向方面编程的核心理念是定义切入点（pointcut）以及通知（advice）。程序控制流中所有匹配该切入点的连接点（joinpoint）都将执行这段通知代码。面向切面的一种实现方式就是字节码注入，比如AspectJ、DiSL(它支持用注解来定义切入点，用普通 Java 方法来定义通知)</p>
+<p>1、浅拷贝：对基本数据类型进行值传递，对引用数据类型进行引用传递般的拷贝，此为浅拷贝。</p>
+<p>2、深拷贝：对基本数据类型进行值传递，对引用数据类型，创建一个新的对象，并复制其内容，此为深拷贝。</p>
+<blockquote>
+<p>无论是浅拷贝还是深拷贝，都需要实现 clone() 方法，浅拷贝和深拷贝只是相对的，如果一个对象内部只有基本数据类型，那用 clone() 方法获取到的就是这个对象的深拷贝，而如果其内部还有引用数据类型，那用 clone() 方法就是一次浅拷贝的操作。</p>
+<p>深拷贝比较常用的方案有两种：</p>
+<ol>
+<li>序列化（serialization）这个对象，再反序列化回来，就可以得到这个新的对象，无非就是序列化的规则需要我们自己来写。</li>
+<li>继续利用 clone() 方法，既然 clone() 方法，是我们来重写的，实际上我们可以对其内的引用类型的变量，再进行一次 clone()。</li>
+</ol>
+</blockquote>
+<h1 id="unsafe">UnSafe</h1>
+<p>Unsafe 是 java 留给开发者的后门，用于直接操作系统内存且不受 jvm 管辖。在java 的并发包和众多偏向底层的框架中都有大量应用。该类的大部分方法均为 native方法，供一些用于执行低级别、不安全操作的方法，如直接访问系统内存资源、自主管理内存资源等，这些方法在提升Java运行效率、增强Java语言底层资源操作能力方面起到了很大的作用。Unsafe类的使用都是受限制的，只有授信的代码才能获得该类的实例。</p>
+<figure data-type="image" tabindex="5"><img src="https://img2018.cnblogs.com/blog/1607781/201908/1607781-20190811141555811-1035387188.png" alt="unsafe" loading="lazy"></figure>
+<p>Unsafe类为一单例实现。使用方式</p>
+<ol>
+<li>受限制的getUnsafe() ，当且仅当调用getUnsafe方法的类为引导类加载器所加载时才合法。把调用unSafe方法的类打成的jar包路径追加到bootstrap中<code>-Xbootclasspath/a</code></li>
+<li>反射获取单例对象theUnsafe</li>
+</ol>
+<h3 id="内存操作">内存操作</h3>
+<p>我们在Java中创建的对象都处于堆内内存（heap）中，堆内内存是由JVM所管控的Java进程内存，并且它们遵循JVM的内存管理机制，JVM会采用垃圾回收机制统一管理堆内存。与之相对的是堆外内存，存在于JVM管控之外的内存区域，Java中对堆外内存的操作，依赖于Unsafe提供的操作堆外内存的native方法。</p>
+<p>unsafe提供内存的分配、拷贝、释放、给定地址值操作等方法。</p>
+<h4 id="典型应用directbytebuffer">典型应用DirectByteBuffer。</h4>
+<p>其构造函数中创建DirectByteBuffer的时候，通过Unsafe.allocateMemory分配内存、Unsafe.setMemory进行内存初始化，而后构建Cleaner对象用于跟踪DirectByteBuffer对象的垃圾回收，以实现当DirectByteBuffer被垃圾回收时，分配的堆外内存一起被释放。</p>
+<blockquote>
+<p>如何通过构建垃圾回收追踪对象Cleaner实现堆外内存释放呢？</p>
+<p>Cleaner继承自虚引用PhantomReference，通常PhantomReference与引用队列ReferenceQueue结合使用，可以实现虚引用关联对象被垃圾回收时能够进行系统通知、资源清理等功能。</p>
+</blockquote>
+<h3 id="cas相关">CAS相关</h3>
+<p>当前的处理器基本都支持CAS，只不过不同的厂家的实现不一样罢了。<strong>CAS有三个操作数：内存值V、旧的预期值E、要修改的值B，当且仅当预期值A和内存值V相同时，将内存值修改为B并返回true，否则什么都不做并返回false</strong>。</p>
+<p>CAS的全称是Compare And Swap 即比较交换，其算法核心思想如下</p>
+<blockquote>
+<p>执行函数：CAS(V,E,N)</p>
+</blockquote>
+<p>包含3个参数</p>
+<ol>
+<li>V表示要更新的变量</li>
+<li>E表示预期值</li>
+<li>N表示新值</li>
+</ol>
+<p>如果V值等于E值，则将V的值设为N。若V值和E值不同，则说明已经有其他线程做了更新，则当前线程什么都不做。</p>
+<p>CAS，Compare and Swap即比较并交换，设计并发算法时常用到的一种技术，java.util.concurrent包全完建立在CAS之上，没有CAS也就没有此包。CAS是一条CPU的原子指令（cmpxchg指令），不会造成所谓的数据不一致问题，Unsafe提供的CAS方法（如compareAndSwapXXX）底层实现即为CPU指令cmpxchg。</p>
+<h4 id="典型应用atomicinteger">典型应用AtomicInteger</h4>
+<p>CAS在java.util.concurrent.atomic相关类、Java AQS、CurrentHashMap等实现上有非常广泛的应用。</p>
+<p>在AtomicInteger的实现中，静态字段valueOffset即为字段value的<strong>内存偏移地址</strong>。在AtomicInteger初始化时的静态代码块中通过Unsafe的objectFieldOffset方法获取valueOffset的值。在AtomicInteger中提供的线程安全方法中，通过字段valueOffset的值可以定位到AtomicInteger对象中value的内存地址，从而可以根据CAS实现对value字段的原子操作。</p>
+<h3 id="线程调度">线程调度</h3>
+<p>park、unpark即可实现线程的挂起与恢复，将一个线程进行挂起是通过park方法实现的，调用park方法后，线程将一直阻塞直到超时或者中断等条件出现；unpark可以终止一个挂起的线程，使其恢复正常。</p>
+<h4 id="典型应用">典型应用</h4>
+<p>Java锁和同步器框架的核心类AbstractQueuedSynchronizer，就是通过调用<code>LockSupport.park()</code>和<code>LockSupport.unpark()</code>实现线程的阻塞和唤醒的，而LockSupport的park、unpark方法实际是调用Unsafe的park、unpark方式来实现。</p>
+<h3 id="class相关">Class相关</h3>
+<p>主要提供Class和它的静态字段的操作相关方法，包含静态字段内存定位、定义类、定义匿名类、检验&amp;确保初始化等。</p>
+<h4 id="典型应用-2">典型应用</h4>
+<p>从Java 8开始，JDK使用invokedynamic及VM Anonymous Class结合来实现Java语言层面上的Lambda表达式。</p>
+<p>通过invokedynamic指令调用引导方法生成调用点，在此过程中，会通过ASM动态生成字节码，而后利用<strong>Unsafe的defineAnonymousClass</strong>方法定义实现相应的函数式接口的匿名类，然后再实例化此匿名类，并返回与此匿名类中函数式方法的方法句柄关联的调用点；而后可以通过此调用点实现调用相应Lambda表达式定义逻辑的功能。</p>
+<blockquote>
+<ul>
+<li><strong>invokedynamic</strong>： invokedynamic是Java 7为了实现在JVM上运行动态语言而引入的一条新的虚拟机指令，它可以实现在运行期动态解析出调用点限定符所引用的方法，然后再执行该方法，invokedynamic指令的分派逻辑是由用户设定的引导方法决定。</li>
+<li><strong>VM Anonymous Class</strong>：可以看做是一种模板机制，针对于程序动态生成很多结构相同、仅若干常量不同的类时，可以先创建包含常量占位符的模板类，而后通过Unsafe.defineAnonymousClass方法定义具体类时填充模板的占位符生成具体的匿名类。</li>
+</ul>
+</blockquote>
+<h3 id="对象操作">对象操作</h3>
+<p>主要包含对象成员属性相关操作及非常规的对象实例化方式等相关方法。</p>
+<h4 id="典型应用-3">典型应用</h4>
+<ul>
+<li><strong>常规对象实例化方式</strong>：我们通常所用到的创建对象的方式，从本质上来讲，都是通过new机制来实现对象的创建。但是，new机制有个特点就是当类只提供有参的构造函数且无显示声明无参构造函数时，则必须使用有参构造函数进行对象构造，而使用有参构造函数时，必须传递相应个数的参数才能完成对象实例化。</li>
+<li><strong>非常规的实例化方式</strong>：而Unsafe中提供allocateInstance方法，仅通过Class对象就可以创建此类的实例对象，而且不需要调用其构造函数、初始化代码、JVM安全检查等。它抑制修饰符检测，也就是即使构造器是private修饰的也能通过此方法实例化，只需提类对象即可创建相应的对象。由于这种特性，allocateInstance在java.lang.invoke、Objenesis（提供绕过类构造器的对象生成方式）、Gson（反序列化时用到）中都有相应的应用。</li>
+</ul>
+<p>在Gson反序列化时，如果类有默认构造函数，则通过反射调用默认构造函数创建实例，否则通过UnsafeAllocator来实现对象实例的构造，UnsafeAllocator通过调用Unsafe的allocateInstance实现对象的实例化，保证在目标类无默认构造函数时，反序列化不够影响。</p>
+<h3 id="数组相关">数组相关</h3>
+<p>数据操作相关的arrayBaseOffset与arrayIndexScale这两个方法，两者配合起来使用，即可定位数组中每个元素在内存中的位置。</p>
+<pre><code class="language-java">//返回数组中第一个元素的偏移地址
+public native int arrayBaseOffset(Class&lt;?&gt; arrayClass);
+//返回数组中一个元素占用的大小
+public native int arrayIndexScale(Class&lt;?&gt; arrayClass);
+</code></pre>
+<h4 id="典型应用-4">典型应用</h4>
+<p>这两个与数据操作相关的方法，在java.util.concurrent.atomic 包下的AtomicIntegerArray（可以实现对Integer数组中每个元素的原子性操作）中有典型的应用。AtomicIntegerArray源码中，通过Unsafe的arrayBaseOffset、arrayIndexScale分别获取数组首元素的偏移地址base及单个元素大小因子scale。后续相关原子性操作，均依赖于这两个值进行数组中元素的定位，如getAndAdd方法即通过checkedByteOffset方法获取某数组元素的偏移地址，而后通过CAS实现原子性操作。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%AD%97%E8%8A%82%E7%A0%81">字节码</a></li>
+<li><a href="#%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%E5%8F%8A%E6%8C%87%E4%BB%A4">操作数栈及指令</a></li>
+<li><a href="#jvmti%E5%90%8E%E9%97%A8-javaagent-instrumentation">JVMTI后门、javaagent、Instrumentation</a></li>
+<li><a href="#%E5%AD%97%E8%8A%82%E7%A0%81%E5%A2%9E%E5%BC%BA">字节码增强</a>
+<ul>
+<li><a href="#asm">ASM</a>
+<ul>
+<li><a href="#cglib">Cglib</a></li>
+</ul>
+</li>
+<li><a href="#javassist">Javassist</a></li>
+<li><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%B3%A8%E5%85%A5">运行时注入</a></li>
+</ul>
+</li>
+<li><a href="#unsafe">UnSafe</a><br>
+*
+<ul>
+<li><a href="#%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C">内存操作</a>
+<ul>
+<li><a href="#%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8directbytebuffer">典型应用DirectByteBuffer。</a></li>
+</ul>
+</li>
+<li><a href="#cas%E7%9B%B8%E5%85%B3">CAS相关</a>
+<ul>
+<li><a href="#%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8atomicinteger">典型应用AtomicInteger</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E8%B0%83%E5%BA%A6">线程调度</a>
+<ul>
+<li><a href="#%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8">典型应用</a></li>
+</ul>
+</li>
+<li><a href="#class%E7%9B%B8%E5%85%B3">Class相关</a>
+<ul>
+<li><a href="#%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8-2">典型应用</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AF%B9%E8%B1%A1%E6%93%8D%E4%BD%9C">对象操作</a>
+<ul>
+<li><a href="#%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8-3">典型应用</a></li>
+</ul>
+</li>
+<li><a href="#%E6%95%B0%E7%BB%84%E7%9B%B8%E5%85%B3">数组相关</a>
+<ul>
+<li><a href="#%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8-4">典型应用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/jvm/">
+              <h3 class="post-title">
+                JVM
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
