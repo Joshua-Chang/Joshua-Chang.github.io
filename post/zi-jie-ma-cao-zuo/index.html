@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>字节码操作 | Joshua-Chang`Blog</title>
-<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1626162429103">
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1627017694079">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="字节码操作 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
@@ -31,7 +31,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Joshua-Chang.github.io">
-  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1626162429103" alt="">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1627017694079" alt="">
   </a>
   <h1 class="site-title">
     Joshua-Chang`Blog
@@ -91,7 +91,7 @@
                 2021-07-08
               </span>
               <span>
-                29 min read
+                31 min read
               </span>
               
             </div>
@@ -430,7 +430,7 @@ jar cvfm inst.jar com/aop/inst/MANIFEST.MF com/aop/inst/RuntimeAgent.class com/a
 </blockquote>
 <h1 id="unsafe">UnSafe</h1>
 <p>Unsafe 是 java 留给开发者的后门，用于直接操作系统内存且不受 jvm 管辖。在java 的并发包和众多偏向底层的框架中都有大量应用。该类的大部分方法均为 native方法，供一些用于执行低级别、不安全操作的方法，如直接访问系统内存资源、自主管理内存资源等，这些方法在提升Java运行效率、增强Java语言底层资源操作能力方面起到了很大的作用。Unsafe类的使用都是受限制的，只有授信的代码才能获得该类的实例。</p>
-<figure data-type="image" tabindex="5"><img src="https://img2018.cnblogs.com/blog/1607781/201908/1607781-20190811141555811-1035387188.png" alt="unsafe" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/1607781-20190811141555811-1035387188.png" alt="unsafe" loading="lazy"></figure>
 <p>Unsafe类为一单例实现。使用方式</p>
 <ol>
 <li>受限制的getUnsafe() ，当且仅当调用getUnsafe方法的类为引导类加载器所加载时才合法。把调用unSafe方法的类打成的jar包路径追加到bootstrap中<code>-Xbootclasspath/a</code></li>
@@ -494,6 +494,49 @@ public native int arrayIndexScale(Class&lt;?&gt; arrayClass);
 </code></pre>
 <h4 id="典型应用-4">典型应用</h4>
 <p>这两个与数据操作相关的方法，在java.util.concurrent.atomic 包下的AtomicIntegerArray（可以实现对Integer数组中每个元素的原子性操作）中有典型的应用。AtomicIntegerArray源码中，通过Unsafe的arrayBaseOffset、arrayIndexScale分别获取数组首元素的偏移地址base及单个元素大小因子scale。后续相关原子性操作，均依赖于这两个值进行数组中元素的定位，如getAndAdd方法即通过checkedByteOffset方法获取某数组元素的偏移地址，而后通过CAS实现原子性操作。</p>
+<h2 id="内部类">内部类</h2>
+<p>javap查看其字节码和源码不同。</p>
+<ol>
+<li>
+<p>编译器给内部类和外部类的每个私有属性，都生成了相应的<code>access$0 access$1..access$5</code> 等静态方法，以供对方<strong>访问</strong>。</p>
+</li>
+<li>
+<p>内部类构造的时候，会将外部类的引用<code>this$0</code>传递进来，并且作为内部类的一个属性。<strong>内部类会持有一个其外部类的引用</strong>，因此内部类不必通过实例外部类，就可以直接访问外部类的属性。但访问其私有属性是因为编译生成的<code>access</code>方法。</p>
+<p>外部类可以通过实例化内部类，来访问其内部属性。可以访问内部类的私有属性，同样是编译时对方暴露了访问方法<code>access</code>。<strong>匿名内部类的私有成员就不可被外部类访问</strong>。</p>
+</li>
+</ol>
+<pre><code class="language-java">public class Outer {
+    private char outChar;
+    public void fun1(){
+        Inner inner = new Inner();
+        inner.inChar='1';//通过实例方法内部类私有变量
+    }
+    public class Inner {
+        private char inChar;
+        public void fun2(){
+            outChar='2';//直接访问外部类私有变量
+        }
+    }
+}
+</code></pre>
+<pre><code class="language-java">//javap
+public class com.data.linkedlist.Outer {
+    static char access$102(com.data.linkedlist.Outer, char);//供内部类访问的方法
+    Code:
+       0: aload_0
+       1: iload_1
+       2: dup_x1
+       3: putfield      #1                  // Field outChar:C
+       6: ireturn
+}
+public class com.data.linkedlist.Outer$Inner {
+  final com.data.linkedlist.Outer this$0;//内部类持有外部引用
+  static char access$002(com.data.linkedlist.Outer$Inner, char);//供外部类访问的方法
+	Code：
+    //.....
+  	3: putfield      #1                  // Field inChar:C
+}
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -545,6 +588,7 @@ public native int arrayIndexScale(Class&lt;?&gt; arrayClass);
 <li><a href="#%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8-4">典型应用</a></li>
 </ul>
 </li>
+<li><a href="#%E5%86%85%E9%83%A8%E7%B1%BB">内部类</a></li>
 </ul>
 </li>
 </ul>

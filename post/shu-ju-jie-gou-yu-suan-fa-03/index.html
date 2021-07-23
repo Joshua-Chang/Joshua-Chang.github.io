@@ -1,0 +1,1119 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>查找 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1627017694079">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="查找 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="二分查找
+算法描述
+二分查找（Binary Search）也叫折半查找，是针对有序数据集合的查找算法。用循环或递归来实现：
+
+折半取中，判断元素与目标元素的大小关系
+
+
+小于——往前继续折半
+
+
+大于——往后继续折半
+
+
+等于——返回
+
+
+..." />
+    <meta name="keywords" content="数据结构,算法" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1627017694079" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              查找
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-03-13
+              </span>
+              <span>
+                51 min read
+              </span>
+              
+                <a href="https://Joshua-Chang.github.io/tag/BErOFr5XG/" class="post-tag">
+                  # 数据结构
+                </a>
+              
+                <a href="https://Joshua-Chang.github.io/tag/adLQuSjePQ/" class="post-tag">
+                  # 算法
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://static001.geekbang.org/resource/image/ca/df/ca9c8119a7532fc8a7b249af019bf3df.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="二分查找">二分查找</h1>
+<h2 id="算法描述">算法描述</h2>
+<p>二分查找（Binary Search）也叫折半查找，是针对有序数据集合的查找算法。用循环或递归来实现：</p>
+<ul>
+<li>折半取中，判断元素与目标元素的大小关系
+<ul>
+<li>
+<p>小于——往前继续折半</p>
+</li>
+<li>
+<p>大于——往后继续折半</p>
+</li>
+<li>
+<p>等于——返回</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>时间复杂度<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></p>
+<p>易错点：</p>
+<ul>
+<li>
+<p>循环条件：是 low&lt;=high，而不是 low&lt;high。</p>
+</li>
+<li>
+<p>mid与查找的值有大于、小于、等于三种关系。要分别考虑，不要漏掉。</p>
+</li>
+<li>
+<p>mid 的取值：mid=(low+high)/2 这种写法不好。若 low 和 high 比较大的话，两者之和有可能溢出。</p>
+<p>优化<code>low+(high-low)/2</code> 或位运算 <code>low+((high-low)&gt;&gt;1)</code></p>
+</li>
+<li>
+<p>low 和 high 的更新，折半时<code>low=mid+1 或 high=mid-1</code> ，一定要 +1 或 -1，直接<code>low=mid 或high=mid</code>，在<code>high=low≠value</code>	即时查找不到时，可能会发生死循环。</p>
+</li>
+<li>
+<h2 id="适用场景">适用场景</h2>
+</li>
+</ul>
+<ul>
+<li>依赖顺序表结构。因为要根据下标随机访问。数组可以；链表就不适合，加大了复杂度。</li>
+<li>数据本身必须有序。即时对无序数据增加复杂度去排序，也只适合用在插入、删除操作不频繁的数据集合。</li>
+<li>数据量相对比较元素的开销要足够大——不然遍历即可</li>
+<li>数据量相对内存空间不能太大——不然顺序表装不下</li>
+</ul>
+<p>最简单的二分查找：在<strong>不存在重复元素</strong>的有序数组中，查找值<strong>等于</strong>给定值的元素。</p>
+<h2 id="变体">变体</h2>
+<p>复杂二分查找：存在重复元素，查找第一个或最后一个等于、大于、小于给定值的元素。</p>
+<p>要根据对<code>arr[mid] = value</code>这种找到了元素的情况，进行额外处理</p>
+<pre><code class="language-java">public int bSearchFirstEq(int[] arr, int size, int value) {
+    int low = arr[0];
+    int high = arr[size - 1];
+    while (low &lt;= high) {
+        int mid = low + ((low - high) &gt;&gt; 1);
+        if (arr[mid] &lt; value) low = mid + 1;
+        else if (arr[mid] &gt; value) high = mid - 1;
+        else {
+	          //mid没有上一个位置，或mid的上一个位置的值也不是value
+            if (mid == 0 || arr[mid - 1] != value) return mid;
+            else high = mid - 1;/*mid前还有value，value就在[low,mid-1]间*/
+        }
+    }
+    return -1;
+}
+</code></pre>
+<h1 id="跳表skip-list">跳表（Skip List）</h1>
+<p>链表加索引的结构，就是跳表</p>
+<p>支持快速地：</p>
+<ul>
+<li>插入</li>
+<li>删除</li>
+<li>查找</li>
+</ul>
+<p>某些情况下，跳表甚至可以替代红黑树（Red-Black tree）。Redis 当中的有序集合（Sorted Set）是用跳表实现的。</p>
+<h2 id="跳表的结构">跳表的结构</h2>
+<p>跳表是对链表的改进。对于单链表来说，即使内容是有序的，查找具体某个元素也只能从头到尾遍历链表，时间复杂度也要达到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>。二分查找又只适合数组。对链表稍加改造，就可以支持类似“二分”的查找算法。改造之后的数据结构叫作<strong>跳表</strong>（Skip list）</p>
+<p>每两个结点提取一个结点到上一级，把抽出来的那一级叫作<strong>索引</strong>或**索引层。**查找某个结点，先在索引层遍历，遍历到下个节点大于要查找的元素前，再通过索引层结点的 down 指针，下降到原始链表这一层，继续遍历。</p>
+<p>跳表的核心思想是用空间换时间，构建足够多级数的索引，来缩短查找具体值的时间开销。抽取结点到上级索引可以是每两个，或者更多个，索引占用的额外空间就越少。实际开发中，不必太在意索引占用的额外空间，和原始链表中存储的对象比起来可以忽略。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/49/65/492206afe5e2fef9f683c7cff83afa65.jpg" alt="具有二级索引的跳表示例" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/65379f0651bc3a7cfd13ab8694c4d26c.jpg" alt="在跳表中插入一个元素" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<h2 id="高效地插入和删除">高效地插入和删除</h2>
+<p>对于链表来说，插入或删除一个<u><em>给定结点</em></u>的时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。因此，对于跳表来说，插入或删除某个结点，其时间复杂度完全依赖于查找这类结点的耗时。而我们知道，在跳表中查找某个元素的时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>。因此，在跳表中插入或删除某个结点的时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>。</p>
+<h2 id="跳表索引的动态更新">跳表索引的动态更新</h2>
+<p>为了维护跳表的结构，在不断插入数据的过程中，有必要动态维护跳表的索引结构。即如果链表中结点多了，索引结点就相应地增加一些，避免复杂度退化。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/c8/c5/c863074c01c26538cf0134eaf8dc67c5.jpg" alt="索引" loading="lazy"></th>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/a861445d0b53fc842f38919365b004a7.jpg" alt="在跳表中插入一个元素并更新索引" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>一般来说，可以在插入时采用<strong>随机层级</strong>法。具体来说是引入一个输出整数的随机函数。当随机函数输出 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">K</span></span></span></span>，则更新从第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 级至第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">K</span></span></span></span> 级的索引。为了保证索引结构和数据规模大小的匹配，一般采用二项分布的随机函数。</p>
+<p>红黑树、AVL 树这样平衡二叉树，通过左右旋的方式保持左右子树的大小平衡，而跳表是通过随机函数来维护这种“平衡性”。</p>
+<h2 id="复杂度分析">复杂度分析</h2>
+<p>跳表的空间复杂度都是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>；时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>。</p>
+<h1 id="散列表">散列表</h1>
+<p>Hash Table也叫“哈希表”或者“Hash 表，<strong>用的是数组支持按照下标随机访问数据的特性，所以散列表其实就是数组的一种扩展，利用数组下标的随机访问特性。</strong></p>
+<h2 id="散列思想">散列思想</h2>
+<ul>
+<li>键/关键字/Key：用来标识一个数据</li>
+<li>散列函数/哈希函数/Hash：将 Key 映射到数组下标的函数</li>
+<li>散列值/哈希值：Key 经过散列函数得到的数值</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://static001.geekbang.org/resource/image/92/73/92c89a57e21f49d2f14f4424343a2773.jpg" alt="" loading="lazy"></figure>
+<p>本质：利用散列函数将关键字映射到数组下标，而后利用数组随机访问时间复杂度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Θ</mi><mo>(</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">\Theta(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 的特性快速访问。</p>
+<h2 id="散列函数">散列函数</h2>
+<ul>
+<li>形式：<code>hash(key)</code></li>
+<li>基本要求
+<ol>
+<li>散列值是非负整数</li>
+<li>如果 <code>key1 == key2</code>，那么 <code>hash(key1) == hash(key2)</code></li>
+<li>如果 <code>key1 != key2</code>，那么 <code>hash(key1) != hash(key2)</code></li>
+</ol>
+</li>
+</ul>
+<p>第 3 个要求，实际上不可能对任意的 <code>key1</code> 和 <code>key2</code> 都成立。因为通常散列函数的输出范围有限而输入范围无限。</p>
+<h2 id="散列冲突">散列冲突</h2>
+<ul>
+<li>散列冲突：<code>key1 != key2</code> 但 <code>hash(key1) == hash(key2)</code></li>
+</ul>
+<p>散列冲突会导致不同键值映射到散列表的同一个位置。即便像<a href="https://zh.wikipedia.org/wiki/MD5">MD5</a>、<a href="https://zh.wikipedia.org/wiki/SHA%E5%AE%B6%E6%97%8F">SHA</a>、<a href="https://zh.wikipedia.org/wiki/%E5%BE%AA%E7%92%B0%E5%86%97%E9%A4%98%E6%A0%A1%E9%A9%97">CRC</a>等哈希算法，也无法完全避免这种<strong>散列冲突</strong>。几乎无法找到一个完美的无冲突的散列函数，即便能找到，付出的时间成本、计算成本也是很大的，所以针对散列冲突问题，我们需要通过其他途径来解决。</p>
+<p>几乎无法找到一个完美的无冲突的散列函数，即便能找到，付出的时间成本、计算成本也是很大的，所以针对散列冲突问题，需要通过其他途径来解决。</p>
+<p>常用的散列冲突解决方法有两类，开放寻址法（open addressing）和链表法（chaining）。</p>
+<h3 id="开放寻址法">开放寻址法</h3>
+<p>如果遇到冲突，那就继续寻找下一个空闲的槽位。</p>
+<h4 id="线性探测">线性探测</h4>
+<p>插入时，如果遇到冲突，那就依次往下寻找下一个空闲的槽位。（橙色表示已被占用的槽位，黄色表示空闲槽位）</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/5c/d5/5c31a3127cbc00f0c63409bbe1fbd0d5.jpg" alt="" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/fe/1d/fe7482ba09670cbe05a9dfe4dd49bd1d.jpg" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>查找时，如果目标槽位上不是目标数据，则依次往下寻找；直至遇见目标数据或空槽位。</p>
+<p>可以将删除的元素，特殊标记为 <code>deleted</code>。当线性探测查找的时候，遇到标记为 <code>deleted</code> 的空间，并不是停下来，而是继续往下探测。</p>
+<p><strong>平方探测（Quadratic probing）</strong></p>
+<p>插入时，如果遇到冲突，那就往后寻找下一个空闲的槽位，其步长为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>1</mn><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">1^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">1</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">2^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>3</mn><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">3^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">3</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>…</mo></mrow><annotation encoding="application/x-tex">\ldots</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.12em;vertical-align:0em;"></span><span class="minner">…</span></span></span></span>。</p>
+<p>查找时，如果目标槽位上不是目标数据，则依次往下寻找，其步长为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>1</mn><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">1^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">1</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">2^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>3</mn><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">3^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">3</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>…</mo></mrow><annotation encoding="application/x-tex">\ldots</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.12em;vertical-align:0em;"></span><span class="minner">…</span></span></span></span>；</p>
+<p><strong>双重散列</strong>（Double hashing）先用第一个散列函数，如果计算得到的存储位置已经被占用，再用第二个散列函数，依次类推，直到找到空闲的存储位置。</p>
+<p>还有很多，比如直接寻址法、平方取中法、折叠法、随机数法等。</p>
+<h4 id="装载因子load-factor">装载因子（load factor）</h4>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext>load factor</mtext><mo>=</mo><mfrac><mrow><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mo>(</mo><mo>)</mo></mrow><mrow><mi>c</mi><mi>a</mi><mi>p</mi><mi>a</mi><mi>c</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>(</mo><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{load factor} = \frac{size()}{capacity()}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord text"><span class="mord">load factor</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">p</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">i</span><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span><span class="mopen mtight">(</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight">i</span><span class="mord mathdefault mtight" style="margin-right:0.04398em;">z</span><span class="mord mathdefault mtight">e</span><span class="mopen mtight">(</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p><strong>装载因子</strong>（load factor）来表示空闲槽位的多少。装载因子越大，说明散列表中的元素越多，空闲位置越少，散列冲突的概率就越大。插入数据的过程要多次寻址或者拉很长的链，查找的过程也会因此变得很慢。</p>
+<h3 id="链表法">链表法</h3>
+<p>所有散列值相同的 key 以链表的形式存储在同一个槽位中。</p>
+<figure data-type="image" tabindex="2"><img src="https://static001.geekbang.org/resource/image/a4/7f/a4b77d593e4cb76acb2b0689294ec17f.jpg" alt="" loading="lazy"></figure>
+<p>插入时，不论是否有冲突，直接插入目标位置的链表。</p>
+<p>查找时，遍历目标位置的链表来查询。</p>
+<p>删除时，遍历目标位置的链表来删除。</p>
+<h1 id="散列表-2">散列表</h1>
+<p>核心：散列表的效率仅是在理论上能达到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。</p>
+<p>极端情况下，数据经过散列函数之后，都散列到同一个槽里，散列表就会退化为链表。使得散列表的性能急剧下降。</p>
+<p>如何设计一个工业级的散列表？</p>
+<h2 id="散列函数-2">散列函数</h2>
+<ul>
+<li>不能过于复杂——避免计算散列过程耗时</li>
+<li>散列函数的结果要尽可能均匀——最小化散列冲突机率</li>
+</ul>
+<h2 id="动态扩容rehash">动态扩容ReHash</h2>
+<p>装载因子越大，说明散列表中的元素越多，空闲位置越少，散列冲突的概率就越大。插入数据的过程要多次寻址或者拉很长的链，查找的过程也会因此变得很慢。</p>
+<p>针对散列表的扩容，因为散列表的大小变了，数据的存储位置也变了，所以需要通过散列函数重新计算每个数据的存储位置。即<code>ReHash</code></p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/67/43/67d12e07a7d673a9c1d14354ad029443.jpg" alt="" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/6d/cb/6d6736f986ec4b75dabc5472965fb9cb.jpg" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>直接拷贝移动很低效，如何提高扩容效率？</p>
+<p>——将 rehash 的步骤，均摊到每一次插入中去：</p>
+<ul>
+<li>申请新的空间</li>
+<li>不立即使用</li>
+<li>每次来了新的数据，往新表插入数据</li>
+<li>同时，取出旧表的一个数据，插入新表</li>
+</ul>
+<h2 id="解决冲突">解决冲突</h2>
+<p>LinkedHashMap 就采用了链表法解决冲突，ThreadLocalMap 是通过线性探测的开放寻址法来解决冲突。</p>
+<p><strong>当数据量比较小、装载因子小的时候，适合采用开放寻址法。</strong></p>
+<p><strong>基于链表的散列冲突处理方法比较适合存储大对象、大数据量的散列表，而且，比起开放寻址法，它更加灵活，支持更多的优化策略，比如用红黑树代替链表</strong>。</p>
+<p>开放寻址法，优点：</p>
+<ul>
+<li>不需要额外空间</li>
+<li>有效利用 CPU 缓存</li>
+<li>方便序列化</li>
+</ul>
+<p>开放寻址法，缺点：</p>
+<ul>
+<li>查找、删除数据时，涉及到 <code>delete</code> 标志，相对麻烦</li>
+<li>冲突的代价更高</li>
+<li>对装载因子敏感</li>
+</ul>
+<p>链表法，优点：</p>
+<ul>
+<li>内存利用率较高——链表的优点</li>
+<li>对装载因子不敏感</li>
+</ul>
+<p>链表法，缺点：</p>
+<ul>
+<li>需要额外的空间（保存指针）</li>
+<li>对 CPU 缓存不友好</li>
+</ul>
+<p>——将链表改造成更高效的数据结构，例如跳表、红黑树</p>
+<h2 id="java-中的-hashmap">JAVA 中的 HashMap</h2>
+<ul>
+<li>初始大小：16</li>
+<li>装载因子：超过 0.75 时动态扩容</li>
+<li>散列冲突：优化版的链表法（当槽位冲突元素超过 8 时使用红黑树，否则使用链表）</li>
+</ul>
+<h1 id="散列表-3">散列表</h1>
+<p>散列表和链表的组合？为什么呢？</p>
+<ul>
+<li>链表：涉及查找的操作慢，不连续存储；</li>
+<li>顺序表：支持随机访问，连续存储。</li>
+</ul>
+<p>散列表 + 链表：结合优点、规避缺点。</p>
+<h2 id="结合散列表的-lru-缓存淘汰算法">结合散列表的 LRU 缓存淘汰算法</h2>
+<p>缓存的操作接口：</p>
+<ul>
+<li>向缓存添加数据</li>
+<li>从缓存删除数据</li>
+<li>在缓存中查找数据</li>
+</ul>
+<p>然而——不管是添加还是删除，都涉及到查找数据。因此，单纯的链表效率低下。</p>
+<figure data-type="image" tabindex="3"><img src="https://static001.geekbang.org/resource/image/ea/6e/eaefd5f4028cc7d4cfbb56b24ce8ae6e.jpg" alt="" loading="lazy"></figure>
+<ul>
+<li><code>prev</code> 和 <code>next</code>：双向链表——LRU 的链表</li>
+<li><code>hnext</code>：单向链表——解决散列冲突的链表</li>
+</ul>
+<p>操作：</p>
+<ul>
+<li>在缓存中查找数据：利用散列表</li>
+<li>从缓存中删除数据：先利用散列表寻找数据，然后删除——改链表就好了，效率很高</li>
+<li>向缓存中添加数据：先利用散列表寻找数据，如果找到了，LRU 更新；如果没找到，直接添加在 LRU 链表尾部</li>
+</ul>
+<h2 id="java-linkedhashmap">Java: LinkedHashMap</h2>
+<p>遍历时，按照访问顺序遍历。</p>
+<p>往 LinkedHashMap 中添加数据的时候，都会将数据添加到链表的尾部；有同值则先删除，再插入末尾。</p>
+<p>述 LRU 的结构完全相同——只不过它不是缓存，不限制容量大小。</p>
+<h1 id="哈希算法">哈希算法</h1>
+<p>将任意长度的二进制值串<strong>映射为固定长度</strong>的二进制值串，这个映射的规则就是<strong>哈希算法。</strong></p>
+<p>通过原始数据映射之后得到的二进制值串就是<strong>哈希值</strong>。</p>
+<p>哈希算法的要求</p>
+<ul>
+<li>从哈希值<strong>不能反向推导</strong>出原始数据（所以哈希算法也叫单向哈希算法）；</li>
+<li>对<strong>输入数据敏感</strong>，哪怕原始数据只修改了一个 Bit，最后得到的哈希值也大不相同；</li>
+<li><strong>散列冲突概率小</strong>，对于不同的原始数据，哈希值相同的概率非常小；</li>
+<li>哈希算法的<strong>执行效率高</strong>，针对较长的文本，也能快速地计算出哈希值。</li>
+</ul>
+<p>哈希算法常见的应用：安全加密、唯一标识、数据校验、散列函数、负载均衡、数据分片、分布式存储。</p>
+<h2 id="安全加密">安全加密</h2>
+<p><strong>MD5</strong>（MD5 Message-Digest Algorithm，MD5 消息摘要算法）128 位二进制串</p>
+<p><strong>SHA</strong>（Secure Hash Algorithm，安全散列算法）。128/256</p>
+<p><strong>DES</strong>（Data Encryption Standard，数据加密标准）</p>
+<p><strong>AES</strong>（Advanced Encryption Standard，高级加密标准）。</p>
+<p>提高哈希算法的复杂度，可以引入一个盐（salt），如用户的密码组合在一起，增加密码的复杂度，再做哈希算法加密。</p>
+<h2 id="唯一标识">唯一标识</h2>
+<p>一个文件的信息摘要</p>
+<h2 id="数据校验">数据校验</h2>
+<p>确定数据的完整性，没被篡改过。</p>
+<h2 id="和分布式系统有关的应用">和分布式系统有关的应用</h2>
+<p>在负载均衡应用中，利用哈希算法替代映射表，可以实现一个会话粘滞的负载均衡策略。在数据分片应用中，通过哈希算法对处理的海量数据进行分片，多机分布式处理，可以突破单机资源的限制。在分布式存储应用中，利用一致性哈希算法，可以解决缓存等分布式系统的扩容、缩容导致数据大量搬移的难题。</p>
+<h1 id="二叉树">二叉树</h1>
+<h3 id="树">树</h3>
+<p>没有父节点的节点叫作<strong>根节点</strong></p>
+<p>没有子节点的节点叫作<strong>叶子节点</strong>(叶节点)</p>
+<p><strong>高度</strong>（Height）从下往上算</p>
+<p><strong>深度</strong>（Depth）从上往下算</p>
+<p><strong>层</strong>（Level）深度+1</p>
+<p>树的高度就是根节点的高度。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/40/1e/4094a733986073fedb6b9d03f877d71e.jpg" alt="height" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/50/b4/50f89510ad1f7570791dd12f4e9adeb4.jpg" alt="deep" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<h3 id="二叉树-2">二叉树</h3>
+<p>每个节点<strong>最多</strong>有两个子节点的树，即<strong>左子节点</strong>和<strong>右子节点</strong>。</p>
+<p><strong>满二叉树</strong>	：除最底一层的叶子节点，所有上层左右子节点都开满的树。</p>
+<p><strong>完全二叉树</strong>：最后一层的叶子节点靠左排列；且除了最后一层，其他层是满二叉树。</p>
+<h2 id="表示法">表示法</h2>
+<p>基于指针或者引用的二叉链式存储法</p>
+<p>基于数组的顺序存储法。</p>
+<p><strong>链式存储法</strong>：每个节点有三个字段：数据、左右子节点的指针。拎住根节点，通过左右子节点的指针，就能把整棵树都串起来。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/12/8e/12cd11b2432ed7c4dfc9a2053cb70b8e.jpg" alt="link" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/14/30/14eaa820cb89a17a7303e8847a412330.jpg" alt="array" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p><strong>顺序存储法</strong>：完全二叉树，“浪费”了一个下标为 0 的存储位置。非完全二叉树会浪费更多数组存储空间。</p>
+<p>为了方便计算子节点，根节点会存储在下标为 1 的位置。节点 X 存储在数组中下标为 i 的位置，下标为 2 * i 的位置存储的就是左子节点，下标为 2 * i + 1 的位置存储的就是右子节点。反过来，下标为 i/2 的位置存储就是它的父节点</p>
+<h2 id="遍历">遍历</h2>
+<p><strong>前、中、后序遍历</strong>	是指当前节点、左子树、右子树，<strong>当前节点</strong>在三者闭环中的前、后、中的位置。</p>
+<ul>
+<li>前序遍历是指，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。</li>
+<li>中序遍历是指，先打印节点的左子树，然后再打印节点本身，最后打印节点的右子树。</li>
+<li>后序遍历是指，先打印节点的左子树，然后再打印节点的右子树，最后打印这个节点本身。</li>
+</ul>
+<img src="https://static001.geekbang.org/resource/image/ab/16/ab103822e75b5b15c615b68560cb2416.jpg" alt="遍历" style="zoom:50%;" />
+<p><strong>前、中、后序遍历就是一个递归的过程</strong>。比如，前序遍历，其实就是先打印根节点，然后再递归地打印左子树，最后递归地打印右子树。</p>
+<pre><code class="language-c">前序遍历的递推公式：
+preOrder(r) = print r-&gt;preOrder(r-&gt;left)-&gt;preOrder(r-&gt;right)
+ 
+中序遍历的递推公式：
+inOrder(r) = inOrder(r-&gt;left)-&gt;print r-&gt;inOrder(r-&gt;right)
+ 
+后序遍历的递推公式：
+postOrder(r) = postOrder(r-&gt;left)-&gt;postOrder(r-&gt;right)-&gt;print r
+</code></pre>
+<h1 id="二叉查找树">二叉查找树</h1>
+<p>二叉查找树Binary Search Tree也叫二叉搜索/排序树，支持动态数据集合的快速插入、删除、查找操作。</p>
+<blockquote>
+<p>散列表也是支持这些操作的，并且散列表的这些操作比二叉查找树更高效，时间复杂度是 O(1)。</p>
+<p>二叉查找树是为了实现快速查找而生的。不过，它不仅仅支持快速查找一个数据。</p>
+</blockquote>
+<p><strong>二叉查找树要求，在树中的任意一个节点，其左子树中的每个节点的值，都要小于这个节点的值，而右子树节点的值都大于这个节点的值。</strong></p>
+<p><strong>二叉查找树时间复杂度跟树的高度成正比，也就是 O(height)</strong></p>
+<p><strong>按照中序的插入后。中序遍历二叉查找树，可以输出有序的数据序列，时间复杂度是 O(n)，非常高效</strong>。</p>
+<p>根节点的左右子树极度不平衡时，会退化成了链表。因此才有了平衡二叉树。</p>
+<p><strong>查找</strong>：先取根节点，如果等于要查找的数据就返回。如果要查找的数据比根节点的值小，那就在左子树中递归查找；如果要查找的数据比根节点的值大，那就在右子树中递归查找。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/96/2a/96b3d86ed9b7c4f399e8357ceed0db2a.jpg" alt="查找" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/da/c5/daa9fb557726ee6183c5b80222cfc5c5.jpg" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p><strong>插入</strong>：从根节点开始，依次比较要插入的数据和节点的大小关系。</p>
+<p>数据比节点的数据大，并且节点的右子树为空，就将新数据直接插到右子节点的位置；如果不为空，就再递归遍历右子树，查找插入位置。同理，如果要插入的数据比节点数值小，并且节点的左子树为空，就将新数据插入到左子节点的位置；如果不为空，就再递归遍历左子树，查找插入位置。</p>
+<h2 id="删除">删除</h2>
+<img src="https://static001.geekbang.org/resource/image/29/2c/299c615bc2e00dc32225f4d9e3490e2c.jpg" style="zoom:50%;" />
+<p>二叉查找树的删除操作有三种情况：</p>
+<ol>
+<li>如果要删除的节点没有子节点，把将父节点中指向要删除节点的指针，置为 null。图中55。</li>
+<li>如果要删除的节点只有左或右一个子节点，把新父节点中指向要删除节点的指针，指向要删除节点的子节点就可以了。图中 13。</li>
+<li>如果要删除的节点有两个子节点。找到这个节点的右子树中的最小节点，把它替换到要删除的节点上。再删除掉这个最小节点。（因为最小节点肯定没有左子节点，如果有左子结点，那就不是最小节点了），所以，我们可以应用上面两条规则来删除这个最小节点）图中 18。即删除该节点，并找到大于该节点的最小值来替换。具体为，从该节点的右子节点往下找最小值。</li>
+</ol>
+<blockquote>
+<p>另一种删除策略：单纯将要删除的节点标记为“已删除”，并不真正从树中将这个节点去掉。浪费内存空间，但是删除操作就变得简单了很多。</p>
+</blockquote>
+<h2 id="支持重复数据的二叉查找树">支持重复数据的二叉查找树</h2>
+<p>本次讨论中为了更清晰，默认树中节点存储的都是数字。在实际开发中，二叉查找树中存储的，是一个包含很多字段的对象。用对象的某个字段作为键值（key）来构建二叉查找树。把对象中的其他字段叫作卫星数据。</p>
+<p><strong>插入</strong>：寻找插入位置时，若发现一个节点的值与要插入的数据相同，把要插入的数据放到该节点的右子树，即把这个新插入的数据当作大于这个节点的值来处理。</p>
+<p>**查找：**查找数据时，遇到值相同的节点并不停止查找，而是继续在右子树中查找，直到遇到叶子节点才停止。</p>
+<p><strong>删除</strong>：查找到每个要删除的节点，然后依次删除。</p>
+<blockquote>
+<p>如果存储的两个对象键值相同，还可以通过链表和支持动态扩容的数组等数据结构，把值相同的数据都存储在同一个节点上。</p>
+</blockquote>
+<blockquote>
+<p>散列表的插入、删除、查找操作的时间复杂度可以做到常量级的 O(1)，非常高效。而二叉查找树在平衡的情况下，插入、删除、查找操作时间复杂度才是 O(logn)，为什么还要使用二叉查找树呢？</p>
+<p>第一，散列表中的数据是无序存储的，想有序输出还要先进行排序；二叉查找树来，想有序输出只需要中序遍历。</p>
+<p>第二，散列表扩容耗时很多，而且当遇到散列冲突时，性能不稳定；最常用的平衡二叉查找树的性能非常稳定，时间复杂度稳定在 O(logn)。</p>
+<p>第三，散列表构造复杂，需要考虑散列函数的设计、冲突解决办法、扩容、缩容等。平衡二叉查找树只需要考虑平衡性且解决方案比较成熟、固定。</p>
+<p>尽管散列表的查找等操作的时间复杂度是常量级的，但在哈希冲突时，常量未比必logn小，再加上哈希函数的耗时等，具体开发中具体选择。</p>
+</blockquote>
+<h1 id="红黑树">红黑树</h1>
+<p>二叉查找树在频繁的动态更新过程中，可能会出现树的高度远大于 log2n 的情况，从而导致各个操作的效率下降。极端情况下，二叉树会退化为链表，时间复杂度会退化到 O(n)。因此产生了平衡二叉查找树，使左右节点平衡。红黑树便是最常用的平衡二叉查找树。</p>
+<p><strong>平衡二叉查找树</strong>：原定义是任意一个节点的左右子树的高度相差不能大于 1，的二叉查找树。但实际只要整棵树的左右比较平衡，树的高度不比 log2n 大很多，仍然是一个合格的平衡二叉查找树。</p>
+<blockquote>
+<p>完全二叉树、满二叉树都是平衡二叉树，但是非完全二叉树也有可能是平衡二叉树。</p>
+<p>最先被发明的平衡二叉查找树是<a href="https://zh.wikipedia.org/wiki/AVL%E6%A0%91">AVL 树</a>	，平衡二叉查找树还有Splay Tree（伸展树）、Treap（树堆）等</p>
+<p>AVL 树是一种高度平衡的二叉树，查找的效率非常高。但AVL 树为了维持这种高度的平衡，每次插入、删除都要做调整，就比较复杂、耗时。所以，对于有频繁的插入、删除操作的数据集合，使用 AVL 树的代价就有点高了。</p>
+</blockquote>
+<p>平衡二叉查找树中“平衡”的意思，其实就是让<strong>整棵树左右看起来比较“对称”、比较“平衡”</strong>，不要出现左子树很高、右子树很矮的情况。这样就能让整棵树的高度相对来说低一些，相应的插入、删除、查找等操作的效率高一些。</p>
+<p>红黑树“Red-Black Tree”，简称 R-B Tree。是一种不严格的平衡二叉查找树。</p>
+<p>红黑树中的节点，一类被标记为黑色，一类被标记为红色。且满足四个特征：</p>
+<ol>
+<li><strong>根节点是黑色的</strong>；</li>
+<li><strong>叶子节点不存储数据</strong>，即每个叶子节点都是黑色的空节点（NIL）；</li>
+<li><strong>红色节点不相邻</strong>，即红色节点是被黑色节点隔开的；</li>
+<li>每个节点，从该节点到其<strong>可达叶子节点的</strong>所有路径，都包含的<strong>黑色节点数目相同</strong>；</li>
+</ol>
+<p>“叶子节点都是黑色的空节点”，是为了简化红黑树的代码实现而设置的。<strong>在画图思考的时候，一般将黑色的、空的叶子节点都省略掉。</strong></p>
+<p>红黑树是“近似平衡”的。“平衡”的意思可以等价为性能不退化。“近似平衡”就等价为性能不会退化的太严重**。</p>
+<p>二叉查找树很多操作的性能都跟树的高度成正比。一棵极其平衡的二叉树（满二叉树或完全二叉树）的高度大约是 log2n，所以红黑树的高度比较稳定地趋近 log2n 就是近似平衡的。</p>
+<h2 id="平衡调整">平衡调整</h2>
+<p>当插入、删除节点时，红黑树的红色节点可能会相临，某个节点到其可达叶子节点路径上黑色条目也可能会不同。要通过平衡调整的操作使红色节点不相临，同时每条可达叶子节点路径上的黑色条目相同。</p>
+<p>即插入、删除节点时会破坏特征3、4，“平衡调整”就是把破坏的3、4恢复过来。</p>
+<p>围绕某个节点<strong>左旋（rotate left）</strong>、<strong>右旋（rotate right）</strong>，和<strong>改变节点颜色</strong>是平衡调整的基本操作。</p>
+<p>红黑树的平衡调整过程是一个迭代的过程。正在处理的节点叫作<strong>关注节点</strong>。关注节点会随着不停地迭代处理，而不断发生变化。最开始的关注节点就是新插入的节点。</p>
+<p><strong>红黑树规定，插入的节点必须是红色的。且二叉查找树中新插入的节点都是放在叶子节点上</strong>。</p>
+<p>新节点插入之后，如果红黑树的平衡被打破，只需要根据每种情况的特点。通过左右旋、改变颜色不停地调整，就可以让红黑树继续符合定义，也就是继续保持平衡。</p>
+<p>红黑树的平衡调整的过程比作魔方复原，至于平衡调整策略、算法的正确性都无须深究。</p>
+<h1 id="递归树">递归树</h1>
+<p>递归的思想就是，将大问题分解为小问题来求解，一层一层地分解，直到问题的数据规模被分解得足够小，不用继续递归分解为止。</p>
+<p>把递归一层一层的分解过程画成图，就是一棵树，即<strong>递归树</strong>。<strong>递归树常用来分析递归算法的时间复杂度</strong></p>
+<h2 id="归并排序复杂度">归并排序复杂度</h2>
+<img src="https://static001.geekbang.org/resource/image/c6/d0/c66bfc3d02d3b7b8f64c208bf4c948d0.jpg" style="zoom:50%;" />
+<p>归并算法中比较耗时的是归并操作，也就是把两个子数组合并为大数组。每一层归并操作消耗的时间总和是一样的，跟要排序的数据规模有关。每一层归并操作消耗的时间记作 n，树高h，总的时间复杂度 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mi mathvariant="normal">∗</mi><mi>h</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n∗h)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord">∗</span><span class="mord mathdefault">h</span><span class="mclose">)</span></span></span></span>	，归并排序的递归树是一棵满二叉树，高度h是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi></mrow><annotation encoding="application/x-tex">log_2n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span></span></span></span>	，因此归并排序的时间复杂度是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>∗</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n*log_2n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>忽略底数为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>∗</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n*logn)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></p>
+<h1 id="堆与堆排序">堆与堆排序</h1>
+<p>堆排序是一种原地的、时间复杂度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi mathvariant="normal">⁡</mi><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(nlog⁡n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord">⁡</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>的排序算法。</p>
+<p>堆的特性：</p>
+<ol>
+<li>堆是一个完全二叉树；</li>
+<li>大顶堆：堆中每一个节点的值都必须大于等于（或小顶堆小于等于）其左右子节点的值。</li>
+</ol>
+<p>用数组来存储完全二叉树是非常节省存储空间的。不需要存储左右子节点的指针，单纯地通过数组的下标，就可以找到一个节点的左右子节点和父节点。</p>
+<p><strong>数组下标为 1 的位置开始存储时节点存在数组中下标为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> ，其左节点下标<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>i</mi></mrow><annotation encoding="application/x-tex">2i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord mathdefault">i</span></span></span></span>，右节点下标为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2i+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，其父节点下标为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>i</mi><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{i}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.200664em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.855664em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></strong></p>
+<p><strong>数组下标为 0 的位置开始存储时节点存在数组中下标为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> ，其左节点下标<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2i+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，右节点下标为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>i</mi><mo>+</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2i+2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span>，其父节点下标为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{i-1}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.200664em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.855664em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></strong></p>
+<h2 id="插入元素">插入元素</h2>
+<p>堆中插入一个元素后，需要进行调整，让其重新满足堆的特性叫做<strong>堆化</strong></p>
+<p>插入一个数据和删除堆顶元素都要用到堆化。插入一个数据的时候，把新插入的数据放到数组的最后，然后从下往上堆化；删除堆顶数据的时候，我们把数组中的最后一个元素放到堆顶，然后从上往下堆化。这两个操作时间复杂度都是 O(logn)。</p>
+<p><strong>从下往上堆化:</strong> 取最后一个节点，顺着节点所在的路径向上，比较和交换，直到满足堆的特性。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/e5/22/e578654f930002a140ebcf72b11eb722.jpg" alt=" " loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/e3/0e/e3744661e038e4ae570316bc862b2c0e.jpg" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<h4 id="删除堆顶元素">删除堆顶元素</h4>
+<p>根据堆的第二特性，堆顶元素就是堆中数据的最大/最小值。</p>
+<p>当我们删除堆顶元素时，顶节点空缺，要将左右子节点中较大的节点上移到堆顶；此时第二层有一个位置空缺，再从该位置载第三层的左右子节点中较大的节点上移。以此类推，直到从叶子节点上移填补。</p>
+<p><strong>从上往下的堆化方法</strong>:	把最后一个节点放到堆顶，然后父子节点对比。对于不满足父子节点大小关系的，互换两个节点，并且重复进行这个过程，直到父子节点之间满足大小关系为止。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/59/81/5916121b08da6fc0636edf1fc24b5a81.jpg" alt="" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/11/60/110d6f442e718f86d2a1d16095513260.jpg" alt=" " loading="lazy"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>删除栈顶元素</td>
+<td>从上往下堆化</td>
+</tr>
+</tbody>
+</table>
+<p>一个包含 n 个节点的完全二叉树，树的高度不会超过 log2⁡n。堆化的过程是顺着节点所在路径比较交换的，所以堆化的时间复杂度跟树的高度成正比，也是 O(log⁡n)。插入数据和删除堆顶元素的主要逻辑就是堆化，时间复杂度都是 O(logn)。</p>
+<h2 id="堆排序">堆排序</h2>
+<p>堆排序是一种原地的、时间复杂度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi mathvariant="normal">⁡</mi><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(nlog⁡n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord">⁡</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>的排序算法。</p>
+<p>两大步骤是<strong>建堆</strong>和<strong>排序</strong>。</p>
+<p>将原数组下标从  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>到 1 的节点，依次进行从上到下的堆化操作，就可以把数组中的数据组织成堆这种数据结构。然后迭代地将堆顶的元素放到堆的末尾，并将堆的大小减一，然后再堆化，重复这个过程，直到堆中只剩下一个元素，整个数组中的数据就都有序排列了。</p>
+<h3 id="建堆">建堆</h3>
+<p>首先将数组原地建成一个堆。不借助另一个数组，就在原数组上操作。</p>
+<p>方式一：从下往上堆化：在堆中插入一个元素的思路。尽管数组中包含 n 个数据，但假设起初堆中只包含一个数据，就是下标为 1 的数据。然后将下标从 2 到 n 的数据依次插入到堆中。就组织成了堆。如下标2的元素，与其父节点下标1比较交换.....</p>
+<p>方式二：从上往下堆化：在堆中删除堆顶元素的思路：从后往前(从  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>到 1 )取出数组中的元素，依次把元素当作从上往下堆化中插入的新顶点，与子节点比较交换完成堆化。因为叶子节点往下堆化只能自己跟自己比较，所以我们直接从第一个非叶子节点开始堆化就行了。（当下标从0开始时 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\frac{n}{2}-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>到0）</p>
+<p>对于完全二叉树来说，下标超过 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>的节点都是叶子节点，不必当作顶点重复比较，因此方式二只需对数组内下标<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>到 1进行堆化。</p>
+<p>建立堆时间复杂度O(n)</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/50c1e6bc6fe68378d0a66bdccfff441e-20210718213839150-20210718213842273.jpg" alt=" " loading="lazy"><br /><img src="https://static001.geekbang.org/resource/image/aa/9d/aabb8d15b1b92d5e040895589c60419d.jpg" alt="" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/23/d1/23958f889ca48dbb8373f521708408d1.jpg" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<h2 id="排序">排序</h2>
+<p>建立了一个(每一个节点的值都必须大于等于/小于等于其左右子节点的值的完全二叉树)大顶堆或小顶堆，数组的第一个元素就是堆顶。</p>
+<p>排序的过程类似“删除堆顶元素”的操作：</p>
+<p>把堆顶（数组的第一个元素）与最后一个元素交换，即最大元素就放到下标为 n 的位置，下标为 n的元素放到堆顶。</p>
+<p>再采用类似“删除堆顶元素”的操作，把原下标为n的元素从上往下堆化。</p>
+<p>堆化完成后，再取新的堆顶与下标n-1的元素交换，然后下标n-1的元素继续从上往下堆化</p>
+<p>重复这个过程，直到最后数组里只剩下下标为1的元素，排序完成。</p>
+<p>每次的堆顶就是数组内剩余的最大值，因此数组得以排序。</p>
+<p>建堆过程的时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>，排序过程的时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(nlogn)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>，所以，堆排序整体的时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi mathvariant="normal">⁡</mi><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(nlog⁡n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord">⁡</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></p>
+<p><strong>数组下标为 1 的位置开始存储时节点存在数组中下标为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span> ，其左节点下标<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2i+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，右节点下标为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>i</mi><mo>+</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2i+2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span>，其父节点下标为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{i-1}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.200664em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.855664em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></strong></p>
+<blockquote>
+<p>为什么在实际开发中，快速排序要比堆排序性能好？</p>
+<ol>
+<li>**堆排序数据访问的方式没有快速排序友好。**堆排序来说，数据是跳着访问的对cpu缓存不友好。</li>
+<li>**对于同样的数据排序，堆排序算法的数据交换次数要多于快速排序。**快速排序是基于比较的，数据交换的次数不会比逆序度多；堆排序建堆就会打破数据的原有顺序，增加逆序度。</li>
+</ol>
+</blockquote>
+<h1 id="堆的应用">堆的应用</h1>
+<p>优先级队列、求 Top K 和求中位数</p>
+<h2 id="优先级队列">优先级队列</h2>
+<p>队列最大的特性就是先进先出。</p>
+<p>优先级队列中，数据的出队顺序不是先进先出，而是按照优先级来，优先级最高的，最先出队。</p>
+<p>优先级队列在赫夫曼编码、图的最短路径、最小生成树算法等中都有使用。</p>
+<p>一个堆就可以看作一个优先级队列。很多时候，它们只是概念上的区分而已。往优先级队列中插入一个元素，就相当于往堆中插入一个元素；从优先级队列中取出优先级最高的元素，就相当于取出堆顶元素。</p>
+<p><strong>优先级队列使用场景</strong>：定时器、合并有序小文件等</p>
+<h2 id="利用堆求-top-k">利用堆求 Top K</h2>
+<p>求TopK问题可分成两类：针对静态数据集合、针对动态数据集合</p>
+<p>针对静态数据集合，在包含n个数据的数组中，查找前 K 大数据：</p>
+<blockquote>
+<p>具体做法：</p>
+<ol>
+<li>从原数组取前k个元素</li>
+<li>对这k个元素建小顶堆</li>
+<li>遍历原数组除去前k个，剩余的元素（[k,n]），和小顶堆的堆顶比较。</li>
+<li>若大于堆顶则替换堆顶的位置，并触发堆化。</li>
+</ol>
+</blockquote>
+<p><strong>维护一个大小为 K 的小顶堆</strong>，顺序遍历数组，从数组中取出取数据与堆顶元素比较。</p>
+<p>如果比堆顶元素大，就把堆顶元素删除，并且将这个元素插入到堆中；比堆顶元素小则不做处理，继续遍历数组。遍历完数组后堆中的数据就是前 K 大数据。时间复杂度为O(nlogn)。</p>
+<p>针对动态数据求得 Top K 就是实时 Top K，即数据集合中有两个操作，一个是添加数据，另一个询问当前的前 K 大数据。</p>
+<p>若每次询问前 K 大数据，都基于当前的数据重新计算的话，性能损耗大。可以一直都维护一个 K 大小的小顶堆，当有数据被添加到集合中时，我们就拿它与堆顶的元素对比。如果比堆顶元素大，我们就把堆顶元素删除，并且将这个元素插入到堆中；如果比堆顶元素小，则不做处理。这样，无论任何时候需要查询当前的前 K 大数据，都可以立刻返回给。</p>
+<h2 id="利用堆求中位数">利用堆求中位数</h2>
+<p>求堆的中位数，也可以简化为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mi>o</mi><mi>p</mi><mo>(</mo><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">Top(n/2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault">o</span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord">/</span><span class="mord">2</span><span class="mclose">)</span></span></span></span>问题</p>
+<p>中位数就是处在中间位置的那个数。如果数据的个数是奇数，把数据从小到大排列，那第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\frac{n}{2}+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个数据就是中位数；如果数据的个数是偶数的话，那处于中间位置的数据有两个，第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> 个和第<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\frac{n}{2}+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>  个数据，可以随意取一个作为中位数，比如取两个数中靠前的那个，就是第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>n</mi><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{n}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040392em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>​ 个数据。</p>
+<p>对于一组<strong>静态数据</strong>，中位数是固定的，可以先排序，查寻时返回固定值。但<strong>动态数据</strong>却不能先排序</p>
+<p><strong>借助堆这种数据结构，不用排序，就可以非常高效地实现求中位数操作。</strong></p>
+<p>维护两个堆，一个大顶堆，一个小顶堆。满足两个条件</p>
+<ol>
+<li><strong>大顶堆中存储前半部分数据，小顶堆中存储后半部分数据；</strong></li>
+<li><strong>且小顶堆中的数据都大于大顶堆中的数据</strong>。<br>
+这样，大顶堆中的堆顶元素就是要找的中位数。</li>
+</ol>
+<p>如果新加入的数据小于等于大顶堆的堆顶元素，就将这个新数据插入到大顶堆；如果新加入的数据大于等于小顶堆的堆顶元素，就将这个新数据插入到小顶堆。数据个数是奇数时，大顶堆中的堆顶元素就是中位数；偶数时大堆顶和小堆顶都是。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/08/99/08c29d3e014a4baf5f8148c2271e6099.jpg" alt="" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/ae/b1/aee4dcaf9d34111870a1d66a6e109fb1.jpg" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>当两个堆中的数据个数不符合前面约定的情况时，可以从一个堆中不停地将堆顶元素移动到另一个堆，通过这样的调整，来让两个堆中的数据满足上面的约定。</p>
+<blockquote>
+<p><strong>求接口的 99% 响应时间</strong></p>
+<p>中位数的概念就是将数据从小到大排列，处于中间位置，就叫中位数，这个数据会大于等于前面 50% 的数据。99 百分位数的概念可以类比中位数，如果将一组数据从小到大排列，这个 99 百分位数就是大于前面 99% 数据的那个数据。</p>
+<p>1，2，3，……，100中，那 99 百分位数就是 99，因为小于等于 99 的数占总个数的 99%。</p>
+<figure data-type="image" tabindex="4"><img src="https://static001.geekbang.org/resource/image/bb/2d/bbb043d369eeef1bb7feadd28c6ea32d.jpg" alt=" " loading="lazy"></figure>
+<p>维护两个堆，一个大顶堆，一个小顶堆。假设当前总数据的个数是 n，大顶堆中保存 n<em>99% 个数据，小顶堆中保存 n</em>1% 个数据。大顶堆堆顶的数据就是我们要找的 99% 响应时间。</p>
+<p><strong>10 亿个搜索关键词中获取到 Top 10 最热门的搜索关键词？</strong></p>
+<p>实际中使用MapReduce</p>
+<p>假设10亿关键词中，不重复的有1亿条。</p>
+<p>用堆求 Top K 的方法，建立一个大小为 10 的小顶堆，对10亿数据一次加载性能损耗太大。</p>
+<p>遍历这 10 亿个关键词，并且通过某个哈希算法对其求哈希值，然后哈希值同 10 取模，根据余数，分成10中不同的组。再各自求每组的top10。最后对总共的Top100中取出现最频繁的Top10。</p>
+</blockquote>
+<h1 id="图">图</h1>
+<p>树和图都是非线性表数据结构。树中的元素为节点，图中的元素叫作<strong>顶点</strong>（vertex）。图中的一个顶点可以与任意其他顶点建立连接关系。这种建立的关系叫作<strong>边</strong>（edge）。跟顶点相连接的边的条数就叫作顶点的<strong>度</strong>（degree），如微信每个用户有多少个好友。</p>
+<p>微博不像微信，它允许单向关注。这种边有方向的图叫作“有向图”。有向图把度分为<strong>入度</strong>（In-degree）和<strong>出度</strong>（Out-degree）</p>
+<p>QQ亲密度。是典型的<strong>带权图</strong>（weighted graph）。每条边都有一个权重（weight）</p>
+<table>
+<thead>
+<tr>
+<th>无向图</th>
+<th>有向图</th>
+<th>带权图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://static001.geekbang.org/resource/image/df/af/df85dc345a9726cab0338e68982fd1af.jpg" alt=" " loading="lazy"></td>
+<td><img src="https://static001.geekbang.org/resource/image/c3/96/c31759a37d8a8719841f347bd479b796.jpg" alt="" loading="lazy"></td>
+<td><img src="https://static001.geekbang.org/resource/image/55/e8/55d7e4806dc47950ae098d959b03ace8.jpg" alt="" loading="lazy"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="邻接矩阵存储方法">邻接矩阵存储方法</h2>
+<p>图最直观的一种存储方法就是，<strong>邻接矩阵</strong>（Adjacency Matrix）</p>
+<p>邻接矩阵的底层依赖一个二维数组。</p>
+<p>对于无向图来说，如果顶点 i 与顶点 j 之间有边，我们就将<code>A[i][j]</code>和 <code>A[j][i]</code> 标记为 1；</p>
+<p>对于有向图来说，如果顶点 i 到顶点 j 之间，有一条箭头从顶点 i 指向顶点 j 的边，那我们就将 A<code>[i][j]</code> 标记为 1。同理，如果有一条箭头从顶点 j 指向顶点 i 的边，我们就将<code>A[j][i]</code> 标记为 1。</p>
+<p>对于带权图，数组中就存储相应的权重。</p>
+<img src="https://static001.geekbang.org/resource/image/62/d2/625e7493b5470e774b5aa91fb4fdb9d2.jpg" style="zoom:50%;" />
+<p>用邻接矩阵来表示一个图，虽然简单、直观，但是比较浪费存储空间。</p>
+<p>如无向图，如果<code>A[i][j]</code> 等于 1，那 <code>A[j][i]</code> 也肯定等于 1。实际上只需要存储一个就可以了。将其用对角线划分为上下两部分，一半的空间浪费掉了。</p>
+<p>如果存储的是<strong>稀疏图</strong>（Sparse Matrix），顶点很多，但每个顶点的边并不多，那邻接矩阵的存储方法就更加浪费空间了。（比如微信有好几亿的用户，对应到图上就是好几亿的顶点。但是每个用户的好友并不会很多。）</p>
+<p>邻接矩阵的存储方式优点：</p>
+<p>简单、直接，基于多维数组，获取两个顶点的关系时，就非常高效。</p>
+<p>方便计算，可以将很多图的运算转换成矩阵之间的运算。比如求解最短路径问题时会提到一个<a href="https://zh.wikipedia.org/wiki/Floyd-Warshall%E7%AE%97%E6%B3%95">Floyd-Warshall 算法</a>，就是利用矩阵循环相乘若干次得到结果。</p>
+<h2 id="邻接表存储方法">邻接表存储方法</h2>
+<p>针对邻接矩阵比较浪费内存空间的问题，可以采用<strong>邻接表</strong>（Adjacency List）</p>
+<p>邻接表有点像散列表，每个顶点对应一条链表，链表中存储的是与这个顶点相连接的其他顶点。</p>
+<p>有向图每个顶点对应的链表里面，存储的是<strong>指向的顶点</strong>。</p>
+<p>无向图每个顶点的链表中存储的，是跟这个顶点<strong>有边相连的顶点</strong></p>
+<table>
+<thead>
+<tr>
+<th>邻接表</th>
+<th>逆邻接表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://static001.geekbang.org/resource/image/03/94/039bc254b97bd11670cdc4bf2a8e1394.jpg" alt="" loading="lazy"></td>
+<td><img src="https://static001.geekbang.org/resource/image/50/a1/501440bcffdcf4e6f9a5ca1117e990a1.jpg" alt=" " loading="lazy"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>逆邻接表</strong>中，每个顶点的链表中，存储的是指向这个顶点的顶点。如在微博中邻接表存储用户的关注关系，逆邻接表中存储的是用户的被关注关系。</p>
+<p>邻接矩阵存储起来比较浪费空间，但是使用起来比较节省时间。相反，邻接表存储起来比较节省空间，但是使用起来就比较耗时间。</p>
+<blockquote>
+<p>微博中，如果要查找某个用户关注了哪些用户，在邻接表中查找；如果要查找某个用户被哪些用户关注了，从逆邻接表中查找。</p>
+<p>需要按照用户名称的首字母排序，分页来获取用户的粉丝列表或者关注列表，用跳表最合适，跳表插入、删除、查找都非常高效，且跳表中存储的数据本来就是有序的。</p>
+<p>微博上亿数据规模无法全部加载内存，可以通过哈希算法等数据分片方式，将邻接表存储在不同的机器上。或外部存储上，如硬盘、数据库等</p>
+</blockquote>
+<h1 id="深度广度优先搜索">深度广度优先搜索</h1>
+<p>深度优先搜索算法和广度优先搜索算法都是基于“图”这种数据结构的。</p>
+<pre><code class="language-java">public class Graph { // 无向图
+  private int v; // 顶点的个数
+  private LinkedList&lt;Integer&gt; adj[]; // 邻接表
+  public Graph(int v) {
+    this.v = v;
+    adj = new LinkedList[v];
+    for (int i=0; i&lt;v; ++i) {
+      adj[i] = new LinkedList&lt;&gt;();
+    }
+  }
+  public void addEdge(int s, int t) { // 无向图一条边存两次
+    adj[s].add(t);
+    adj[t].add(s);
+  }
+}
+</code></pre>
+<p>广度优先搜索和深度优先搜索是两种最常用、最基本的搜索算法，比起其他高级的搜索算法，比如 A*、IDA* 等，要简单粗暴，没有什么优化，所以，也被叫作暴力搜索算法。仅适用于图不大的搜索。</p>
+<p>E 表示边的个数，V表示顶点的个数</p>
+<p>在执行效率方面，深度优先和广度优先搜索的时间复杂度都是 O(E)，空间复杂度是 O(V)。</p>
+<p>BFS和DFS的代码 都需要：</p>
+<ul>
+<li>一个顶点数大小的<code>boolean</code>数组<code>visited</code>，来记录顶点是否被访问过</li>
+<li>一个数组prev记录走过的路径。（如 <code>prev[q]=w</code>记录下：q顶点是从w顶点访问而来的，即从w顶点访问量q顶点）</li>
+<li>BFS需要一个队列记录下一步可以访问的相邻可达的顶点；DFS需要一个栈或回溯来搜索路径。</li>
+</ul>
+<h2 id="广度优先搜索bfs">广度优先搜索（BFS）</h2>
+<p>广度优先搜索（Breadth-First-Search），通俗的理解就是，地毯式层层推进，从起始顶点开始，先查找离起始顶点最近的，然后是次近的，依次往外搜索。</p>
+<p>广度优先搜索需要借助<strong>队列</strong>来实现，遍历得到的路径就是，起始顶点到终止顶点的<strong>最短路径</strong>。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/4f/3a/4fea8c4505b342cfaf8cb0a93a65503a.jpg" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://static001.geekbang.org/resource/image/ea/23/ea00f376d445225a304de4531dd82723.jpg" alt="" loading="lazy"></td>
+</tr>
+<tr>
+<td><img src="https://static001.geekbang.org/resource/image/4c/39/4cd192d4c220cc9ac8049fd3547dba39.jpg" alt="" loading="lazy"></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-java">public void bfs(int s, int t) {
+    if (s == t) return;
+    boolean[] visited = new boolean[vertices];//顶点数大小的数组，来记录顶点是否被访问过
+    visited[s] = true;
+	  //先进先出的队列，来记录与被访问的顶点，相邻的顶点。即下一步可以访问的顶点
+    Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();
+    queue.add(s);
+    int[] prev = new int[vertices];//记录搜索路径，作为结果 prev[i]=k 表示i顶点是从k访问过来的
+    Arrays.fill(prev, -1);
+    while (queue.size() != 0) {
+        int w = queue.poll();/*最开始是s*/
+        for (int i = 0; i &lt; adj[w].size()/*该顶点的边数*/; i++) {
+          /*遍历w顶点的邻接表，即遍历该顶点的边*/
+            int q = adj[w].get(i);/*第i个相邻可达顶点q*/
+            if (!visited[q]) {/*相邻可达顶点q未被访问过*/
+                prev[q] = w;//是从w顶点访问的q顶点
+                if (q == t) {//到了目的地
+                    print(prev, s, t);
+                }
+                visited[q] = true;/*q被访问过*/
+                queue.add(q);//后续的while循环，可以搜索q所有的边
+            }
+        }
+    }
+}
+</code></pre>
+<h2 id="深度优先搜索dfs">深度优先搜索（DFS）</h2>
+<p>深度优先搜索（Depth-First-Search），简称 DFS。最直观的例子就是“走迷宫”。在迷宫的某个岔路口，随意选择一个岔路口来走，走着走着发现走不通的时候，你就回退到上一个岔路口，重新选择一条路继续走，直到最终找到出口。这种走法就是一种深度优先搜索策略。</p>
+<p>深度优先搜索用的是<strong>回溯思想</strong>，非常适合用<strong>递归</strong>实现。也可以说深度优先搜索是借助<strong>栈</strong>来实现的。但深度优先搜索只是能找出路径，但<strong>未必是最短路径</strong>。</p>
+<blockquote>
+<figure data-type="image" tabindex="5"><img src="https://static001.geekbang.org/resource/image/87/85/8778201ce6ff7037c0b3f26b83efba85.jpg" alt="" loading="lazy"></figure>
+<p>实线箭头表示遍历，虚线箭头表示回退。</p>
+</blockquote>
+<pre><code class="language-java">public void dfs(int s, int t) {
+    found = false;
+    boolean[] visited = new boolean[vertices];/*记录顶点是否被访问过*/
+    int[] prev = new int[vertices];/*记录访问路径*/
+    Arrays.fill(prev, -1);
+    recurDfs(s, t, visited, prev);
+    print(prev, s, t);
+}
+private void recurDfs(int w, int t, boolean[] visited, int[] prev) {
+    if (found == true)
+        return;
+    visited[w] = true;
+    if (w == t) {/*找到了*/
+        found = true;
+        return;
+    }
+    for (int i = 0; i &lt; adj[w].size(); i++) {/*遍历w顶点的邻接表，找出每个边*/
+        int q = adj[w].get(i);//w的相邻可达顶点q
+        if (!visited[q]) {
+            prev[q] = w;//记录下：从q顶点是从w顶点访问而来的，即从w顶点访问量q顶点
+            recurDfs(q, t, visited, prev);//递归再把q做为起点找到t的路径
+        }
+    }
+}
+</code></pre>
+<h1 id="字符串匹配">字符串匹配</h1>
+<p>Java 中的 indexOf()，Python 中的 find() 函数等，它们底层就是依赖接下来要讲的字符串匹配算法。</p>
+<p>BF 算法和 RK 算法是单模式串匹配的算法，也就是一个串跟一个串进行匹配。Trie 树和 AC 自动机是多模式串匹配算法，在一个串中同时查找多个串。</p>
+<p>RK 算法是 BF 算法的改进，它巧妙借助了哈希算法，让匹配的效率有了很大的提升。</p>
+<h2 id="bf-算法">BF 算法</h2>
+<p>BF 算法Brute Force ，暴力匹配算法，也叫朴素匹配算法。</p>
+<p>字符串 A 中查找字符串 B，那字符串 A 就是<strong>主串</strong>，字符串 B 就是<strong>模式串</strong>。我们把主串的长度记作 n，模式串的长度记作 m。因为我们是在主串中查找模式串，所以 n&gt;m。</p>
+<p><strong>在主串中，检查起始位置分别是 0、1、2…n-m 且长度为 m 的 n-m+1 个子串，看有没有跟模式串匹配的</strong>。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/f3/a2/f36fed972a5bdc75331d59c36eb15aa2.jpg" alt="" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/01/ee/015c85a9c2a4adc11236f9a40c6d57ee.jpg" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<h2 id="rk-算法">RK 算法</h2>
+<p>RK 算法的全称叫 Rabin-Karp 算法，是由它的两位发明者 Rabin 和 Karp 的名字来命名的。</p>
+<p>BF算法每次检查主串与子串是否匹配，需要依次比对每个字符，所以 BF 算法的时间复杂度就比较高，是 O(n*m)。我们对朴素的字符串匹配算法稍加改造，引入哈希算法，时间复杂度立刻就会降低。</p>
+<p>RK 算法：**通过哈希算法对主串中的 n-m+1 个子串分别求哈希值，然后逐个与模式串的哈希值比较大小。**如果某个子串的哈希值与模式串相等，那就说明对应的子串和模式串匹配了。因为哈希值是一个数字，数字之间比较是否相等是非常快速的，所以模式串和子串比较的效率就提高了。</p>
+<p>尽管模式串与子串比较的效率提高了，但需要额外的哈希算法计算子串哈希值，而且还会遇到哈希冲突的问题，因此要提高哈希算法的效率。</p>
+<p>当发现一个子串的哈希值跟模式串的哈希值相等的时候，只需要再对比一下子串和模式串本身就好了。</p>
+<h2 id="bmboyer-moore算法">BM（Boyer-Moore）算法</h2>
+<p>BM 算法核心思想是，利用模式串本身的特点，在模式串中某个字符与主串不能匹配的时候，将模式串往后多滑动几位，以此来减少不必要的字符比较，提高匹配的效率。BM 算法构建的规则有两类，坏字符规则和好后缀规则。好后缀规则可以独立于坏字符规则使用。因为坏字符规则的实现比较耗内存，为了节省内存，我们可以只用好后缀规则来实现 BM 算法。</p>
+<p>BM算法用到了额外的 3 个数组内存消耗大，其中 bc 数组的大小跟字符集大小有关，suffix 数组和 prefix 数组的大小跟模式串长度 m 有关。</p>
+<h2 id="kmp-算法基本原理">KMP 算法基本原理</h2>
+<p>KMP 算法是根据三位作者（D.E.Knuth，J.H.Morris 和 V.R.Pratt）的名字来命名的。</p>
+<p>在模式串和主串匹配的过程中，把不能匹配的那个字符仍然叫作<strong>坏字符</strong>，把已经匹配的那段字符串叫作<strong>好前缀</strong></p>
+<img src="https://static001.geekbang.org/resource/image/da/8f/da99c0349f8fac27e193af8d801dbb8f.jpg" style="zoom:50%;" />
+<p>KMP 算法和BM 算法的本质非常类似，都是根据规律在遇到坏字符的时候，把模式串往后多滑动几位。BM 算法有两个规则，坏字符和好后缀。KMP 算法借鉴 BM 算法的思想，可以总结成好前缀规则。</p>
+<h2 id="trie树">Trie树</h2>
+<p>Trie这个术语来自于re<strong>trie</strong>val。</p>
+<p>F 算法、RK 算法、BM 算法、KMP 算法四种算法都是单模式串匹配算法, Trie 树是多模式串匹配算法。单模式串匹配算法，是在一个模式串和一个主串之间进行匹配，在一个主串中查找一个模式串。多模式串匹配算法，就是在多个模式串和一个主串之间做匹配，在一个主串中查找多个模式串。</p>
+<p>又称<strong>前缀树</strong>或<strong>字典树</strong>，是一种专门处理字符串匹配的树型结构。常用在搜索引擎的搜索关键词提示功能。</p>
+<p><strong>Trie 树的本质，就是利用字符串之间的公共前缀，将重复的前缀合并在一起</strong>。</p>
+<p>如how，hi，her，hello，so，see在这六个字符串中查找匹配。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/f8/6c/f848a7d8bda3d4f8bb4a7cbfaabab66c.jpg" alt="trie1 " loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/06/b6/06b45fde2ca8077465e0c557bc749ab6.jpg" alt=" " loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>根节点不包含任何信息。每个节点表示一个字符串中的字符，从根节点到红色节点的一条路径表示一个字符串（注意：红色节点并不都是叶子节点）。</p>
+<table>
+<thead>
+<tr>
+<th><img src="https://static001.geekbang.org/resource/image/6d/b9/6dbed0579a60c6d170bd8fde5990bfb9.jpg" alt="" loading="lazy"></th>
+<th><img src="https://static001.geekbang.org/resource/image/05/f9/05c3c5d534921f00a9ae33e7e65b1bf9.jpg" alt="" loading="lazy"></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>当在 Trie 树中查找一个字符串“her”的时候，将要查找的字符串分割成单个的字符 h，e，r，然后从 Trie 树的根节点开始匹配。绿色的路径就是在 Trie 树中匹配的路径。</p>
+<p>如果要查找的是字符串“he”，路径的最后一个节点“e”并不是红色的。也就是说，“he”是某个字符串的前缀子串，但并不能完全匹配任何字符串。</p>
+<h3 id="实现">实现</h3>
+<p>Trie 树主要有两个操作，<strong>一个是将字符串集合构造成 Trie 树</strong>，就是一个将字符串插入到 Trie 树的过程。<strong>另一个是在 Trie 树中查询一个字符串</strong>。</p>
+<p><strong>如何存储一个 Trie 树？</strong></p>
+<p>Trie 树是一个<strong>多叉树</strong>。借助散列表的思想，通过一个下标与字符一一映射的数组，来存储子节点的指针。</p>
+<img src="https://static001.geekbang.org/resource/image/f5/35/f5a4a9cb7f0fe9dcfbf29eb1e5da6d35.jpg" style="zoom:50%;" />
+<blockquote>
+<pre><code class="language-java">class TrieNode {
+  char data;
+  TrieNode children[26];
+}
+</code></pre>
+<p>假设字符串中只有从 a 到 z 这 26 个小写字母，在数组中下标为 0 的位置，存储指向子节点 a 的指针，下标为 1 的位置存储指向子节点 b 的指针。如果某个字符的子节点不存在，就在对应的下标的位置存储 null。</p>
+<p>在 Trie 树中查找字符串的时候，就可以通过字符的 ASCII 码减去“a”的 ASCII 码，迅速找到匹配的子节点的指针。比如，d 的 ASCII 码减去 a 的 ASCII 码就是 3，那子节点 d 的指针就存储在数组中下标为 3 的位置中。</p>
+</blockquote>
+<p>Trie 树的本质是避免重复存储一组字符串的相同前缀子串，一种非常独特的、高效的字符串匹配方法，针对Trie可能浪费内存，Trie 树的变体有很多，都可以在一定程度上解决内存消耗的问题。如<strong>缩点优化</strong>，对只有一个子节点的节点，将此节点与子节点合并。节省空间，但却增加了编码难度。</p>
+<p>Trie 树的优势并不在于，用它来做动态集合数据的查找，因为，这个工作完全可以用更加合适的散列表或者红黑树来替代。Trie 树最有优势的是查找前缀匹配的字符串，比如搜索引擎中的关键词提示功能这个场景。</p>
+<h2 id="ac-自动机">AC 自动机</h2>
+<p>Aho-Corasick 算法是经典的多模式串匹配算法，典型应用场景是<strong>敏感词过滤系统</strong></p>
+<p><strong>AC 自动机实际上就是在 Trie 树之上，加了类似 KMP 的 next 数组，只不过此处的 next 数组是构建在树上罢了</strong></p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
+<ul>
+<li><a href="#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0">算法描述</a></li>
+<li><a href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF">适用场景</a></li>
+<li><a href="#%E5%8F%98%E4%BD%93">变体</a></li>
+</ul>
+</li>
+<li><a href="#%E8%B7%B3%E8%A1%A8skip-list">跳表（Skip List）</a>
+<ul>
+<li><a href="#%E8%B7%B3%E8%A1%A8%E7%9A%84%E7%BB%93%E6%9E%84">跳表的结构</a></li>
+<li><a href="#%E9%AB%98%E6%95%88%E5%9C%B0%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4">高效地插入和删除</a></li>
+<li><a href="#%E8%B7%B3%E8%A1%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E5%8A%A8%E6%80%81%E6%9B%B4%E6%96%B0">跳表索引的动态更新</a></li>
+<li><a href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90">复杂度分析</a></li>
+</ul>
+</li>
+<li><a href="#%E6%95%A3%E5%88%97%E8%A1%A8">散列表</a>
+<ul>
+<li><a href="#%E6%95%A3%E5%88%97%E6%80%9D%E6%83%B3">散列思想</a></li>
+<li><a href="#%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0">散列函数</a></li>
+<li><a href="#%E6%95%A3%E5%88%97%E5%86%B2%E7%AA%81">散列冲突</a>
+<ul>
+<li><a href="#%E5%BC%80%E6%94%BE%E5%AF%BB%E5%9D%80%E6%B3%95">开放寻址法</a>
+<ul>
+<li><a href="#%E7%BA%BF%E6%80%A7%E6%8E%A2%E6%B5%8B">线性探测</a></li>
+<li><a href="#%E8%A3%85%E8%BD%BD%E5%9B%A0%E5%AD%90load-factor">装载因子（load factor）</a></li>
+</ul>
+</li>
+<li><a href="#%E9%93%BE%E8%A1%A8%E6%B3%95">链表法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E6%95%A3%E5%88%97%E8%A1%A8-2">散列表</a>
+<ul>
+<li><a href="#%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0-2">散列函数</a></li>
+<li><a href="#%E5%8A%A8%E6%80%81%E6%89%A9%E5%AE%B9rehash">动态扩容ReHash</a></li>
+<li><a href="#%E8%A7%A3%E5%86%B3%E5%86%B2%E7%AA%81">解决冲突</a></li>
+<li><a href="#java-%E4%B8%AD%E7%9A%84-hashmap">JAVA 中的 HashMap</a></li>
+</ul>
+</li>
+<li><a href="#%E6%95%A3%E5%88%97%E8%A1%A8-3">散列表</a>
+<ul>
+<li><a href="#%E7%BB%93%E5%90%88%E6%95%A3%E5%88%97%E8%A1%A8%E7%9A%84-lru-%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AE%97%E6%B3%95">结合散列表的 LRU 缓存淘汰算法</a></li>
+<li><a href="#java-linkedhashmap">Java: LinkedHashMap</a></li>
+</ul>
+</li>
+<li><a href="#%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95">哈希算法</a>
+<ul>
+<li><a href="#%E5%AE%89%E5%85%A8%E5%8A%A0%E5%AF%86">安全加密</a></li>
+<li><a href="#%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86">唯一标识</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C">数据校验</a></li>
+<li><a href="#%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E6%9C%89%E5%85%B3%E7%9A%84%E5%BA%94%E7%94%A8">和分布式系统有关的应用</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a><br>
+*
+<ul>
+<li><a href="#%E6%A0%91">树</a></li>
+<li><a href="#%E4%BA%8C%E5%8F%89%E6%A0%91-2">二叉树</a></li>
+<li><a href="#%E8%A1%A8%E7%A4%BA%E6%B3%95">表示法</a></li>
+<li><a href="#%E9%81%8D%E5%8E%86">遍历</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91">二叉查找树</a>
+<ul>
+<li><a href="#%E5%88%A0%E9%99%A4">删除</a></li>
+<li><a href="#%E6%94%AF%E6%8C%81%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91">支持重复数据的二叉查找树</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BA%A2%E9%BB%91%E6%A0%91">红黑树</a>
+<ul>
+<li><a href="#%E5%B9%B3%E8%A1%A1%E8%B0%83%E6%95%B4">平衡调整</a></li>
+</ul>
+</li>
+<li><a href="#%E9%80%92%E5%BD%92%E6%A0%91">递归树</a>
+<ul>
+<li><a href="#%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E5%A4%8D%E6%9D%82%E5%BA%A6">归并排序复杂度</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A0%86%E4%B8%8E%E5%A0%86%E6%8E%92%E5%BA%8F">堆与堆排序</a>
+<ul>
+<li><a href="#%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A0">插入元素</a><br>
+*
+<ul>
+<li><a href="#%E5%88%A0%E9%99%A4%E5%A0%86%E9%A1%B6%E5%85%83%E7%B4%A0">删除堆顶元素</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A0%86%E6%8E%92%E5%BA%8F">堆排序</a>
+<ul>
+<li><a href="#%E5%BB%BA%E5%A0%86">建堆</a></li>
+</ul>
+</li>
+<li><a href="#%E6%8E%92%E5%BA%8F">排序</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A0%86%E7%9A%84%E5%BA%94%E7%94%A8">堆的应用</a>
+<ul>
+<li><a href="#%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97">优先级队列</a></li>
+<li><a href="#%E5%88%A9%E7%94%A8%E5%A0%86%E6%B1%82-top-k">利用堆求 Top K</a></li>
+<li><a href="#%E5%88%A9%E7%94%A8%E5%A0%86%E6%B1%82%E4%B8%AD%E4%BD%8D%E6%95%B0">利用堆求中位数</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%BE">图</a>
+<ul>
+<li><a href="#%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5%E5%AD%98%E5%82%A8%E6%96%B9%E6%B3%95">邻接矩阵存储方法</a></li>
+<li><a href="#%E9%82%BB%E6%8E%A5%E8%A1%A8%E5%AD%98%E5%82%A8%E6%96%B9%E6%B3%95">邻接表存储方法</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B7%B1%E5%BA%A6%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2">深度广度优先搜索</a>
+<ul>
+<li><a href="#%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2bfs">广度优先搜索（BFS）</a></li>
+<li><a href="#%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2dfs">深度优先搜索（DFS）</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D">字符串匹配</a>
+<ul>
+<li><a href="#bf-%E7%AE%97%E6%B3%95">BF 算法</a></li>
+<li><a href="#rk-%E7%AE%97%E6%B3%95">RK 算法</a></li>
+<li><a href="#bmboyer-moore%E7%AE%97%E6%B3%95">BM（Boyer-Moore）算法</a></li>
+<li><a href="#kmp-%E7%AE%97%E6%B3%95%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86">KMP 算法基本原理</a></li>
+<li><a href="#trie%E6%A0%91">Trie树</a>
+<ul>
+<li><a href="#%E5%AE%9E%E7%8E%B0">实现</a></li>
+</ul>
+</li>
+<li><a href="#ac-%E8%87%AA%E5%8A%A8%E6%9C%BA">AC 自动机</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/shu-ju-jie-gou-yu-suan-fa-02/">
+              <h3 class="post-title">
+                排序算法
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

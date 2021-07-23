@@ -2,22 +2,38 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>数据结构与算法 | Joshua-Chang`Blog</title>
+<title>排序算法 | Joshua-Chang`Blog</title>
 <link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1627017694079">
 <link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="数据结构与算法 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="排序算法 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
 
 
 
-    <meta name="description" content="10 个数据结构：数组、链表、栈、队列、散列表、二叉树、堆、跳表、图、Trie 树；
-10 个算法：递归、排序、二分查找、搜索、哈希算法、贪心算法、分治算法、回溯算法、动态规划、字符串匹配算法。
+    <meta name="description" content="排序（平方时间复杂度排序算法）
 
 
-复杂度分析
-通过统计、监控，就能得到算法..." />
+
+排序算法
+时间复杂度
+是否基于比较
+
+
+
+
+冒泡、插入、选择
+O(n2)O(n^2)O(n2)
+[y]
+
+
+快排、归并
+O(nlog⁡n)O(n\log n)O(nlogn)
+[y]
+
+
+桶、基数、计数..." />
     <meta name="keywords" content="数据结构,算法" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
@@ -83,14 +99,14 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              数据结构与算法
+              排序算法
             </h2>
             <div class="post-info">
               <span>
                 2021-03-13
               </span>
               <span>
-                40 min read
+                15 min read
               </span>
               
                 <a href="https://Joshua-Chang.github.io/tag/BErOFr5XG/" class="post-tag">
@@ -103,386 +119,11 @@
               
             </div>
             
-              <img class="post-feature-image" src="https://static001.geekbang.org/resource/image/56/49/56f17c4b9c5a3cc329ca37cc6b328c49.jpg" alt="">
+              <img class="post-feature-image" src="https://static001.geekbang.org/resource/image/7c/67/7c40ffed3d9263a00af4d83198b54a67.jpg" alt="">
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>10 个数据结构：数组、链表、栈、队列、散列表、二叉树、堆、跳表、图、Trie 树；<br>
-10 个算法：递归、排序、二分查找、搜索、哈希算法、贪心算法、分治算法、回溯算法、动态规划、字符串匹配算法。</p>
-<!-- more -->
-<img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/image-20210713165526299.png" alt="image-20210713165526299" style="zoom:25%;" />
-<h1 id="复杂度分析">复杂度分析</h1>
-<p>通过统计、监控，就能得到算法执行的时间和占用的内存大小<strong>事后统计法</strong>有缺陷</p>
-<ol>
-<li>测试结果非常依赖测试环境</li>
-<li>测试结果受数据规模的影响很大</li>
-</ol>
-<p>因此需要一个不用具体的测试数据来测试，就可以粗略地估计算法的执行效率的方法。即<strong>时间、空间复杂度分析方法</strong>。</p>
-<h2 id="大-o-复杂度表示法">大 O 复杂度表示法</h2>
-<pre><code class="language-java"> int cal(int n) {
-   int sum = 0;//1
-   int i = 1;//1
-   int j = 1;//1
-   for (; i &lt;= n; ++i) {//执行n次
-     j = 1;//执行n次
-     for (; j &lt;= n; ++j) {//执行n^2次
-       sum = sum +  i * j;//执行n^2次
-     }
-   }
- }
-</code></pre>
-<p>假设每行代码执行的时间都一样，为 unit_time。</p>
-<p>总的执行时间 T(n) = (2n^2+2n+3)*unit_time。</p>
-<p><strong>代码总的执行时间 T(n) 与每行代码的执行次数n成正比</strong>，总结成公式为</p>
-<blockquote>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mi>O</mi><mo>(</mo><mi>f</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)=O(f(n))
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></span></p>
-<p>n表示每行代码的执行次数。即数据的规模大小</p>
-<p>T(n)代码执行的总时间</p>
-<p>f(n) 表示每行代码执行的次数的总和，即总次数。</p>
-<p>O：表示代码的执行时间 T(n) 与 f(n)代码执行总次数表达式成正比。</p>
-</blockquote>
-<p>T(n) = O(2n^2+2n+3)。</p>
-<h2 id="时间复杂度">时间复杂度</h2>
-<p><strong>大 O 时间复杂度表示法</strong>。大 O 时间复杂度实际上并不具体表示代码真正的执行时间，而是表示<strong>代码执行时间随数据规模增长的变化趋势</strong>，所以，也叫作<strong>渐进时间复杂度</strong>（asymptotic time complexity），简称<strong>时间复杂度</strong>，<strong>表示算法的执行时间与数据规模之间的增长关系</strong>。</p>
-<ol>
-<li>
-<p><strong>只关注循环执行次数最多的一段代码</strong></p>
-<p>大 O 这种复杂度表示方法只是表示一种变化趋势。我们通常会忽略掉公式中的常量、低阶、系数，只需要记录一个最大阶的量级就可以了。</p>
-</li>
-<li>
-<p><strong>加法法则：总复杂度等于量级最大的那段代码的复杂度</strong></p>
-<p>整体中有多个独立的复杂度操作，整体的复杂度为独立操作中最大的复杂度</p>
-</li>
-<li>
-<p><strong>乘法法则：嵌套代码的复杂度等于嵌套内外代码复杂度的乘积</strong></p>
-<p>嵌套循环复杂度为内外操作复杂度的乘积</p>
-</li>
-</ol>
-<h3 id="常见时间复杂度">常见时间复杂度</h3>
-<img src="https://Joshua-Chang.github.io/post-images/1615628804979.jpg" style="zoom: 50%;" />
-<ol>
-<li><strong>O(1)</strong><br>
-代码的执行时间不随 n 的增大而增长。一般情况下，只要算法中不存在循环语句、递归语句，即使有成千上万行的代码，其时间复杂度也是Ο(1)。</li>
-<li><strong>O(m+n...)、O(m*n...)</strong><br>
-时间复杂度<strong>由两个(多个)数据的规模</strong>决定时，不知道哪个量级更大，无法用加法法则忽略，则相加；若有相乘操作则复杂度相乘。</li>
-<li><strong>O(logn)、O(nlogn)</strong></li>
-</ol>
-<pre><code class="language-java">i=1;
-while (i &lt;= n)  {
-i = i * 3;
-}
-</code></pre>
-<p>时间复杂度可转化成</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>3</mn><mi>i</mi></msup><mo>=</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">3^i=n
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8746639999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">3</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8746639999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span></span></p>
-<p>求i问题，结果为：</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>=</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>3</mn></msub><mi>n</mi></mrow><annotation encoding="application/x-tex">i=log_3n
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span></span></span></span></span></p>
-<p>以3为底n的对数，因此这段代码时间复杂度为</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>3</mn></msub><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(log_3n)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></span></p>
-<p>因为对数的底，可以转换如下的相乘</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>3</mn></msub><mi>n</mi><mo>=</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>3</mn></msub><mn>2</mn><mo>∗</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi></mrow><annotation encoding="application/x-tex">log_3n=log_32 * log_2n
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span></span></span></span></span></p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>C</mi><mo>=</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>3</mn></msub><mn>2</mn></mrow><annotation encoding="application/x-tex">C=log_32 
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">2</span></span></span></span></span></p>
-<p>C是一个常量，忽略系数则复杂度相同。</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>3</mn></msub><mi>n</mi><mo>)</mo><mo>=</mo><mi>O</mi><mo>(</mo><mi>C</mi><mo>∗</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(log_3n) = O(C * log_2n)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></span></p>
-<p>因此在对数阶时间复杂度的表示方法里，忽略对数的“底”，把所有对数阶的时间复杂度都记为 O(logn)。</p>
-<p>如果一段代码的时间复杂度是 O(logn)，循环执行 n 遍，时间复杂度就为:</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mi>n</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">O(nlog_n)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
-<p>归并排序、快速排序的时间复杂度都是这样。</p>
-<p>常见的复杂度从低阶到高阶：O(1)、O(logn)、O(n)、O(nlogn)、O(n2 )</p>
-<img src="https://Joshua-Chang.github.io/post-images/1615628794973.jpg" style="zoom: 33%;" />
-<p>n为数据规模可以理解为每行代码执行的次数。T(n)为执行的总时间。</p>
-<p>作一条与n平行的切线：时间复杂度越低，每行代码在同样地时间里能被执行的次数越多。</p>
-<p>作一条与T(n)平行的切线，即每行代码执行同样的次数时：时间复杂度越低，耗费的时间就越短。</p>
-<h2 id="空间复杂度分析">空间复杂度分析</h2>
-<p>空间复杂度全称就是<strong>渐进空间复杂度</strong>（asymptotic space complexity），<strong>表示算法的存储空间与数据规模之间的增长关系</strong>。</p>
-<h2 id="概率纬度">概率纬度</h2>
-<p><strong>最好情况时间复杂度</strong>（best case time complexity）、<strong>最坏情况时间复杂度</strong>（worst case time complexity）、<strong>平均情况时间复杂度</strong>（average case time complexity）、<strong>均摊时间复杂度</strong>（amortized time complexity）。</p>
-<pre><code class="language-java">// n 表示数组 array 的长度
-int find(int[] array, int n, int x) {
-  int i = 0;
-  int pos = -1;
-  for (; i &lt; n; ++i) {
-    if (array[i] == x){
-			pos = i;      
-      break;
-    } 
-  }
-  return pos;
-}
-</code></pre>
-<p>在无序的数组中，查找变量的位置</p>
-<p><strong>最好情况时间复杂度</strong>:遍历数组时第一位就是O(1)</p>
-<p><strong>最坏情况时间复杂度</strong>:遍历数组完毕也没找到O(n)</p>
-<p><strong>平均情况时间复杂度</strong>:变量在数组中的位置有n+1种情况（在数组中n种，不在1种）,求得其<strong>加权平均值</strong>为 (3n+1)/4。去掉系数和常量仍为O(n)</p>
-<p>在大多数情况下，我们并不需要区分最好、最坏、平均情况时间复杂度三种情况。只有同一块代码在不同的情况下，时间复杂度有量级的差距，我们才会使用这三种复杂度表示法来区分</p>
-<blockquote>
-<p>变量在在数组中的位置有n+1种情况。把每种情况下，查找需要遍历的元素个数累加起来(不再数组中也要遍历n个)，然后再除以 n+1，就可以得到平均要遍历多少个元素，才能找到该变量。</p>
-<figure data-type="image" tabindex="1"><img src="https://static001.geekbang.org/resource/image/d8/2f/d889a358b8eccc5bbb90fc16e327a22f.jpg" alt="" loading="lazy"></figure>
-<p>假设在数组中与不在数组中的概率都为 1/2。要查找的数据出现在 0～n-1 这 n 个位置的概率是 1/n。根据概率乘法法则，要查找的数据在该数组内，且出现在 0～n-1 中任意位置的概率就是 1/(2n)。</p>
-<p>如果将各种情况发生的概率考虑进去</p>
-<figure data-type="image" tabindex="2"><img src="https://static001.geekbang.org/resource/image/36/7f/36c0aabdac69032f8a43368f5e90c67f.jpg" alt="" loading="lazy"></figure>
-<p>这个值就是概率论中的<strong>加权平均值</strong>，也叫作<strong>期望值</strong>，所以平均时间复杂度的全称应该叫<strong>加权平均时间复杂度</strong>或者<strong>期望时间复杂度</strong>。</p>
-</blockquote>
-<p><strong>均摊时间复杂度</strong>：</p>
-<ol>
-<li>insert() 在大部分情况下，时间复杂度都为 O(1)，个别情况下为 O(n)。</li>
-<li>O(1) 时间复杂度的插入和 O(n) 时间复杂度的插入，的频率有前后时序关系规律。一个 O(n) 插入之后，紧跟着 n-1 个 O(1) 的插入，循环往复。</li>
-</ol>
-<p><strong>摊还分析法</strong>：把1次耗时多的 O(n) 的插入操作，均摊到接下来的 n-1 次耗时少的操作上。均摊时间复杂度就是 O(1)。</p>
-<pre><code class="language-java"> int[] array = new int[n];
- int count = 0;
- void insert(int val) {
-    if (count == array.length) {
-       int sum = 0;
-       for (int i = 0; i &lt; array.length; ++i) {
-          sum = sum + array[i];
-       }
-       array[0] = sum;
-       count = 1;
-    }
- 
-    array[count] = val;
-    ++count;
- }
-</code></pre>
-<p>对一个数据结构进行一组连续操作中，大部分情况下时间复杂度都很低，只有个别情况下时间复杂度比较高，而且这些操作之间存在前后连贯的时序关系，这个时候，我们就可以将这一组操作放在一块儿分析，看是否能将较高时间复杂度那次操作的耗时，平摊到其他那些时间复杂度比较低的操作上。</p>
-<h1 id="数组">数组</h1>
-<p><strong>数组（Array）是一种线性表数据结构。它用一组连续的内存空间，来存储一组具有相同类型的数据。</strong></p>
-<p><strong>线性表</strong>（Linear List）就是数据排成像一条线一样的结构。每个线性表上的数据最多只有前和后两个方向。数组、链表、队列、栈等也是线性表结构。而二叉树、堆、图等是非线性的，是因为，在非线性表中，数据之间并不是简单的前后关系。</p>
-<p><strong>连续的内存空间和相同类型的数据</strong> 才能<strong>随机访问</strong>。但这两个限制下要想在数组中删除、插入一个数据，为了保证连续性，就需要做大量的数据搬移工作。</p>
-<p><strong>根据下标随机访问数组元素</strong>：目标元素地址 = 首元素地址 + i * 元素大小</p>
-<blockquote>
-<p>链表适合插入、删除，时间复杂度 O(1)；数组适合查找，查找时间复杂度为 O(1)”。这种表述是不准确的。数组是适合查找操作，但是查找的时间复杂度并不为 O(1)。即便是排好序的数组，你用二分查找，时间复杂度也是 O(logn)。</p>
-<p>正确的表述应该是，数组支持随机访问，根据下标随机访问的时间复杂度为 O(1)。</p>
-</blockquote>
-<h2 id="低效的插入和删除">低效的“插入”和“删除”</h2>
-<p>插入操作：如果要将数据插入到长度为 n的数组，中的第 k 个位置。</p>
-<ul>
-<li>如果数组中的数据是有序的，要搬移 k及之后的数据往后挪一位。k在数组末尾： O(1)，k在数组开头： O(n)，平均 (1+2+…n)/n=O(n)</li>
-<li>数组只是被当作一个存储数据的集合，存储的数据并无规律时。为了避免大规模的数据搬移，可以直接将第 k 位的数据搬移到数组元素的最后，把新的元素直接放入第 k 个位置。利用这种处理思想，在特定场景下(如快排)时间复杂度将为O(1)</li>
-</ul>
-<p>插入操作：如果要将删除长度为 n的数组，中的第 k 个元素。</p>
-<ul>
-<li>为了内存的连续性，也需要搬移数据。k在数组末尾： O(1)，k在数组开头： O(n)，平均O(n)</li>
-<li>在数组内的数据不要求连续性时，可以将多次删除操作集中在一起执行，以提高效率。</li>
-</ul>
-<blockquote>
-<p>JVM 标记清除垃圾回收算法的核心思想</p>
-<p>先记录下已经删除的数据。每次的删除操作并不是真正地搬移数据，只是记录数据已经被删除。当数组没有更多空间存储数据时，我们再触发执行一次真正的删除操作，这样就大大减少了删除操作导致的数据搬移。</p>
-</blockquote>
-<h2 id="数组越界">数组越界</h2>
-<pre><code class="language-c">int main(int argc, char* argv[]){
-    int i = 0;
-    int arr[3] = {0};//size
-    for(; i&lt;=3; i++){//length
-        arr[i] = 0;
-        printf(&quot;hello world\n&quot;);
-    }
-    return 0;
-}
-</code></pre>
-<p>声明数组时arr[3]，3是数组size。最多存储下标为0、1、2三个元素</p>
-<p>使用数组时arr[3]，3是下标。下标为3，访问数组越界。</p>
-<blockquote>
-<p>在C语言中会无限打印。在 C 语言中，只要不是访问受限的内存，所有的内存空间都可以自由访问，arr[3]</p>
-<p>访问的不属于数组的内存地址上，而这个地址正好是存储变量 i 的内存地址。因此arr[3]=0相当于i=0，而无限循环。</p>
-<p>Java会做越界检查</p>
-</blockquote>
-<h2 id="容器能否完全替代数组">容器能否完全替代数组？</h2>
-<p>针对数组类型，很多语言都提供了容器类，比如 Java 中的 ArrayList、C++ STL 中的 vector。</p>
-<p>ArrayList 优势是<strong>可以将很多数组操作的细节封装起来</strong>。比如数组插入、删除数据时需要搬移其他数据等。另外它还<strong>支持动态扩容</strong>。</p>
-<blockquote>
-<p>因为扩容操作涉及内存申请和数据搬移，比较耗时。因此如果事先能确定需要存储的数据大小，最好<strong>在创建 ArrayList 的时候事先指定数据大小</strong>。</p>
-</blockquote>
-<ol>
-<li>
-<p>Java ArrayList 无法存储基本类型，比如 int、long，需要封装为 Integer、Long 类，而 Autoboxing、Unboxing 则有一定的性能消耗，所以如果特别关注性能，或者希望使用基本类型，就可以选用数组。</p>
-</li>
-<li>
-<p>如果数据大小事先已知，并且对数据的操作非常简单，用不到 ArrayList 提供的大部分方法，也可以直接使用数组。</p>
-</li>
-<li>
-<p>在表示多维数组时，用数组往往会更加直观。比如 <code>Object[][] array</code>；而用容器的话则需要这样定义：<code>ArrayList&lt;ArrayList &gt; array</code>。</p>
-</li>
-</ol>
-<p>对于业务开发，直接使用容器省时省力，性能的略微损耗，完全不会影响到系统整体的性能。</p>
-<p>但如果做一些非常底层的开发，如开发网络框架，性能的优化需要做到极致，数组就会优于容器。</p>
-<blockquote>
-<p>为什么大多数编程语言中，数组要从 0 开始编号，而不是从 1 开始呢？</p>
-<p>从数组存储的内存模型上来看，“下标”最确切的定义应该是“偏移（offset）”。如果用 a 来表示数组的首地址，a[0] 就是偏移为 0 的位置，也就是首地址，a[k] 就表示偏移 k 个 type_size 的位置，所以计算 a[k] 的内存地址只需要<code>a[k]_address = base_address + k * type_size</code></p>
-<p>但Matlab下标并非从0开始。Python下标还能为负数。</p>
-</blockquote>
-<h1 id="链表">链表</h1>
-<p>缓存的大小有限，当缓存被用满时，哪些数据应该被清理出去，哪些数据应该被保留？这就需要<strong>缓存淘汰策略</strong>来决定。常见的策略有三种：先进先出策略 FIFO（First In，First Out）、最少使用策略 LFU（Least Frequently Used）、最近最少使用策略 LRU（Least Recently Used）。</p>
-<p>数组需要一块<strong>连续的内存空间</strong>来存储；链表（Linked list）并不需要一块连续的内存空间，它通过“指针”将一组<strong>零散的内存块</strong>串联起来使用。数组的内存空间固定，因内存不足扩容而拷贝时损耗时间和性能；链表没有大小限制。</p>
-<p>常见的链表结构有单链表、双向链表和循环链表。</p>
-<p>链表通过指针将一组零散的内存块串联在一起。其中内存块称为链表的“<strong>结点</strong>”。记录下个结点地址的指针叫作<strong>后继指针 next</strong>。</p>
-<p>因为链表的存储空间本身就不是连续的（并不需要像数组为了保持内存的连续性而搬移结点）。所以在链表中<strong>插入和删除</strong>一个数据是非常快速的。</p>
-<p>链表中的数据并非连续存储的，当链表要想<strong>随机访问</strong>第 k 个元素时，需要根据指针一个结点一个结点地依次遍历，直到找到相应的结点。</p>
-<table>
-<thead>
-<tr>
-<th><img src="https://static001.geekbang.org/resource/image/b9/eb/b93e7ade9bb927baad1348d9a806ddeb.jpg" alt="1" loading="lazy"></th>
-<th><img src="https://static001.geekbang.org/resource/image/45/17/452e943788bdeea462d364389bd08a17.jpg" alt="" loading="lazy"></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th><img src="https://static001.geekbang.org/resource/image/86/55/86cb7dc331ea958b0a108b911f38d155.jpg" alt="" loading="lazy"></th>
-<th><img src="https://static001.geekbang.org/resource/image/cb/0b/cbc8ab20276e2f9312030c313a9ef70b.jpg" alt="" loading="lazy"></th>
-<th><img src="https://static001.geekbang.org/resource/image/d1/91/d1665043b283ecdf79b157cfc9e5ed91.jpg" alt="3" loading="lazy"></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-<p><strong>循环链表</strong>的尾结点指针是指向链表的头结点。优点是从链尾到链头比较方便。当要处理的数据具有环型结构特点时，就特别适合采用循环链表。</p>
-<p><strong>双向链表</strong>可以支持 O(1) 时间复杂度的情况下找到前驱结点，双向链表在某些情况下的插入、删除等操作都要比单链表简单、高效。如LinkedHashMap</p>
-<blockquote>
-<ul>
-<li>删除/插入结点中“值等于某个给定值”的结点；</li>
-<li>删除/插件给定指针指向的结点。</li>
-</ul>
-<p>第一种情况，不管是单链表还是双向链表，都需要从头结点开始一个一个依次遍历对比，直到找到值等于给定值的结点，然后再通过指针操作将其删除/作插入操作。尽管单删除/插入操作是O(1)，但遍历查找却O(n)，加法法则O(n)</p>
-<p>第二种情况，要改变前驱节点的next指针的指向。单链表为了找前驱节点要从头遍历一遍。</p>
-<p>即插入/删除前二者都要查找。但当查找到节点或已知要插入/删除的节点的前提下，不必查找，只需改变指针指向时。单向链表还要遍历查找前驱节点；双向链表可直接获取。</p>
-<p>除了插入、删除操作有优势之外，对于一个有序链表，双向链表的按值查询的效率也要比单链表高一些。记录上次查找的位置 p，每次查询时，根据要查找的值与 p 的大小关系，决定是往前还是往后查找，所以平均只需要查找一半的数据。</p>
-<p>因此双向链表尽管比较费内存(多一个前指针)，但还是比单链表的应用更加广泛。</p>
-</blockquote>
-<p>如何基于链表实现 LRU 缓存淘汰算法？</p>
-<p>维护一个有序单链表，越靠近链表尾部的结点是越早之前访问的。当有一个新的数据被访问时，我们从链表头开始顺序遍历链表。</p>
-<ol>
-<li>
-<p>如果此数据之前已经被缓存在链表中了，我们遍历得到这个数据对应的结点，并将其从原来的位置删除，然后再插入到链表的头部。</p>
-</li>
-<li>
-<p>如果此数据没有在缓存链表中，又可以分为两种情况：</p>
-</li>
-</ol>
-<ul>
-<li>如果此时缓存未满，则将此结点直接插入到链表的头部；</li>
-<li>如果此时缓存已满，则链表尾结点删除，将新的数据结点插入链表的头部。</li>
-</ul>
-<p>不管缓存有没有满，都需要遍历一遍链表，缓存访问的时间复杂度为 O(n)</p>
-<h2 id="链表代码">链表代码</h2>
-<ul>
-<li>
-<p><strong>插入结点时，一定要注意操作的顺序</strong></p>
-<pre><code class="language-c">new_node-&gt;next = p-&gt;next;
-p-&gt;next = new_node;//顺序反了会使链表断裂
-</code></pre>
-</li>
-<li>
-<p><strong>针对链表的插入、删除操作，需要对空链表插入第一个结点和删除链表中仅剩的最后一个结点的边界情况进行特殊处理</strong>，这样比较麻烦， <strong>增加哨兵节点</strong>，让边界操作普通化。head 指针指向哨兵节点，该节点不存储任何数据。有哨兵结点的链表叫<strong>带头链表</strong>。</p>
-<blockquote>
-<p>删除最后一个节点是指链表中仅剩的一个节点，而不是末尾的节点。</p>
-<p>插入第一个节点是链表为空时插入的第一个节点，而不是在首插入节点。</p>
-<p>利用哨兵简化编程难度的技巧，在插入排序、归并排序、动态规划等也有使用。</p>
-</blockquote>
-</li>
-</ul>
-<figure data-type="image" tabindex="3"><img src="https://static001.geekbang.org/resource/image/7d/c7/7d22d9428bdbba96bfe388fe1e3368c7.jpg" alt="head" loading="lazy"></figure>
-<h1 id="栈">栈</h1>
-<p><strong>先进者后出，后进者先出</strong>，是典型的“栈”结构。<strong>栈是一种“操作受限”的线性表</strong>，只允许在一端插入和删除数据。</p>
-<p><strong>当某个数据集合只涉及在一端插入和删除数据；并且满足后进先出、先进后出的特性，应该首选“栈”这种数据结构</strong>。</p>
-<p>栈主要包含两个操作，入栈和出栈，也就是在栈顶插入一个数据和从栈顶删除一个数据。</p>
-<p>用数组实现的栈，我们叫作<strong>顺序栈</strong>，用链表实现的栈，我们叫作<strong>链式栈</strong>。</p>
-<p>不管是顺序栈还是链式栈，存储数据只需要一个大小为 n 的数组。入栈和出栈过程中，只需要一两个临时变量存储空间，所以空间复杂度是 O(1)。</p>
-<p>不管是顺序栈还是链式栈，入栈、出栈只涉及栈顶个别数据的操作，时间复杂度都是 O(1)。</p>
-<blockquote>
-<p>存储数据需要一个大小为 n 的数组，并不是说空间复杂度就是 O(n)。因为，这 n 个空间是必须的，无法省掉。说空间复杂度的时候，是指除了原本的数据存储空间外，算法运行还需要额外的存储空间。</p>
-</blockquote>
-<p>支持动态扩容的顺序栈，底层依赖一个支持动态扩容的数组既可，在平时开发中并不常用到。扩容插入时间复杂度O(n)，非扩容O(1)，均摊时间复杂度一般都等于最好情况时间复杂度。</p>
-<p>栈的应用：函数调用栈、表达式求值、括号匹配等</p>
-<h1 id="队列">队列</h1>
-<p><strong>先进者先出，就是队列</strong>。队列最基本的操作也是两个：<strong>入队 enqueue()</strong>，放一个数据到队列尾部；<strong>出队 dequeue()</strong>，从队列头部取一个元素。队列也是一种<strong>操作受限的线性表数据结构</strong>。</p>
-<p>用数组实现的队列叫作<strong>顺序队列</strong>，用链表实现的队列叫作<strong>链式队列</strong>。</p>
-<p>栈来只需要一个<strong>栈顶指针</strong>。但是队列需要两个指针：一个是 head 指针，指向队头；一个是 tail 指针，指向队尾。</p>
-<h2 id="顺序队列">顺序队列</h2>
-<table>
-<thead>
-<tr>
-<th><img src="https://static001.geekbang.org/resource/image/5c/cb/5c0ec42eb797e8a7d48c9dbe89dc93cb.jpg" alt="queue" loading="lazy"></th>
-<th><img src="https://static001.geekbang.org/resource/image/de/0d/dea27f2c505dd8d0b6b86e262d03430d.jpg" alt="queue2" loading="lazy"></th>
-<th><img src="https://static001.geekbang.org/resource/image/09/c7/094ba7722eeec46ead58b40c097353c7.jpg" alt="queue3" loading="lazy"></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-<p>随着不停地进行入队、出队操作，head 和 tail 都会持续往后移动。当 tail 移动到最右边，即使数组中还有空闲空间，也无法继续往队列中添加数据了。</p>
-<p>当队列的 tail 指针移动到数组的最右边后，如果再有新的数据入队，我们可以将 head 到 tail 之间的数据，整体搬移到数组中 0 到 tail-head 的位置。</p>
-<h2 id="链式队列">链式队列</h2>
-<p>入队时，<code>tail-&gt;next= new_node, tail = tail-&gt;next；</code> 出队时， <code>head = head-&gt;next</code>。</p>
-<h2 id="循环队列">循环队列</h2>
-<p>当 tail 移动到最右边，会有数据搬移操作，提高时间复杂度。避免搬移操作采用循环队列。</p>
-<table>
-<thead>
-<tr>
-<th><img src="https://static001.geekbang.org/resource/image/58/90/58ba37bb4102b87d66dffe7148b0f990.jpg" alt="circle" loading="lazy"></th>
-<th><img src="https://static001.geekbang.org/resource/image/71/80/71a41effb54ccea9dd463bde1b6abe80.jpg" alt="" loading="lazy"></th>
-<th><img src="https://static001.geekbang.org/resource/image/3d/ec/3d81a44f8c42b3ceee55605f9aeedcec.jpg" alt="circle3" loading="lazy"></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-<p>当队列满时，tail 指向的位置实际上是没有存储数据的。所以，循环队列会浪费一个数组的存储空间。</p>
-<p>非循环队列队空条件：head==tail</p>
-<p>非循环队列队满条件： tail == capacity。移动数据后队满还要同时满足head==0</p>
-<p>判断循环队列的空/满条件是关键。</p>
-<p>循环队列队空条件：head == tail</p>
-<p>循环队列队满条件：<strong>(tail+1)%n=head</strong> 	%n只是确定相对位置。tail+1指tail的下一个是head</p>
-<h2 id="阻塞队列和并发队列">阻塞队列和并发队列</h2>
-<p>实际业务开发中，只有一些具有特殊特性的队列应用却比较广泛，比如阻塞队列和并发队列。</p>
-<p><strong>阻塞队列</strong>其实就是在队列基础上增加了阻塞操作。即在队列为空的时候，从队头取数据会被阻塞。因为此时还没有数据可取，直到队列中有了数据才能返回；如果队列已经满了，那么插入数据的操作就会被阻塞，直到队列中有空闲位置后再插入数据，然后再返回。</p>
-<p>基于阻塞队列实现的“生产者 - 消费者模型”，可以有效地协调生产和消费的速度。当“生产者”生产数据的速度过快，“消费者”来不及消费时，存储数据的队列很快就会满了。这个时候，生产者就阻塞等待，直到“消费者”消费了数据，“生产者”才会被唤醒继续“生产”。</p>
-<p>基于阻塞队列，可以通过协调“生产者”和“消费者”的个数，来提高数据的处理效率。即多个线程同时操作队列，此时就采用线程安全的队列：**并发队列。**实现方式是直接在 enqueue()、dequeue() 方法上加锁，但是锁粒度大并发度会比较低，同一时刻仅允许一个存或者取操作。基于数组的循环队列，利用 CAS 原子操作，可以实现非常高效的并发队列。</p>
-<blockquote>
-<p>线程池没有空闲线程时，新的任务请求线程资源时，线程池该如何处理？</p>
-<p>第一种是非阻塞的处理方式，直接拒绝任务请求；另一种是阻塞的处理方式，将请求排队，等到有空闲线程时，取出排队的请求继续处理。</p>
-<p>基于链表可以实现一个的无界队列（unbounded queue），可能会导致过多的请求排队等待。</p>
-<p>基于数组实现的有界队列（bounded queue），排队的请求超过队列大小时，请求就会被拒绝。</p>
-<p><strong>对于大部分资源有限的场景，当没有空闲资源时，基本上都可以通过“队列”这种数据结构来实现请求排队。</strong></p>
-</blockquote>
-<h1 id="递归">递归</h1>
-<p>递归recursion是一种应用非常广泛的算法（或者编程技巧）。很多数据结构和算法的编码实现都要用到递归，比如 DFS 深度优先搜索、前中后序二叉树遍历等等。</p>
-<p>递归需要满足的三个条件</p>
-<ol>
-<li>一个问题的解<strong>可分解</strong>为几个子问题的解</li>
-<li>这个问题与分解之后的子问题，除了数据规模不同，求解<strong>思路一样</strong></li>
-<li><strong>存在递归终止条件</strong></li>
-</ol>
-<p>写递归代码的关键就是找到如何将大问题分解为小问题的规律，并且基于此<strong>写出递推公式</strong>，然后再<strong>推出终止条件</strong>，最后将递推公式和终止条件<strong>翻译成代码</strong>。</p>
-<h2 id="楼梯问题">楼梯问题</h2>
-<p>有 n 个台阶，每次可以跨 1 个台阶或者 2 个台阶，走完n个台阶共有多少种走法？</p>
-<p>分解：第一类先跨1个台阶；第二类先跨2个台阶。<code>f(n-1)</code> <code>f(n-2)</code> 都是求剩余的走法。</p>
-<p>递推公式：<code>f(n) = f(n-1)+f(n-2)</code></p>
-<p>终止条件：<code>f(1)=1</code> <code>f(2)=2</code> 走1个台阶只有1种走法；走2个台阶有2种走法。</p>
-<p>翻译成代码：</p>
-<pre><code class="language-java">int f(int n) {
-  if (n == 1) return 1;
-  if (n == 2) return 2;
-  return f(n-1) + f(n-2);
-}
-</code></pre>
-<h2 id="思维陷阱">思维陷阱</h2>
-<p>人脑更喜欢平铺直叙的思维方式。当我们看到递归时，总想把递归平铺展开，脑子里就会循环，一层一层往下调，然后再一层一层返回，试图想搞清楚计算机每一步都是怎么执行的，这样就很容易被绕进去。</p>
-<p>人脑几乎没办法把整个“递”和“归”的过程一步一步都想清楚。试图用人脑想清楚整个递和归过程的做法，就是思维误区。</p>
-<p><strong>遇到递归，就把它抽象成一个递推公式，而不要想一层层的调用关系，不要试图用人脑去分解递归的每个步骤</strong></p>
-<h2 id="递归注意的问题">递归注意的问题</h2>
-<p>堆栈溢出：可以用全局变量控制键递归的深度。</p>
-<p>重复计算：可以通过一个数据结构（比如散列表）来保存已经求解过的，再遇到免去计算直接取。</p>
-<p>递归代码的表达力很强，写起来非常简洁；但空间复杂度高、有堆栈溢出的风险、存在重复计算、过多的函数调用会耗时较多。</p>
-<p>笼统的讲，所有的递归代码都可以改为<strong>迭代循环</strong>的非递归写法。但本质只是把方法栈里栈帧的递归，换成了“手动”递归，原来方法递归的缺点没能改善，还徒增实现难度。</p>
-<h1 id="排序平方时间复杂度排序算法">排序（平方时间复杂度排序算法）</h1>
+                <h1 id="排序平方时间复杂度排序算法">排序（平方时间复杂度排序算法）</h1>
 <table>
 <thead>
 <tr>
@@ -531,7 +172,7 @@ p-&gt;next = new_node;//顺序反了会使链表断裂
 <li>每次循环都从序列起始位置开始</li>
 <li>循环中的每个动作，都对比相邻两个元素的大小是否满足偏序要求，若不满足，则交换顺序</li>
 </ul>
-<figure data-type="image" tabindex="4"><img src="https://static001.geekbang.org/resource/image/88/34/8890cbf63ea80455ce82490a23361134.jpg" alt="冒泡排序例图" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://static001.geekbang.org/resource/image/88/34/8890cbf63ea80455ce82490a23361134.jpg" alt="冒泡排序例图" loading="lazy"></figure>
 <p>分析：</p>
 <ul>
 <li>原地排序</li>
@@ -857,50 +498,14 @@ partition(A, p, r) {
 </ul>
 </li>
 </ul>
+<h2 id="优化">优化</h2>
+<figure data-type="image" tabindex="2"><img src="https://static001.geekbang.org/resource/image/1f/fd/1f6ef7e0a5365d6e9d68f0ccc71755fd.jpg" alt="比较" loading="lazy"></figure>
+<p>大部分排序函数都是采用 O(nlogn) 排序算法来实现，但是为了尽可能地提高性能，会做很多优化。</p>
+<p>比如快速排序pivot点选择：可以随机选择可以首、尾、中间比较选大小中间的。</p>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90">复杂度分析</a>
-<ul>
-<li><a href="#%E5%A4%A7-o-%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%A1%A8%E7%A4%BA%E6%B3%95">大 O 复杂度表示法</a></li>
-<li><a href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6">时间复杂度</a>
-<ul>
-<li><a href="#%E5%B8%B8%E8%A7%81%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6">常见时间复杂度</a></li>
-</ul>
-</li>
-<li><a href="#%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90">空间复杂度分析</a></li>
-<li><a href="#%E6%A6%82%E7%8E%87%E7%BA%AC%E5%BA%A6">概率纬度</a></li>
-</ul>
-</li>
-<li><a href="#%E6%95%B0%E7%BB%84">数组</a>
-<ul>
-<li><a href="#%E4%BD%8E%E6%95%88%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4">低效的“插入”和“删除”</a></li>
-<li><a href="#%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C">数组越界</a></li>
-<li><a href="#%E5%AE%B9%E5%99%A8%E8%83%BD%E5%90%A6%E5%AE%8C%E5%85%A8%E6%9B%BF%E4%BB%A3%E6%95%B0%E7%BB%84">容器能否完全替代数组？</a></li>
-</ul>
-</li>
-<li><a href="#%E9%93%BE%E8%A1%A8">链表</a>
-<ul>
-<li><a href="#%E9%93%BE%E8%A1%A8%E4%BB%A3%E7%A0%81">链表代码</a></li>
-</ul>
-</li>
-<li><a href="#%E6%A0%88">栈</a></li>
-<li><a href="#%E9%98%9F%E5%88%97">队列</a>
-<ul>
-<li><a href="#%E9%A1%BA%E5%BA%8F%E9%98%9F%E5%88%97">顺序队列</a></li>
-<li><a href="#%E9%93%BE%E5%BC%8F%E9%98%9F%E5%88%97">链式队列</a></li>
-<li><a href="#%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97">循环队列</a></li>
-<li><a href="#%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E5%92%8C%E5%B9%B6%E5%8F%91%E9%98%9F%E5%88%97">阻塞队列和并发队列</a></li>
-</ul>
-</li>
-<li><a href="#%E9%80%92%E5%BD%92">递归</a>
-<ul>
-<li><a href="#%E6%A5%BC%E6%A2%AF%E9%97%AE%E9%A2%98">楼梯问题</a></li>
-<li><a href="#%E6%80%9D%E7%BB%B4%E9%99%B7%E9%98%B1">思维陷阱</a></li>
-<li><a href="#%E9%80%92%E5%BD%92%E6%B3%A8%E6%84%8F%E7%9A%84%E9%97%AE%E9%A2%98">递归注意的问题</a></li>
-</ul>
-</li>
 <li><a href="#%E6%8E%92%E5%BA%8F%E5%B9%B3%E6%96%B9%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95">排序（平方时间复杂度排序算法）</a>
 <ul>
 <li><a href="#%E5%A6%82%E4%BD%95%E5%88%86%E6%9E%90%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95">如何分析「排序算法」？</a>
@@ -952,6 +557,7 @@ partition(A, p, r) {
 <li><a href="#%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90-5">算法分析</a></li>
 </ul>
 </li>
+<li><a href="#%E4%BC%98%E5%8C%96">优化</a></li>
 </ul>
 </li>
 </ul>
@@ -964,9 +570,9 @@ partition(A, p, r) {
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Joshua-Chang.github.io/post/ji-suan-ji-zu-cheng-yuan-li-05-chu-li-qi-she-ji-xia/">
+            <a href="https://Joshua-Chang.github.io/post/shu-ju-jie-gou-yu-suan-fa-01-fu-za-du-fen-xi/">
               <h3 class="post-title">
-                 计算机组成原理05处理器设计 下
+                数据结构与算法
               </h3>
             </a>
           </div>
