@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Joshua-Chang.github.io</id>
     <title>Joshua-Chang`Blog</title>
-    <updated>2021-07-23T05:21:53.218Z</updated>
+    <updated>2021-07-24T19:43:55.871Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Joshua-Chang.github.io"/>
     <link rel="self" href="https://Joshua-Chang.github.io/atom.xml"/>
@@ -10,6 +10,116 @@
     <logo>https://Joshua-Chang.github.io/images/avatar.png</logo>
     <icon>https://Joshua-Chang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Joshua-Chang`Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[getLocalVisibleRect可见区域的变化推演]]></title>
+        <id>https://Joshua-Chang.github.io/post/getlocalvisiblerect-ke-jian-qu-yu-de-bian-hua-tui-yan/</id>
+        <link href="https://Joshua-Chang.github.io/post/getlocalvisiblerect-ke-jian-qu-yu-de-bian-hua-tui-yan/">
+        </link>
+        <updated>2021-07-24T19:38:50.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="官方文档">官方文档</h1>
+<p>文档翻译：<em>如果该view的某些区域未被父view给clipped，then就通过r 根据全局(根)座标返回这些区域。</em></p>
+<p><em>若通过r 根据当前座标返回的话，对其做偏移r.offset(-globalOffset.x, -globalOffset.y)</em></p>
+<p><em>如果该view完全被父view给clip掉，或已经平移出去则返回false</em></p>
+<p>由文档可知，<u>在View部分或完全显示时</u>：</p>
+<p><code>getGlobalVisibleRect</code><strong>显示的区域</strong>以<strong>屏幕左上角</strong>为座标原点的Rect表示</p>
+<p><code>getLocalVisibleRect</code><strong>显示的区域</strong>以<strong>自身左上角</strong>为座标原点的Rect表示</p>
+<p><strong>屏幕左上角和view左上角存在偏移量</strong>。在view部分或完全显示的情况下，<code>getLocalVisibleRect</code>返回的<code>Rect</code>等于对<code>getGlobalVisibleRect</code>中返回的<code>Rect</code> 的<code>left、top、right、bottom</code>四项加取反的偏移量。</p>
+<blockquote>
+<p>屏幕左上角的座标为(0,0)，view自身左上角的在屏幕上的(500,800)位置时</p>
+<p>globalOffset.x=500；globalOffset.y=500。</p>
+<p>当<code>getGlobalVisibleRect</code>返回的<code>Rect</code>为(500,800,550,900)时</p>
+<p>和<code>getLocalVisibleRect</code>返回的<code>Rect</code>是<code>Global</code> 的<code>left、right</code>-500<code>top、bottom</code>-800，(0,0,50,100)</p>
+</blockquote>
+<blockquote>
+<p>两个方法同<code>getLocationInWindow/InSurface/OnScreen</code>（获得在目标容器中定位：int[]）一样。最好在	<code>view.getViewTreeObserver().addOnGlobalLayoutListener</code>  view摆放完成后使用。</p>
+</blockquote>
+<h1 id="应用">应用</h1>
+<p>两个方法都有<code>boolean</code>返回值，用来判断view显示与否。</p>
+<blockquote>
+<p>两个方法对于被同一级view遮挡的view还是判断为显示的，同一级view盖在一起只算重复绘制。子view超出了父view的区域被父view给clipped裁切掉；或子view从父view中移动出去才判断为不显示。</p>
+</blockquote>
+<p>在实际开发中，不但会在view显示的情况下求其显示区域。还会在未显示的情况下获得其返回的Rect。如横向tab超出屏幕的部分的自动移动等情景。</p>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/getLocalVisibleRect.png" alt="getLocalVisibleRect" loading="lazy"></figure>
+<p>View在单横向或纵向划动的情况下，有<strong>完全不可见、部分或完全可见</strong>两种情况：</p>
+<ul>
+<li>
+<p>二者在View<strong>还未显示</strong>或<strong>已经完全移出去</strong>，即<strong>完全不可见时</strong>：<code>getLocalVisibleRect</code>和<code>getGlobalVisibleRect</code>返回的<code>Rect</code>相同。</p>
+<ul>
+<li>
+<p><code>left、top、right、bottom</code>其中随移动方向变化的两项，以<strong>屏幕左上角</strong>为座标原点而变化；</p>
+</li>
+<li>
+<p>另外不变化的两项，以view<strong>自身左上角</strong>为座标原点相对值，并保持不变。</p>
+<blockquote>
+<p>如横向移动时，<code>left、right</code>的值参照左边原点而变化，<code>top、bottom</code>的值参照自身取0和height保持不变</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>二者在View<strong>部分或完全可见</strong>时返回的<code>Rect</code>是：</p>
+<ul>
+<li><code>getGlobalVisibleRect</code><strong>显示的区域</strong>以<strong>屏幕左上角</strong>为座标原点的Rect表示（别忘了Rect中不随view移动而变化的两项也要换成屏幕左上角的绝对座标）</li>
+<li><code>getLocalVisibleRect</code><strong>显示的区域</strong>以<strong>自身左上角</strong>为座标原点的Rect表示</li>
+</ul>
+</li>
+<li>
+<p>当View在<strong>完全不显示</strong>与<strong>部分或完全显示</strong>之间变化时，如从座标正方向<strong>即将开始进入屏幕或即将完全移出屏幕</strong>时<code>getLocalVisibleRect</code>返回的<code>Rect</code>会有特别的变化。</p>
+<ul>
+<li>
+<p>当View进入屏幕前：<code>getLocalVisibleRect</code>返回的<code>Rect</code>中随移动方向变化的两项，以<strong>屏幕左上角</strong>为座标原点而变化。在进入屏幕前达到极值<code>left=ScreenWidth</code>、<code>right=ScreenWidth+ViewWidth</code>(当从座标正方向纵向进入屏幕时为<code>top=ScreenHeight</code>、<code>bottom=ScreenHeight+ViewHeight</code>)</p>
+</li>
+<li>
+<p>当View进入屏幕后：<code>getLocalVisibleRect</code>返回的<code>Rect</code>中随移动方向变化的两项，以<strong>自身左上角</strong>为座标原点而变化。在进入屏幕的一瞬间<code>left=0</code>、<code>right=0</code>(纵向情况<code>top=0</code>、<code>bottom=0</code>)</p>
+<blockquote>
+<p>view进入屏幕的一瞬间，返回的<code>Rect</code>中随方向变化的两项，发生巨大变化。<code>width</code>从<code>screenwidth</code>变为<code>0</code></p>
+</blockquote>
+</li>
+<li>
+<p>当View完全移出屏幕前：<code>getLocalVisibleRect</code>以<strong>自身左上角</strong>为座标原点，跟屏幕原点无关，所以自身的左上角已在屏幕之外也没有关系。此时的<code>Rect</code>中随移动方向变化的两项<code>left=viewwidth</code>、<code>right=viewwidth</code></p>
+</li>
+<li>
+<p>当View完全移出屏幕后：<code>getLocalVisibleRect</code>返回的<code>Rect</code>中随移动方向变化的两项，以<strong>屏幕左上角</strong>为座标原点而变化。<code>left=-viewwidth</code>、<code>right=0</code></p>
+<blockquote>
+<p>view完全移出屏幕的一瞬间，返回的<code>Rect</code>中<code>left</code>从<code>viewwidth</code>变成<code>-viewwidth</code></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>如当view横向从屏幕外进入屏幕，完全移出屏幕时<code>getLocalVisibleRect</code>返回的<code>Rect</code>的<code>left</code>的变化</p>
+<table>
+<thead>
+<tr>
+<th>在屏幕外很远处</th>
+<th>进入屏幕前</th>
+<th>进入屏幕后</th>
+<th></th>
+<th>完全移出前</th>
+<th>完全移出后</th>
+<th>继续移</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>∞</td>
+<td>screenWidth</td>
+<td>0</td>
+<td></td>
+<td>width</td>
+<td>-width</td>
+<td>-∞</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h1 id="总结">总结：</h1>
+<p><code>View</code>完全不显示时，二者返回的<code>Rect</code>相同，其中随移动方向变化的两项，参照<strong>屏幕左上角</strong>而变化；不变的两项参照<strong>自身左上角</strong>保持不变。</p>
+<p><code>View</code>部分或完全显示时，<code>getGlobalVisibleRect</code><strong>显示的区域</strong>以<strong>屏幕左上角</strong>为座标原点的Rect表示；<code>getLocalVisibleRect</code><strong>显示的区域</strong>以<strong>自身左上角</strong>为座标原点的Rect表示。二者可通过对返回的Rect做加上或减去<strong>屏幕左上角和view左上角之间的偏移量</strong>而互换。</p>
+<p>当View在<strong>完全不显示</strong>与<strong>部分或完全显示</strong>之间变化时，<code>getLocalVisibleRect</code>返回的<code>Rect</code>	在屏幕左上角和平补左上角不同参照系中切换，会产生特殊的邻接值变化。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[字节码操作]]></title>
         <id>https://Joshua-Chang.github.io/post/zi-jie-ma-cao-zuo/</id>
@@ -4514,393 +4624,6 @@ private void recurDfs(int w, int t, boolean[] visited, int[] prev) {
 <h2 id="ac-自动机">AC 自动机</h2>
 <p>Aho-Corasick 算法是经典的多模式串匹配算法，典型应用场景是<strong>敏感词过滤系统</strong></p>
 <p><strong>AC 自动机实际上就是在 Trie 树之上，加了类似 KMP 的 next 数组，只不过此处的 next 数组是构建在树上罢了</strong></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[排序算法]]></title>
-        <id>https://Joshua-Chang.github.io/post/shu-ju-jie-gou-yu-suan-fa-02/</id>
-        <link href="https://Joshua-Chang.github.io/post/shu-ju-jie-gou-yu-suan-fa-02/">
-        </link>
-        <updated>2021-03-13T06:46:51.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="排序平方时间复杂度排序算法">排序（平方时间复杂度排序算法）</h1>
-<table>
-<thead>
-<tr>
-<th>排序算法</th>
-<th>时间复杂度</th>
-<th>是否基于比较</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>冒泡、插入、选择</td>
-<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></td>
-<td>[y]</td>
-</tr>
-<tr>
-<td>快排、归并</td>
-<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></td>
-<td>[y]</td>
-</tr>
-<tr>
-<td>桶、基数、计数</td>
-<td>$O(n)</td>
-<td>[x]</td>
-</tr>
-</tbody>
-</table>
-<h2 id="如何分析排序算法">如何分析「排序算法」？</h2>
-<h3 id="算法执行效率">算法执行效率</h3>
-<ol>
-<li>最好、最坏、平均情况的时间复杂度</li>
-<li>时间复杂度的系数、低阶、常数——在渐进复杂度相同的情况下，需要比较系数、低阶和常数</li>
-<li>比较和交换（移动）的次数——基于比较的排序算法的两种基本操作</li>
-</ol>
-<h3 id="算法的内存消耗">算法的内存消耗</h3>
-<p>是否为<strong>原地排序算法</strong>（In-place sort algorithm），即算法的空间复杂度是否为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。</p>
-<h3 id="排序的稳定性">排序的稳定性</h3>
-<p>经过某种排序算法排序之后，如果两个相同元素的前后顺序没有改变，就是<strong>稳定的排序算法</strong>；如果前后顺序发生变化，那就是<strong>不稳定的排序算法</strong>。</p>
-<blockquote>
-<p>待排序的对象并不是简单的值，而是一个基于对象中的某个 <code>key</code> 时，排序的稳定性就有意义了。</p>
-<p>比如对一批订单，按时间排序，若时间相同再按金额排序。</p>
-<p>方案一：先对订单按时间排序，再对相同时间的小区间 内部按金额排序。</p>
-<p>方案二：先对订单按金额排序；再用稳定排序算法对订单按时间排序。稳定排序算法时间相同时，保持了之前的金额顺序。</p>
-</blockquote>
-<h2 id="冒泡排序">冒泡排序</h2>
-<ul>
-<li>每次循环都从序列起始位置开始</li>
-<li>循环中的每个动作，都对比相邻两个元素的大小是否满足偏序要求，若不满足，则交换顺序</li>
-</ul>
-<figure data-type="image" tabindex="1"><img src="https://static001.geekbang.org/resource/image/88/34/8890cbf63ea80455ce82490a23361134.jpg" alt="冒泡排序例图" loading="lazy"></figure>
-<p>分析：</p>
-<ul>
-<li>原地排序</li>
-<li>稳定排序（偏序关系是严格的偏序关系，如 <code>&lt;</code> 或 <code>&gt;</code>）</li>
-<li>时间复杂度
-<ul>
-<li>最好 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-<li>最坏 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
-<li>平均 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
-</ul>
-</li>
-</ul>
-<h3 id="冒泡排序的平均时间复杂度非严格分析">冒泡排序的平均时间复杂度非严格分析</h3>
-<ul>
-<li>有序度：序列中满足偏序关系的两两组合的元素对的个数</li>
-<li>满有序度：有序的数组的有序度叫作满有序度。它等于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo>)</mo><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">n(n - 1) / 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">n</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mord">/</span><span class="mord">2</span></span></span></span> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>C</mi><mn>62</mn><mo>=</mo><mn>6</mn><mo>∗</mo><mn>5</mn><mo>=</mo><mn>30</mn></mrow><annotation encoding="application/x-tex">C62=6*5=30</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord">6</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">0</span></span></span></span> 排除一半逆序15</li>
-<li>逆序度：序列中不满足偏序关系的两两组合的元素对的个数</li>
-</ul>
-<p>显然，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext>逆序度</mtext><mo>=</mo><mtext>满有序度</mtext><mo>−</mo><mtext>有序度</mtext></mrow><annotation encoding="application/x-tex">\text{逆序度} = \text{满有序度} - \text{有序度}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class="mord cjk_fallback">逆序度</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord text"><span class="mord cjk_fallback">满有序度</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class="mord cjk_fallback">有序度</span></span></span></span></span>。</p>
-<p>冒泡排序包含两个操作原子，<strong>比较</strong>和<strong>交换</strong>。每交换一次，有序度就加 1，逆序度减1。无论算法如何优化，交换次数总是确定的，即为<strong>逆序度</strong>。</p>
-<h2 id="插入排序">插入排序</h2>
-<ol>
-<li>将待排序数列分为已排序区间和未排序区间。(初始已排序区间只有数组的第一个元素。)</li>
-<li>依次取未排序区间的元素，插入倒已排序区间。(遍历已排序区间找到插入位置，挪位腾出空间并插入)</li>
-<li>重复这个过程，直到未排序区间中元素为空。</li>
-</ol>
-<p>插入排序也包含两种操作，一种是<strong>元素的比较</strong>，一种是<strong>元素的移动</strong>。从头到尾或从尾到头查找插入点，元素的比较次数是有区别的，但元素的移动次数总是固定的，为逆序度。</p>
-<p>分析：</p>
-<ul>
-<li>原地排序</li>
-<li>稳定排序（值相同的元素，往后插）</li>
-<li>时间复杂度
-<ul>
-<li>最好 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-<li>最坏 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
-<li>平均 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>（乘法法则）</li>
-</ul>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/fd6582d5e5927173ee35d7cc74d9c401-20210715223052918.jpg" alt="插入排序例图" loading="lazy"></th>
-<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/32371475a0b08f0db9861d102474181d-20210715223108469.jpg" alt="选择排序例图" loading="lazy"></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-<h2 id="选择排序">选择排序</h2>
-<p>选择排序算法的实现思路有点类似插入排序，也分已排序区间和未排序区间。但是选择排序每次会从未排序区间中找到最小的元素，将其放到已排序区间的末尾。</p>
-<p>虽然插入排序和选择排序都分已排序区间和未排序区间。但插入排序涉及到<strong>搬移</strong>元素，十分耗时；选择排序通过<strong>交换</strong>降低了时间复杂度。</p>
-<p>分析：</p>
-<ul>
-<li>原地排序</li>
-<li>非稳定排序：未排序区两个相等的元素，依次换到排序区，顺序刚好反过来。</li>
-<li>时间复杂度
-<ul>
-<li>最好 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
-<li>最坏 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
-<li>平均 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>（乘法法则）</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>插入排序和冒泡排序的时间复杂度相同，都是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，在实际软件开发中，为什么我们更倾向于使用插入排序而不是冒泡排序？</p>
-<ul>
-<li>对同一份未排序序列数据，冒泡排序和插入排序所需的交换（移动）次数是一定的，且是相等的</li>
-<li>单次数据交换，冒泡排序所需的时间更长（三次赋值操作，插排只需要一次）</li>
-</ul>
-<p>另有插入排序的优化版本<a href="https://zh.wikipedia.org/wiki/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F">希尔排序</a>。</p>
-</blockquote>
-<h1 id="排序线性对数时间复杂度排序算法">排序（线性对数时间复杂度排序算法）</h1>
-<table>
-<thead>
-<tr>
-<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/db7f892d3355ef74da9cd64aa926dc2b-20210715222650124.jpg" alt="归并排序分解图" loading="lazy"></th>
-<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/95897ade4f7ad5d10af057b1d144a22f-20210715222640145.jpg" alt=" 的过程" loading="lazy"></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-<h2 id="归并排序">归并排序</h2>
-<ul>
-<li>
-<p>归并排序使用了「分治」思想（Divide and Conquer）</p>
-<ul>
-<li>分：把数组分成前后两部分，分别排序</li>
-<li>合：将有序的两部分合并</li>
-</ul>
-</li>
-<li>
-<p>分治与递归</p>
-<ul>
-<li>分治：解决问题的处理思想</li>
-<li>递归：实现算法的编程技巧</li>
-<li>分治算法经常用递归来实现</li>
-</ul>
-</li>
-<li>
-<p>递归实现：</p>
-<ul>
-<li>递归公式：<code>merge_sort(p…r) = merge(merge_sort(p…q), merge_sort(q+1…r))</code>  其中 <code>q=(p+r)/2</code></li>
-<li>终止条件：<code>p &gt;= r</code>不用再继续分解</li>
-</ul>
-</li>
-<li>
-<p><code>merge</code> 的过程:</p>
-<ul>
-<li>
-<p>使用类似利用哨兵对有序数组排序的方式</p>
-<p>申请一个大小和[first,last]同样地数组temp<br>
-在[first,mid]和[mid+1,last]中分别放入游标i、j，都指向各自的首元素<br>
-比较两区间各自游标指向的元素，取走较小的元素插入temp，然后该区间的游标后移。<br>
-直到一个区间被取完，把剩下的区间全部插入到temp尾部。然后用temp代替原数组。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="算法分析">算法分析</h3>
-<ul>
-<li>稳定性
-<ul>
-<li>
-<p>是稳定的排序算法</p>
-<blockquote>
-<p>在merge的过程中，如果有相同元素还是按原序存入temp；若相同元素不在同一区间，则先取靠前的区间里的元素。merge后还能保持原序，因此是稳定的排序算法。</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li>时间复杂度
-<ul>
-<li>因此，归并排序的时间复杂度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Θ</mi><mo>(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\Theta(n\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-</ul>
-</li>
-<li>空间复杂度
-<ul>
-<li>非原地排序，空间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Θ</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\Theta(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-</ul>
-</li>
-</ul>
-<h2 id="快速排序quick-sort快排">快速排序（quick sort，快排）</h2>
-<ol>
-<li>
-<p>归并排序的关键在<code>merge()</code>，快排的关键在<code>partition()</code> 分区，处理二者都要靠分治思想，又要靠递归技巧来实现。</p>
-</li>
-<li>
-<p>归并排序是先处理子问题，然后再合并；而快排先分区，然后再处理子问题。</p>
-</li>
-<li>
-<p>归并排序虽然是稳定的，但它是非原地排序算法，因为合并函数无法在原地执行；快速排序可以原地分区，因此是原地排序，但却是不稳定的。</p>
-</li>
-</ol>
-<p><code>partition</code>方法中的pivot是作为轴的元素的值，而不是位置。遍历元素通过与pivot的比较，找到合适的位置做交换。最后要把pivot元素从交换到分区点的位置。</p>
-<p>原理：</p>
-<ul>
-<li>在区间 <code>[p,r])</code> 中选取一个元素做主轴pivot（一般选区间的最后一个元素）</li>
-<li>分区：遍历 p 到 r 之间的数据，将小于 pivot 的放到左边，将大于 pivot 的放到右边，将 pivot 放到中间。</li>
-<li>对划分的两个区间，继续划分，直到直到区间缩小为 1。</li>
-</ul>
-<p>显然，这又是一个递归：</p>
-<ul>
-<li>终止条件：区间内不足 2 个元素 即<code>p &gt;= r</code></li>
-<li>递归公式：<code>quick_sort(p…r) = quick_sort(p…q-1) + quick_sort(q+1, r)</code></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/4d892c3a2e08a17f16097d07ea088a81-20210716004705777.jpg" alt="快排分区示例" loading="lazy"></th>
-<th><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/6643bc3cef766f5b3e4526c332c60adc-20210716004654550.jpg" alt="非原地分区" loading="lazy"></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-<blockquote>
-<p>如果不要求空间复杂度，partition() 分区函数可以写的很简单。采用两个额外的数组来存储较大和较小的元素，然后再合并。但就不是原地排序算法了</p>
-<p>如果要求空间复杂度，便用和选择排序类似的原地分区。</p>
-</blockquote>
-<h3 id="核心">核心</h3>
-<p>快排的核心是通过<code>partition</code>	方法，原地分区。</p>
-<p>取区间内的任意座标(通常是最后一个)上的元素当pivot，并通过游标 i 把 A[p…r-1] 分成两部分。<br>
-A[p…i-1] 的元素都是小于 pivot 的，暂且叫它“已处理区间”，初始为空<br>
-A[i…r-1] 是“未处理区间”，初始为整个区间<br>
-游标i所处的位置是，已处理区间(小于pivot)的末尾一个元素</p>
-<p>每次都从未处理的区间 A[i…r-1] 中取一个元素 A[j]，<br>
-如果小于 pivot，则将 A[i] 与 A[j] 交换，就能将其加入到已处理区间的尾部，也就是 A[i] 的位置</p>
-<p>经过遍历，最终已处理区间都小于pivot，未处理区间都大于pivot。</p>
-<p>然后把i+1位置上的元素和pivot元素交换位置，即把pivot元素从原位置(可能是末尾)，交换到分区的交界位置。</p>
-<pre><code class="language-bash">// 快速排序，A 是数组，n 表示数组的大小
-quick_sort(A, n) {
-  quick_sort_c(A, 0, n-1)
-}
-// 快速排序递归函数，p,r 为下标
-quick_sort_c(A, p, r) {
-  if p &gt;= r then return
-  
-  q = partition(A, p, r) // 获取分区点
-  quick_sort_c(A, p, q-1)
-  quick_sort_c(A, q+1, r)
-}
-
-partition(A, p, r) {
-  pivot := A[r]
-  i := p
-  for j := p to r-1 do {
-    if A[j] &lt; pivot {
-      swap A[i] with A[j]
-      i := i+1
-    }
-  }
-  swap A[i] with A[r]
-  return 
-</code></pre>
-<h3 id="算法分析-2">算法分析</h3>
-<ul>
-<li>稳定性
-<ul>
-<li>分区会打破稳定性，不是稳定排序</li>
-</ul>
-</li>
-<li>时间复杂度
-<ul>
-<li>快速排序的时间复杂度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Θ</mi><mo>(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\Theta(n\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-</ul>
-</li>
-<li>空间复杂度
-<ul>
-<li>采用原地分区，空间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Θ</mi><mo>(</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">\Theta(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>问题：如何在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span> 时间复杂度内寻找一个无序数组中第 K 大的元素？</p>
-<p>选择数组区间 A[0…n-1] 的最后一个元素 A[n-1] 作为 pivot，对数组 A[0…n-1] 原地分区，这样数组就分成了三部分，A[0…p-1]、A[p]、A[p+1…n-1]。</p>
-<p>如果 p+1=K，那 A[p] 就是要求解的元素；如果 K&gt;p+1, 说明第 K 大元素出现在 A[p+1…n-1] 区间，再按照上面的思路递归地在 A[p+1…n-1] 这个区间内查找。同理如果K&lt;p+1，就在 A[0…p-1] 区间递归查找。</p>
-<p>分区遍历元素的个数分别为、n/2、n/4、n/8、n/16.……直到区间缩小为1，n+n/2+n/4+n/8+…+1。等比数列求和为 2n-1。忽略常数时间复杂度为O (n)。</p>
-<p>另一种解法用希尔排序，只排前K个。时间复杂度为O (k*n)，k为1还好，k=n则为O (n2)。</p>
-</blockquote>
-<h1 id="线性排序">线性排序</h1>
-<p>这些排序算法的时间复杂度是线性的，且都不涉及元素之间的比较操作。</p>
-<h2 id="桶排序bucket-sort">桶排序（Bucket Sort）</h2>
-<p>算法思想：</p>
-<ul>
-<li>把待排序元素，根据元素的取值，分到所对应的取值范围的序排列的桶里。（把取值在同一个范围的元素放入一个桶）</li>
-<li>桶内再单独快速排序</li>
-<li>有序桶依次取出</li>
-</ul>
-<h3 id="算法分析-3">算法分析</h3>
-<ul>
-<li>时间复杂度 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-<li>使用条件
-<ul>
-<li>数据易于分如有序桶</li>
-<li>数据在各个有序桶之间分布均匀</li>
-<li>适合外部排序——数据不全部载入磁盘</li>
-</ul>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th><img src="https://static001.geekbang.org/resource/image/98/ae/987564607b864255f81686829503abae.jpg" alt="桶排序示例" loading="lazy"></th>
-<th><img src="https://static001.geekbang.org/resource/image/1d/84/1d730cb17249f8e92ef5cab53ae65784.jpg" alt="计数排序示例" loading="lazy"></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-<h2 id="计数排序counting-sort">计数排序（Counting Sort）</h2>
-<p>计数排序是细粒度的桶排序，每个桶的范围只是一个数字：</p>
-<ul>
-<li>数据量大，但都集中再很小的范围里。</li>
-<li>每个桶的粒度都是最小，把取值都相同的元素放入一个桶。（桶排序是把取值在一个范围的元素放入一个桶）</li>
-</ul>
-<p>此时，由于分桶内的元素 key 值都一样，所以桶内的排序操作可以省略，以及桶的编号本身就能记录桶内元素的值。因此，算法只需遍历一遍所有的数据，统计每个取值上有多少元素即可。这个过程时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>。</p>
-<h3 id="高考分数">高考分数</h3>
-<p>简化一分一段表。假设只有 8 个考生，分数在 0 到 5 分之间。</p>
-<p>8人的成绩原序存入数组 <code>A = {2, 5, 3, 0, 2, 3, 0, 3}</code> 。</p>
-<p>统计考每个分数的人数，存入数组 <code>C = {2, 0, 2, 3, 0, 1}</code> 即每个分数一个桶。如考0分的2人、1分的0人</p>
-<p>对统计每个分数的人数，的数组，计数累加 <code>C = {2, 2, 4, 7, 7, 8}</code>	数组中的元素表示「小于等于该分数的元素的个数」。如小于等于5分的8人，小于等于4分的7人，小于等于3分的7人，</p>
-<p>从后到前，依次从保存分数的原序数组 A中取出元素，经过和计数数组C对照得到应存的位置，并放入新数组R的该位置。计数数组C内，值等于该元素的计数减一。</p>
-<p>比如，当从A中取出 3分这个元素时，对照数组 C 中分数小于等于 3 的考生有 7 个。就把3分这个元素放入到数组 R 的第7个位置(index=6)。小于等于 3 的元素取走一个，C中相应的计数减 1，<code>C = {2, 2, 4, 6, 7, 8}</code></p>
-<h3 id="算法分析-4">算法分析</h3>
-<ul>
-<li>时间复杂度
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 个元素，最大值是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span>，分 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 个「桶」；时间复杂度 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-<li>桶内计数累加；时间复杂度 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>k</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span></li>
-<li>摆放元素；时间复杂度 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-<li>当 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>&lt;</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">k &lt; n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> 时，总体时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-</ul>
-</li>
-<li>使用条件
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>&lt;</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">k &lt; n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span>	桶的数量小于元素数量</li>
-<li>待排序元素是非负整数。(小数可以都称10，负数可以都加。转化称正整数)</li>
-</ul>
-</li>
-</ul>
-<p>计数排序只能用在数据<strong>范围</strong>不大的场景中，如果数据范围 k 比要排序的数据 n 大很多，就不适合用计数排序了。且计数排序只能给非负整数排序，如果要排序的数据是其他类型的，要将其在不改变相对大小的情况下，转化为非负整数。</p>
-<h2 id="基数排序radix-sort">基数排序（Radix Sort）</h2>
-<p><strong>基数排序对要排序的数据是有要求的，需要可以分割出独立的“位”来比较，而且位之间有递进的关系，如果 a 数据的高位比 b 数据大，那剩下的低位就不用比较了。</strong></p>
-<p>基数排序适用于等长数据的排序。对于不等长数据，可以在较短的数据后面做 padding，使得数据等长。</p>
-<ul>
-<li>先按照最后一位来排序，再按照倒数第二位重新排序，以此类推，最后按照第一位重新排序。</li>
-<li>必须是采用稳定排序。通常可以用桶排序或者计数排序；时间复杂度 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-</ul>
-<h3 id="算法分析-5">算法分析</h3>
-<ul>
-<li>时间复杂度
-<ul>
-<li>对每一位的排序时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-<li>总共 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 位，因此总的时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>k</mi><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(kn)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span>；考虑到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span></span></span></span> 是常数，因此总的时间复杂度是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span></span></span></span></li>
-</ul>
-</li>
-<li>使用条件
-<ul>
-<li>等长且可以按 <strong>位</strong> 比较的数据</li>
-</ul>
-</li>
-<li>场景
-<ul>
-<li>对 1万个11 位的手机号码排序</li>
-</ul>
-</li>
-</ul>
-<h2 id="优化">优化</h2>
-<figure data-type="image" tabindex="2"><img src="https://static001.geekbang.org/resource/image/1f/fd/1f6ef7e0a5365d6e9d68f0ccc71755fd.jpg" alt="比较" loading="lazy"></figure>
-<p>大部分排序函数都是采用 O(nlogn) 排序算法来实现，但是为了尽可能地提高性能，会做很多优化。</p>
-<p>比如快速排序pivot点选择：可以随机选择可以首、尾、中间比较选大小中间的。</p>
 ]]></content>
     </entry>
 </feed>

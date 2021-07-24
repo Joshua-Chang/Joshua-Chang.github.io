@@ -1,0 +1,287 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>getLocalVisibleRect可见区域的变化推演 | Joshua-Chang`Blog</title>
+<link rel="shortcut icon" href="https://Joshua-Chang.github.io/favicon.ico?v=1627155832069">
+<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://Joshua-Chang.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="getLocalVisibleRect可见区域的变化推演 | Joshua-Chang`Blog - Atom Feed" href="https://Joshua-Chang.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+
+
+    <meta name="description" content="官方文档
+文档翻译：如果该view的某些区域未被父view给clipped，then就通过r 根据全局(根)座标返回这些区域。
+若通过r 根据当前座标返回的话，对其做偏移r.offset(-globalOffset.x, -globalOf..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/rainbow.min.css">
+      
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://Joshua-Chang.github.io">
+  <img class="avatar" src="https://Joshua-Chang.github.io/images/avatar.png?v=1627155832069" alt="">
+  </a>
+  <h1 class="site-title">
+    Joshua-Chang`Blog
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              getLocalVisibleRect可见区域的变化推演
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-07-25
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://static001.geekbang.org/resource/image/e1/4f/e12f874be109778ad8c18180c827e84f.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="官方文档">官方文档</h1>
+<p>文档翻译：<em>如果该view的某些区域未被父view给clipped，then就通过r 根据全局(根)座标返回这些区域。</em></p>
+<p><em>若通过r 根据当前座标返回的话，对其做偏移r.offset(-globalOffset.x, -globalOffset.y)</em></p>
+<p><em>如果该view完全被父view给clip掉，或已经平移出去则返回false</em></p>
+<p>由文档可知，<u>在View部分或完全显示时</u>：</p>
+<p><code>getGlobalVisibleRect</code><strong>显示的区域</strong>以<strong>屏幕左上角</strong>为座标原点的Rect表示</p>
+<p><code>getLocalVisibleRect</code><strong>显示的区域</strong>以<strong>自身左上角</strong>为座标原点的Rect表示</p>
+<p><strong>屏幕左上角和view左上角存在偏移量</strong>。在view部分或完全显示的情况下，<code>getLocalVisibleRect</code>返回的<code>Rect</code>等于对<code>getGlobalVisibleRect</code>中返回的<code>Rect</code> 的<code>left、top、right、bottom</code>四项加取反的偏移量。</p>
+<blockquote>
+<p>屏幕左上角的座标为(0,0)，view自身左上角的在屏幕上的(500,800)位置时</p>
+<p>globalOffset.x=500；globalOffset.y=500。</p>
+<p>当<code>getGlobalVisibleRect</code>返回的<code>Rect</code>为(500,800,550,900)时</p>
+<p>和<code>getLocalVisibleRect</code>返回的<code>Rect</code>是<code>Global</code> 的<code>left、right</code>-500<code>top、bottom</code>-800，(0,0,50,100)</p>
+</blockquote>
+<blockquote>
+<p>两个方法同<code>getLocationInWindow/InSurface/OnScreen</code>（获得在目标容器中定位：int[]）一样。最好在	<code>view.getViewTreeObserver().addOnGlobalLayoutListener</code>  view摆放完成后使用。</p>
+</blockquote>
+<h1 id="应用">应用</h1>
+<p>两个方法都有<code>boolean</code>返回值，用来判断view显示与否。</p>
+<blockquote>
+<p>两个方法对于被同一级view遮挡的view还是判断为显示的，同一级view盖在一起只算重复绘制。子view超出了父view的区域被父view给clipped裁切掉；或子view从父view中移动出去才判断为不显示。</p>
+</blockquote>
+<p>在实际开发中，不但会在view显示的情况下求其显示区域。还会在未显示的情况下获得其返回的Rect。如横向tab超出屏幕的部分的自动移动等情景。</p>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/joshua_chang/pic/raw/master/uPic/getLocalVisibleRect.png" alt="getLocalVisibleRect" loading="lazy"></figure>
+<p>View在单横向或纵向划动的情况下，有<strong>完全不可见、部分或完全可见</strong>两种情况：</p>
+<ul>
+<li>
+<p>二者在View<strong>还未显示</strong>或<strong>已经完全移出去</strong>，即<strong>完全不可见时</strong>：<code>getLocalVisibleRect</code>和<code>getGlobalVisibleRect</code>返回的<code>Rect</code>相同。</p>
+<ul>
+<li>
+<p><code>left、top、right、bottom</code>其中随移动方向变化的两项，以<strong>屏幕左上角</strong>为座标原点而变化；</p>
+</li>
+<li>
+<p>另外不变化的两项，以view<strong>自身左上角</strong>为座标原点相对值，并保持不变。</p>
+<blockquote>
+<p>如横向移动时，<code>left、right</code>的值参照左边原点而变化，<code>top、bottom</code>的值参照自身取0和height保持不变</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>二者在View<strong>部分或完全可见</strong>时返回的<code>Rect</code>是：</p>
+<ul>
+<li><code>getGlobalVisibleRect</code><strong>显示的区域</strong>以<strong>屏幕左上角</strong>为座标原点的Rect表示（别忘了Rect中不随view移动而变化的两项也要换成屏幕左上角的绝对座标）</li>
+<li><code>getLocalVisibleRect</code><strong>显示的区域</strong>以<strong>自身左上角</strong>为座标原点的Rect表示</li>
+</ul>
+</li>
+<li>
+<p>当View在<strong>完全不显示</strong>与<strong>部分或完全显示</strong>之间变化时，如从座标正方向<strong>即将开始进入屏幕或即将完全移出屏幕</strong>时<code>getLocalVisibleRect</code>返回的<code>Rect</code>会有特别的变化。</p>
+<ul>
+<li>
+<p>当View进入屏幕前：<code>getLocalVisibleRect</code>返回的<code>Rect</code>中随移动方向变化的两项，以<strong>屏幕左上角</strong>为座标原点而变化。在进入屏幕前达到极值<code>left=ScreenWidth</code>、<code>right=ScreenWidth+ViewWidth</code>(当从座标正方向纵向进入屏幕时为<code>top=ScreenHeight</code>、<code>bottom=ScreenHeight+ViewHeight</code>)</p>
+</li>
+<li>
+<p>当View进入屏幕后：<code>getLocalVisibleRect</code>返回的<code>Rect</code>中随移动方向变化的两项，以<strong>自身左上角</strong>为座标原点而变化。在进入屏幕的一瞬间<code>left=0</code>、<code>right=0</code>(纵向情况<code>top=0</code>、<code>bottom=0</code>)</p>
+<blockquote>
+<p>view进入屏幕的一瞬间，返回的<code>Rect</code>中随方向变化的两项，发生巨大变化。<code>width</code>从<code>screenwidth</code>变为<code>0</code></p>
+</blockquote>
+</li>
+<li>
+<p>当View完全移出屏幕前：<code>getLocalVisibleRect</code>以<strong>自身左上角</strong>为座标原点，跟屏幕原点无关，所以自身的左上角已在屏幕之外也没有关系。此时的<code>Rect</code>中随移动方向变化的两项<code>left=viewwidth</code>、<code>right=viewwidth</code></p>
+</li>
+<li>
+<p>当View完全移出屏幕后：<code>getLocalVisibleRect</code>返回的<code>Rect</code>中随移动方向变化的两项，以<strong>屏幕左上角</strong>为座标原点而变化。<code>left=-viewwidth</code>、<code>right=0</code></p>
+<blockquote>
+<p>view完全移出屏幕的一瞬间，返回的<code>Rect</code>中<code>left</code>从<code>viewwidth</code>变成<code>-viewwidth</code></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>如当view横向从屏幕外进入屏幕，完全移出屏幕时<code>getLocalVisibleRect</code>返回的<code>Rect</code>的<code>left</code>的变化</p>
+<table>
+<thead>
+<tr>
+<th>在屏幕外很远处</th>
+<th>进入屏幕前</th>
+<th>进入屏幕后</th>
+<th></th>
+<th>完全移出前</th>
+<th>完全移出后</th>
+<th>继续移</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>∞</td>
+<td>screenWidth</td>
+<td>0</td>
+<td></td>
+<td>width</td>
+<td>-width</td>
+<td>-∞</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h1 id="总结">总结：</h1>
+<p><code>View</code>完全不显示时，二者返回的<code>Rect</code>相同，其中随移动方向变化的两项，参照<strong>屏幕左上角</strong>而变化；不变的两项参照<strong>自身左上角</strong>保持不变。</p>
+<p><code>View</code>部分或完全显示时，<code>getGlobalVisibleRect</code><strong>显示的区域</strong>以<strong>屏幕左上角</strong>为座标原点的Rect表示；<code>getLocalVisibleRect</code><strong>显示的区域</strong>以<strong>自身左上角</strong>为座标原点的Rect表示。二者可通过对返回的Rect做加上或减去<strong>屏幕左上角和view左上角之间的偏移量</strong>而互换。</p>
+<p>当View在<strong>完全不显示</strong>与<strong>部分或完全显示</strong>之间变化时，<code>getLocalVisibleRect</code>返回的<code>Rect</code>	在屏幕左上角和平补左上角不同参照系中切换，会产生特殊的邻接值变化。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3">官方文档</a></li>
+<li><a href="#%E5%BA%94%E7%94%A8">应用</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结：</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://Joshua-Chang.github.io/post/zi-jie-ma-cao-zuo/">
+              <h3 class="post-title">
+                字节码操作
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://Joshua-Chang.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+      <div id="vcomments"></div>
+    </div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'MqyUKtQmX8ouL05DG3KdXz6o-gzGzoHsz',
+            appKey: 'LMzBK0QcNL65uWxkhaN1KDUe'
+        })
+    </script>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
